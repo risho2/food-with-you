@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food with you</title>
+<style>
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Helvetica Neue', sans-serif;
+  background: #fafafa; color: #262626; height: 100vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* ── Header ── */
+header {
+  background: #fff; border-bottom: 1px solid #dbdbdb;
+  padding: 10px 18px; display: flex; align-items: center;
+  justify-content: space-between; flex-shrink: 0; z-index: 300;
+}
+.logo {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header-right { display: flex; align-items: center; gap: 12px; }
+.my-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.my-profile:hover .my-name { text-decoration: underline; }
+.ig-ring {
+  border-radius: 50%; padding: 2px;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+.ig-ring-inner {
+  border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: #dc2743; border: 2px solid #fff;
+}
+.my-name { font-size: 13px; font-weight: 600; }
+.add-btn {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #fff; border: none; border-radius: 8px;
+  padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s;
+}
+.add-btn:hover { opacity: 0.85; }
+
+/* ── Layout ── */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 310px; flex-shrink: 0; background: #fff;
+  border-right: 1px solid #dbdbdb; display: flex; flex-direction: column;
+  overflow: hidden; position: relative;
+}
+
+/* ── Stories ── */
+.stories-row {
+  padding: 12px 14px 10px; border-bottom: 1px solid #efefef;
+  display: flex; gap: 12px; overflow-x: auto; flex-shrink: 0;
+}
+.stories-row::-webkit-scrollbar { display: none; }
+.story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+.story-ring {
+  border-radius: 50%; padding: 2.5px; transition: transform 0.15s;
+  width: 54px; height: 54px;
+}
+.story-ring.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.story-ring.gray { background: #dbdbdb; }
+.story-ring.active { outline: 3px solid #dc2743; outline-offset: 2px; }
+.story-inner {
+  width: 100%; height: 100%; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; border: 2.5px solid #fff;
+}
+.story-inner.me { font-size: 15px; font-weight: 800; color: #dc2743; }
+.story-item:hover .story-ring { transform: scale(1.06); }
+.story-name { font-size: 10px; color: #262626; max-width: 54px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Tabs ── */
+.sidebar-tabs { display: flex; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.s-tab {
+  flex: 1; padding: 10px 4px; text-align: center; font-size: 12px; font-weight: 600;
+  color: #8e8e8e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
+}
+.s-tab.active { color: #262626; border-bottom-color: #262626; }
+
+/* ── Sidebar body ── */
+.sidebar-body { overflow-y: auto; flex: 1; }
+.sidebar-body::-webkit-scrollbar { width: 4px; }
+.sidebar-body::-webkit-scrollbar-thumb { background: #dbdbdb; border-radius: 2px; }
+
+/* ── Friend cards ── */
+.friend-card { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #efefef; }
+.fc-avatar { width: 42px; height: 42px; border-radius: 50%; padding: 2px; flex-shrink: 0; cursor: pointer; }
+.fc-avatar.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.fc-avatar.gray { background: #dbdbdb; }
+.fc-avatar-inner { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; border: 2px solid #fff; }
+.fc-info { flex: 1; min-width: 0; cursor: pointer; }
+.fc-name { font-size: 13px; font-weight: 700; }
+.fc-desc { font-size: 11px; color: #8e8e8e; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fc-count { font-size: 11px; color: #8e8e8e; margin-top: 2px; }
+.fc-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.follow-btn {
+  padding: 4px 14px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 11px; font-weight: 700; transition: all 0.2s; white-space: nowrap;
+}
+.follow-btn.following { background: #efefef; color: #262626; border: 1px solid #dbdbdb; }
+.follow-btn.not-following { background: linear-gradient(45deg, #f09433 0%, #dc2743 60%, #bc1888 100%); color: #fff; }
+.map-toggle { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 10px; color: #8e8e8e; font-weight: 600; border: none; background: none; padding: 0; }
+.map-toggle.on { color: #dc2743; }
+.toggle-dot { width: 28px; height: 15px; border-radius: 8px; background: #dbdbdb; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.map-toggle.on .toggle-dot { background: #dc2743; }
+.toggle-dot::after { content: ''; position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; border-radius: 50%; background: #fff; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.map-toggle.on .toggle-dot::after { left: 15px; }
+
+/* ── Spot cards ── */
+.section-head { padding: 9px 14px 5px; background: #fafafa; border-bottom: 1px solid #efefef; }
+.section-label { font-size: 11px; font-weight: 700; color: #8e8e8e; text-transform: uppercase; letter-spacing: 0.5px; }
+.spot-card { display: flex; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #efefef; cursor: pointer; transition: background 0.15s; position: relative; }
+.spot-card:hover { background: #fafafa; }
+.spot-card.hl { background: #fff0f3; border-left: 3px solid #dc2743; }
+.spot-icon-box { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; background: #fafafa; border: 1px solid #efefef; }
+.spot-info { flex: 1; min-width: 0; }
+.spot-name { font-size: 12px; font-weight: 700; }
+.spot-meta { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
+.spot-stars { color: #ffc107; font-size: 11px; margin-top: 2px; }
+.spot-comment { font-size: 11px; color: #555; margin-top: 3px; line-height: 1.5; font-style: italic; }
+.spot-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; margin-top: 4px; color: #fff; }
+.spot-del { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #dbdbdb; font-size: 15px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.spot-del:hover { color: #dc2743; }
+.empty-state { padding: 32px 14px; text-align: center; }
+.empty-state .big { font-size: 36px; margin-bottom: 10px; }
+.empty-state p { font-size: 12px; line-height: 1.8; color: #8e8e8e; }
+
+/* ── Profile panel (slides over sidebar) ── */
+.profile-panel {
+  position: absolute; inset: 0; background: #fff; z-index: 100;
+  display: flex; flex-direction: column; overflow: hidden;
+  transform: translateX(100%); transition: transform 0.25s ease;
+}
+.profile-panel.open { transform: translateX(0); }
+.profile-panel-header {
+  padding: 12px 14px; border-bottom: 1px solid #efefef;
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.profile-back { background: none; border: none; font-size: 20px; cursor: pointer; color: #262626; padding: 2px 4px; line-height: 1; }
+.profile-back-label { font-size: 14px; font-weight: 600; }
+.profile-hero { padding: 20px 16px 14px; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.profile-hero-top { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.profile-big-ring { border-radius: 50%; padding: 3px; flex-shrink: 0; }
+.profile-big-ring.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.profile-big-ring.gray { background: #dbdbdb; }
+.profile-big-inner { width: 72px; height: 72px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid #fff; }
+.profile-big-inner.me { font-size: 24px; font-weight: 800; color: #dc2743; }
+.profile-stats { display: flex; gap: 20px; }
+.profile-stat { text-align: center; }
+.profile-stat-val { font-size: 17px; font-weight: 800; display: block; }
+.profile-stat-label { font-size: 11px; color: #8e8e8e; }
+.profile-name { font-size: 15px; font-weight: 800; }
+.profile-bio { font-size: 12px; color: #555; margin-top: 4px; line-height: 1.6; }
+.profile-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.profile-tag { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #fafafa; border: 1px solid #efefef; color: #555; }
+.profile-actions { display: flex; gap: 8px; margin-top: 12px; }
+.profile-follow-btn {
+  flex: 1; padding: 8px; border-radius: 8px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 700; transition: all 0.2s;
+}
+.profile-follow-btn.following { background: #efefef; color: #262626; border: 1px solid #dbdbdb; }
+.profile-follow-btn.not-following { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
+.profile-map-btn {
+  padding: 8px 12px; border-radius: 8px; border: 1px solid #dbdbdb;
+  background: #fff; font-size: 12px; font-weight: 600; cursor: pointer; color: #262626;
+}
+.profile-map-btn.on { background: #fff0f3; border-color: #dc2743; color: #dc2743; }
+.profile-panel-body { overflow-y: auto; flex: 1; }
+.profile-panel-body::-webkit-scrollbar { width: 4px; }
+.profile-panel-body::-webkit-scrollbar-thumb { background: #dbdbdb; border-radius: 2px; }
+
+/* ── Map ── */
+.map-wrap { position: relative; flex: 1; overflow: hidden; }
+#map { width: 100%; height: 100%; }
+#map-hint { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.96); color: #8e8e8e; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 500; box-shadow: 0 2px 12px rgba(0,0,0,0.12); pointer-events: none; white-space: nowrap; border: 1px solid #dbdbdb; }
+#poi-loading { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(255,255,255,0.96); border-radius: 12px; padding: 14px 22px; font-size: 13px; font-weight: 600; color: #8e8e8e; z-index: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.12); pointer-events: none; }
+
+/* ── Modal ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 16px; width: 420px; max-width: 95vw; box-shadow: 0 24px 60px rgba(0,0,0,0.2); animation: slideUp 0.2s ease; overflow: hidden; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header { padding: 16px 20px 14px; border-bottom: 1px solid #efefef; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 16px; font-weight: 800; }
+.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #8e8e8e; line-height: 1; }
+.modal-body { padding: 18px 20px; max-height: 68vh; overflow-y: auto; }
+.form-row { margin-bottom: 16px; }
+.form-label { font-size: 11px; font-weight: 700; color: #8e8e8e; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.4px; }
+.form-input { width: 100%; padding: 10px 12px; border: 1.5px solid #dbdbdb; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; background: #fafafa; }
+.form-input:focus { border-color: #dc2743; background: #fff; }
+textarea.form-input { resize: vertical; min-height: 70px; }
+select.form-input { background: #fafafa; cursor: pointer; }
+.genre-preview { display: flex; align-items: center; gap: 10px; margin-top: 8px; background: #fafafa; border-radius: 10px; padding: 8px 12px; border: 1px solid #efefef; }
+.genre-preview-emoji { font-size: 24px; }
+.genre-preview-text { font-size: 13px; font-weight: 600; }
+.star-input { display: flex; gap: 6px; margin-top: 4px; }
+.star-input .si { font-size: 28px; cursor: pointer; color: #dbdbdb; transition: all 0.15s; line-height: 1; user-select: none; }
+.star-input .si.filled { color: #ffc107; }
+.star-input .si:hover { transform: scale(1.15); }
+.rating-label { font-size: 12px; color: #8e8e8e; margin-top: 5px; }
+.selected-place { background: #f0fff4; border: 1.5px solid #2ecc71; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; }
+.selected-place .pc { font-size: 11px; color: #27ae60; font-weight: 700; margin-bottom: 3px; }
+.selected-place .pn { font-size: 14px; font-weight: 700; color: #1a7a43; }
+.selected-place .pa { font-size: 11px; color: #555; margin-top: 2px; }
+.search-hint { font-size: 11px; color: #8e8e8e; margin-top: 5px; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid #efefef; display: flex; gap: 10px; }
+.btn-cancel { flex: 1; padding: 10px; border: 1.5px solid #dbdbdb; border-radius: 10px; background: #fff; font-size: 14px; font-weight: 600; color: #262626; cursor: pointer; }
+.btn-submit { flex: 2; padding: 10px; border: none; border-radius: 10px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+.btn-submit:hover { opacity: 0.85; }
+.btn-submit:disabled { background: #dbdbdb; cursor: not-allowed; opacity: 1; }
+.btn-back { width: 100%; padding: 7px; border: none; background: none; font-size: 12px; color: #8e8e8e; cursor: pointer; margin-bottom: 2px; }
+
+/* ── InfoWindow ── */
+.gm-popup { font-family: -apple-system, 'Hiragino Sans', sans-serif; width: 220px; }
+.gm-popup-icon { font-size: 26px; margin-bottom: 5px; }
+.gm-popup-title { font-size: 14px; font-weight: 800; color: #262626; }
+.gm-popup-genre { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
+.gm-popup-stars { color: #ffc107; font-size: 12px; margin-top: 3px; }
+.gm-popup-comment { font-size: 12px; color: #555; line-height: 1.5; font-style: italic; border-top: 1px solid #efefef; padding-top: 7px; margin-top: 7px; }
+.gm-popup-footer { display: flex; align-items: center; gap: 5px; margin-top: 7px; }
+.gm-popup-av { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
+.gm-popup-author { font-size: 11px; font-weight: 700; }
+.gm-popup-by { font-size: 11px; color: #8e8e8e; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Food with you</div>
+  <div class="header-right">
+    <div class="my-profile" onclick="openProfile(0)">
+      <div class="ig-ring" style="width:34px;height:34px;">
+        <div class="ig-ring-inner" style="width:100%;height:100%;font-size:13px;">り</div>
+      </div>
+      <div class="my-name">りょう</div>
+    </div>
+    <button class="add-btn" onclick="startAddSpot()">＋ 追加</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="sidebar">
+    <!-- Stories -->
+    <div class="stories-row" id="storiesRow"></div>
+    <!-- Tabs -->
+    <div class="sidebar-tabs">
+      <div class="s-tab active" id="tab-friends" onclick="switchTab('friends')">フォロー</div>
+      <div class="s-tab" id="tab-myspots" onclick="switchTab('myspots')">マイスポット</div>
+    </div>
+    <div class="sidebar-body" id="sidebarBody"></div>
+
+    <!-- Profile panel (slides in) -->
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-panel-header">
+        <button class="profile-back" onclick="closeProfile()">←</button>
+        <span class="profile-back-label" id="profileBackLabel">プロフィール</span>
+      </div>
+      <div class="profile-hero" id="profileHero"></div>
+      <div class="profile-panel-body" id="profilePanelBody"></div>
+    </div>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div id="map-hint">🍽 地図上のお店をクリックして追加できます</div>
+    <div id="poi-loading">⏳ お店の情報を取得中...</div>
+  </div>
+</div>
+
+<!-- Add Spot Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🍽 お店を追加</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="step1">
+        <div class="form-row">
+          <label class="form-label">お店を検索</label>
+          <input class="form-input" id="inputSearch" placeholder="お店名・住所で検索..." autocomplete="off"/>
+          <div class="search-hint">またはモーダルを閉じて地図上のお店を直接クリック</div>
+        </div>
+      </div>
+      <div id="step2" style="display:none;">
+        <div class="selected-place" id="selectedPlaceCard"></div>
+        <div class="form-row">
+          <label class="form-label">ジャンル</label>
+          <select class="form-input" id="inputGenre" onchange="onGenreChange()">
+            <option>ラーメン・麺類</option><option>寿司・和食</option><option>焼肉・焼鳥</option>
+            <option>カフェ・スイーツ</option><option>イタリアン・パスタ</option><option>中華料理</option>
+            <option>韓国料理</option><option>エスニック料理</option><option>居酒屋・バー</option>
+            <option>ファミレス・カジュアル</option><option>ベーカリー・パン</option><option>その他</option>
+          </select>
+          <div class="genre-preview">
+            <span class="genre-preview-emoji" id="genreEmoji">🍜</span>
+            <span class="genre-preview-text" id="genreText">ラーメン・麺類</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">評価</label>
+          <div class="star-input" id="starInput">
+            <span class="si" data-v="1" onclick="setRating(1)">★</span>
+            <span class="si" data-v="2" onclick="setRating(2)">★</span>
+            <span class="si" data-v="3" onclick="setRating(3)">★</span>
+            <span class="si" data-v="4" onclick="setRating(4)">★</span>
+            <span class="si" data-v="5" onclick="setRating(5)">★</span>
+          </div>
+          <div class="rating-label" id="ratingLabel">タップして評価</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">コメント</label>
+          <textarea class="form-input" id="inputComment" placeholder="おすすめポイントを書いてみよう！"></textarea>
+        </div>
+        <button class="btn-back" onclick="resetSearch()">← 別のお店を検索する</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-submit" id="btnSubmit" onclick="submitSpot()" disabled>保存する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════
+const GENRE_ICONS = {
+  'ラーメン・麺類':'🍜','寿司・和食':'🍣','焼肉・焼鳥':'🔥',
+  'カフェ・スイーツ':'☕','イタリアン・パスタ':'🍝','中華料理':'🥟',
+  '韓国料理':'🌶️','エスニック料理':'🍛','居酒屋・バー':'🍺',
+  'ファミレス・カジュアル':'🍽️','ベーカリー・パン':'🥐','その他':'📍',
+};
+const RATING_WORDS = ['','いまいち','ふつう','おいしい','とてもおいしい','最高！'];
+
+// ═══════════════════════════════════════
+// USERS
+// ═══════════════════════════════════════
+const MY_USER = {
+  id: 0, name: 'りょう', label: 'り', color: '#dc2743', isMe: true,
+  bio: '東京グルメを開拓中。おいしいお店を地図に残しています。',
+  tags: ['和食','カフェ','ラーメン'],
+};
+const FRIENDS = [
+  {
+    id: 1, name: 'さとみ', emoji: '👩‍🍳', color: '#e05c3a',
+    desc: 'グルメブロガー・食べ歩き大好き', following: true, showOnMap: true,
+    bio: '年間300軒以上食べ歩くグルメブロガー。特に東京の隠れた名店探しが得意です。',
+    tags: ['寿司','ラーメン','カフェ','焼鳥'],
+  },
+  {
+    id: 2, name: 'けんじ', emoji: '👨‍👧', color: '#4a90d9',
+    desc: '子育てパパ・家族でお出かけ情報', following: true, showOnMap: true,
+    bio: '3歳の娘と奥さんと週末お出かけするパパ。子連れOKの穴場を日々開拓中。',
+    tags: ['ファミリー','カフェ','うどん'],
+  },
+  {
+    id: 3, name: 'ゆかり', emoji: '🧖‍♀️', color: '#9b59b6',
+    desc: 'インフルエンサー・韓国エスニック', following: false, showOnMap: false,
+    bio: 'K-POPと韓国料理が大好き！新大久保から恵比寿まで韓国グルメを発信中。',
+    tags: ['韓国料理','エスニック','映えスポット'],
+  },
+  {
+    id: 4, name: 'たける', emoji: '🍜', color: '#27ae60',
+    desc: 'ラーメンマニア・週3ラーメン', following: false, showOnMap: false,
+    bio: 'ラーメンのためなら1時間でも並ぶ。スープの研究が趣味。週3はラーメン。',
+    tags: ['ラーメン','つけ麺','二郎系'],
+  },
+  {
+    id: 5, name: 'あいこ', emoji: '☕', color: '#e67e22',
+    desc: 'カフェ巡り・スイーツ好き', following: true, showOnMap: true,
+    bio: 'スペシャルティコーヒーとクロワッサンが人生の幸せ。都内カフェを制覇したい。',
+    tags: ['カフェ','スイーツ','ベーカリー'],
+  },
+];
+
+// ═══════════════════════════════════════
+// REAL SPOTS (東京の実在する店舗)
+// ═══════════════════════════════════════
+const SAMPLE_SPOTS = [
+  // ── さとみ (id:1) ──
+  {
+    id:1, userId:1, name:'一蘭 渋谷店', genre:'ラーメン・麺類',
+    lat:35.6601, lng:139.6983, area:'渋谷', rating:5,
+    comment:'天然とんこつの濃厚スープが絶品。一人一席の個室感が最高で集中して食べられる！',
+  },
+  {
+    id:2, userId:1, name:'久兵衛 銀座本店', genre:'寿司・和食',
+    lat:35.6714, lng:139.7656, area:'銀座', rating:5,
+    comment:'昭和23年創業の老舗鮨屋。ネタの鮮度と職人の技術が段違い。特別な日に絶対おすすめ。',
+  },
+  {
+    id:3, userId:1, name:'猿田彦珈琲 恵比寿本店', genre:'カフェ・スイーツ',
+    lat:35.6458, lng:139.7107, area:'恵比寿', rating:4,
+    comment:'豆の産地にこだわったスペシャルティコーヒーの先駆け。ラテが特においしい！',
+  },
+  {
+    id:4, userId:1, name:'鳥貴族 渋谷道玄坂店', genre:'焼肉・焼鳥',
+    lat:35.6582, lng:139.6977, area:'渋谷', rating:4,
+    comment:'全品均一298円（税抜）の国産鶏専門チェーン。コスパ最強で友達との飲みに最適！',
+  },
+  // ── けんじ (id:2) ──
+  {
+    id:5, userId:2, name:'Eggs \'n Things 原宿店', genre:'カフェ・スイーツ',
+    lat:35.6699, lng:139.7033, area:'原宿', rating:5,
+    comment:'ハワイアンパンケーキの名店。山盛りホイップが映えすぎ！子どもも大喜びでした。',
+  },
+  {
+    id:6, userId:2, name:'丸亀製麺 渋谷店', genre:'ラーメン・麺類',
+    lat:35.6603, lng:139.7007, area:'渋谷', rating:4,
+    comment:'打ちたてうどんのコスパが神。子どもが麺好きなので週1は来てる。天ぷらも最高！',
+  },
+  {
+    id:7, userId:2, name:'むさしの森珈琲 下北沢店', genre:'カフェ・スイーツ',
+    lat:35.6616, lng:139.6681, area:'下北沢', rating:4,
+    comment:'子連れでゆっくりできる広め席が嬉しい。ホットケーキが分厚くて子どもに大人気！',
+  },
+  // ── ゆかり (id:3) ──
+  {
+    id:8, userId:3, name:'新大久保 ハヌリ', genre:'韓国料理',
+    lat:35.7018, lng:139.6993, area:'新大久保', rating:5,
+    comment:'本格サムギョプサルが絶品！スタッフさんが焼いてくれるから楽チン。お酒も進む🔥',
+  },
+  {
+    id:9, userId:3, name:'バーンタイ 新宿店', genre:'エスニック料理',
+    lat:35.6924, lng:139.6994, area:'新宿', rating:4,
+    comment:'タイ料理の老舗。パッタイとグリーンカレーが本場の味！辛さ調節できるので安心。',
+  },
+  {
+    id:10, userId:3, name:'ON THE DISH 恵比寿', genre:'韓国料理',
+    lat:35.6468, lng:139.7099, area:'恵比寿', rating:5,
+    comment:'韓国チキンとチーズハットグが映えすぎ！インスタ映え確定。テイクアウトも◎',
+  },
+  // ── たける (id:4) ──
+  {
+    id:11, userId:4, name:'一風堂 渋谷店', genre:'ラーメン・麺類',
+    lat:35.6593, lng:139.6999, area:'渋谷', rating:5,
+    comment:'博多豚骨の基準。白丸の滑らかなスープと細麺のバランスが完璧。替え玉は絶対頼んで！',
+  },
+  {
+    id:12, userId:4, name:'蒙古タンメン中本 上野店', genre:'ラーメン・麺類',
+    lat:35.7120, lng:139.7758, area:'上野', rating:4,
+    comment:'北極ラーメンで辛さLV10に挑戦。汗が滝のように出るけどやめられない。辛旨の極み。',
+  },
+  {
+    id:13, userId:4, name:'天下一品 渋谷店', genre:'ラーメン・麺類',
+    lat:35.6596, lng:139.7002, area:'渋谷', rating:4,
+    comment:'こってりスープは他では味わえない唯一無二の存在。好き嫌い分かれるけど俺は大好き。',
+  },
+  // ── あいこ (id:5) ──
+  {
+    id:14, userId:5, name:'Blue Bottle Coffee 清澄白河フラッグシップカフェ', genre:'カフェ・スイーツ',
+    lat:35.6762, lng:139.8034, area:'清澄白河', rating:5,
+    comment:'日本1号店。倉庫をリノベした空間が最高。シングルオリジンのドリップコーヒーは必飲！',
+  },
+  {
+    id:15, userId:5, name:'% Arabica Tokyo 六本木', genre:'カフェ・スイーツ',
+    lat:35.6631, lng:139.7319, area:'六本木', rating:5,
+    comment:'京都発の世界的カフェ。ラテアートが芸術的で毎回感動。テラス席から東京タワーが見える！',
+  },
+  {
+    id:16, userId:5, name:'PRESS BUTTER SAND 東京駅一番街店', genre:'カフェ・スイーツ',
+    lat:35.6813, lng:139.7657, area:'東京駅', rating:4,
+    comment:'バターサンドの概念を変えた一品。サクサク生地とバタークリームの組み合わせが神すぎる！',
+  },
+  {
+    id:17, userId:5, name:'ル・プチメック 表参道店', genre:'ベーカリー・パン',
+    lat:35.6650, lng:139.7131, area:'表参道', rating:5,
+    comment:'京都の名ベーカリーが東京に。クロワッサンの層が美しすぎる。開店前から並ぶ価値あり！',
+  },
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let map, infoWindow, placesService, autocomplete;
+let gmMarkers = {}, highlightedSpotId = null, activeTab = 'friends';
+let openProfileId = null;   // プロフィールパネルに表示中のユーザーID
+let mapFilterId   = null;   // 地図フィルタ中のユーザーID
+
+let mySpots = JSON.parse(localStorage.getItem('fwy_mySpots') || '[]');
+let nextId  = parseInt(localStorage.getItem('fwy_nextId') || '100');
+
+let pendingLat = null, pendingLng = null, pendingName = null, pendingAddr = null, pendingArea = null;
+let currentRating = 0;
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function getUserById(id) { return id === 0 ? MY_USER : FRIENDS.find(f => f.id === id); }
+function getAllSpots()    { return [...SAMPLE_SPOTS, ...mySpots]; }
+function iconOf(genre)   { return GENRE_ICONS[genre] || '📍'; }
+function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) : ''; }
+function mapVisibleSpots() {
+  if (mapFilterId !== null) return getAllSpots().filter(s => s.userId === mapFilterId);
+  const ids = new Set([0, ...FRIENDS.filter(f => f.showOnMap).map(f => f.id)]);
+  return getAllSpots().filter(s => ids.has(s.userId));
+}
+
+// ═══════════════════════════════════════
+// MAP
+// ═══════════════════════════════════════
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
+    mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
+    styles: [
+      { featureType:'poi.business', elementType:'labels', stylers:[{visibility:'on'}] },
+      { featureType:'poi.medical',  elementType:'labels', stylers:[{visibility:'off'}] },
+      { featureType:'poi.school',   elementType:'labels', stylers:[{visibility:'off'}] },
+    ],
+  });
+  infoWindow    = new google.maps.InfoWindow();
+  placesService = new google.maps.places.PlacesService(map);
+
+  map.addListener('click', (e) => {
+    if (!e.placeId) return;
+    if (document.getElementById('modalOverlay').classList.contains('open')) return;
+    e.stop();
+    document.getElementById('poi-loading').style.display = 'block';
+    placesService.getDetails(
+      { placeId: e.placeId, fields: ['name','geometry','formatted_address','address_components','types'] },
+      (place, status) => {
+        document.getElementById('poi-loading').style.display = 'none';
+        if (status !== google.maps.places.PlacesServiceStatus.OK || !place) { alert('取得できませんでした。'); return; }
+        openModalWithPlace(place);
+      }
+    );
+  });
+
+  initAutocomplete();
+  renderMarkers();
+  renderStories();
+  renderSidebar();
+}
+
+function makeIcon(user) {
+  const label = user.isMe ? 'り' : user.emoji;
+  const fs    = user.isMe ? 13 : 16;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">
+    <path d="M20 0C8.95 0 0 8.95 0 20c0 15 20 28 20 28S40 35 40 20C40 8.95 31.05 0 20 0z" fill="${user.color}" stroke="white" stroke-width="2.5"/>
+    <text x="20" y="27" text-anchor="middle" font-size="${fs}" fill="white" font-weight="bold" font-family="sans-serif">${label}</text>
+  </svg>`;
+  return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(40,48), anchor: new google.maps.Point(20,48) };
+}
+
+function infoHTML(spot, user) {
+  const lbl = user.isMe ? 'り' : user.emoji;
+  return `<div class="gm-popup">
+    <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
+    <div class="gm-popup-title">${spot.name}</div>
+    <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}</div>
+    ${spot.rating?`<div class="gm-popup-stars">${starsHTML(spot.rating)}</div>`:''}
+    ${spot.comment?`<div class="gm-popup-comment">「${spot.comment}」</div>`:''}
+    <div class="gm-popup-footer">
+      <div class="gm-popup-av" style="background:${user.color};">${lbl}</div>
+      <div class="gm-popup-by">by</div>
+      <div class="gm-popup-author" style="color:${user.color};">${user.name}</div>
+    </div>
+  </div>`;
+}
+
+function renderMarkers() {
+  Object.values(gmMarkers).forEach(m => m.setMap(null));
+  gmMarkers = {};
+  mapVisibleSpots().forEach(spot => {
+    const user   = getUserById(spot.userId);
+    const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map, icon:makeIcon(user), title:spot.name });
+    marker.addListener('click', () => {
+      infoWindow.setContent(infoHTML(spot, user));
+      infoWindow.open(map, marker);
+      highlightedSpotId = spot.id;
+      renderSidebar();
+      if (openProfileId !== null) renderProfilePanel(openProfileId);
+      const el = document.getElementById('spot-'+spot.id);
+      if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+    gmMarkers[spot.id] = marker;
+  });
+}
+
+// ═══════════════════════════════════════
+// STORIES
+// ═══════════════════════════════════════
+function renderStories() {
+  const row = document.getElementById('storiesRow');
+  const all = [MY_USER, ...FRIENDS];
+  row.innerHTML = all.map(u => {
+    const hasSpots = getAllSpots().some(s => s.userId === u.id);
+    const isActive = mapFilterId === u.id;
+    const inner    = u.isMe ? `<div class="story-inner me">り</div>` : `<div class="story-inner">${u.emoji}</div>`;
+    return `<div class="story-item" onclick="openProfile(${u.id})">
+      <div class="story-ring ${hasSpots?'ig':'gray'} ${isActive?'active':''}">
+        ${inner}
+      </div>
+      <div class="story-name">${u.name}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// PROFILE PANEL
+// ═══════════════════════════════════════
+function openProfile(userId) {
+  openProfileId = userId;
+  // 地図をそのユーザーにフィルタ
+  mapFilterId = userId;
+  renderMarkers();
+  renderStories();
+  renderProfilePanel(userId);
+  fitToVisible();
+  document.getElementById('profilePanel').classList.add('open');
+}
+
+function closeProfile() {
+  document.getElementById('profilePanel').classList.remove('open');
+  openProfileId = null;
+  mapFilterId   = null;
+  renderMarkers();
+  renderStories();
+  renderSidebar();
+}
+
+function renderProfilePanel(userId) {
+  const user   = getUserById(userId);
+  const spots  = getAllSpots().filter(s => s.userId === userId);
+  const isMe   = !!user.isMe;
+  const friend = isMe ? null : FRIENDS.find(f => f.id === userId);
+
+  document.getElementById('profileBackLabel').textContent = user.name;
+
+  // Hero section
+  const innerHTML = isMe
+    ? `<div class="profile-big-inner me">り</div>`
+    : `<div class="profile-big-inner">${user.emoji}</div>`;
+
+  const followBtn = (!isMe) ? `
+    <button class="profile-follow-btn ${friend.following?'following':'not-following'}"
+            onclick="toggleFollow(${userId}); renderProfilePanel(${userId})">
+      ${friend.following ? 'フォロー中' : 'フォローする'}
+    </button>` : '';
+
+  const mapBtn = (!isMe && friend.following) ? `
+    <button class="profile-map-btn ${friend.showOnMap?'on':''}"
+            onclick="toggleMapVisibility(${userId}); renderProfilePanel(${userId})">
+      ${friend.showOnMap ? '🗺 地図表示中' : '🗺 地図に表示'}
+    </button>` : '';
+
+  const tagsHTML = (user.tags||[]).map(t=>`<span class="profile-tag">${t}</span>`).join('');
+
+  document.getElementById('profileHero').innerHTML = `
+    <div class="profile-hero-top">
+      <div class="profile-big-ring ${spots.length?'ig':'gray'}" style="width:78px;height:78px;">
+        ${innerHTML}
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <span class="profile-stat-val">${spots.length}</span>
+          <span class="profile-stat-label">スポット</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-name">${user.name}</div>
+    <div class="profile-bio">${user.bio||''}</div>
+    <div class="profile-tags">${tagsHTML}</div>
+    <div class="profile-actions">${followBtn}${mapBtn}</div>
+  `;
+
+  // Spot list
+  const body = document.getElementById('profilePanelBody');
+  if (spots.length === 0) {
+    body.innerHTML = `<div class="empty-state"><div class="big">📍</div><p>まだスポットがありません</p></div>`;
+    return;
+  }
+  body.innerHTML = `
+    <div class="section-head"><div class="section-label">📍 ${user.name}のスポット (${spots.length})</div></div>
+    ${spots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+  `;
+}
+
+// ═══════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-friends').classList.toggle('active', tab==='friends');
+  document.getElementById('tab-myspots').classList.toggle('active', tab==='myspots');
+  renderSidebar();
+}
+
+function renderSidebar() {
+  const body = document.getElementById('sidebarBody');
+  let html = '';
+
+  if (activeTab === 'friends') {
+    FRIENDS.forEach(f => {
+      const cnt = getAllSpots().filter(s => s.userId === f.id).length;
+      html += `
+        <div class="friend-card">
+          <div class="fc-avatar ${f.following?'ig':'gray'}" onclick="openProfile(${f.id})">
+            <div class="fc-avatar-inner">${f.emoji}</div>
+          </div>
+          <div class="fc-info" onclick="openProfile(${f.id})">
+            <div class="fc-name">${f.name}</div>
+            <div class="fc-desc">${f.desc}</div>
+            <div class="fc-count">${cnt}スポット</div>
+          </div>
+          <div class="fc-actions">
+            <button class="follow-btn ${f.following?'following':'not-following'}" onclick="toggleFollow(${f.id})">${f.following?'フォロー中':'フォロー'}</button>
+            ${f.following?`
+            <button class="map-toggle ${f.showOnMap?'on':''}" onclick="toggleMapVisibility(${f.id})">
+              <div class="toggle-dot"></div>
+              <span style="font-size:10px;">${f.showOnMap?'地図表示中':'非表示'}</span>
+            </button>`:'<div style="height:18px;"></div>'}
+          </div>
+        </div>`;
+    });
+    const vis = mapVisibleSpots().filter(s=>s.userId!==0);
+    if (vis.length > 0) {
+      html += `<div class="section-head"><div class="section-label">📍 表示中のスポット (${vis.length})</div></div>`;
+      vis.forEach(s => { html += spotCardHTML(s, getUserById(s.userId), false); });
+    }
+  } else {
+    if (mySpots.length === 0) {
+      html = `<div class="empty-state"><div class="big">🍽</div><p>まだスポットがありません<br>「＋ 追加」から登録してみましょう！</p></div>`;
+    } else {
+      html = `<div class="section-head"><div class="section-label">📍 りょうのスポット (${mySpots.length})</div></div>`;
+      mySpots.slice().reverse().forEach(s => { html += spotCardHTML(s, MY_USER, true); });
+    }
+  }
+  body.innerHTML = html;
+}
+
+function spotCardHTML(spot, user, canDel) {
+  const hi  = spot.id === highlightedSpotId;
+  const lbl = user.isMe ? 'り' : user.emoji;
+  return `
+    <div class="spot-card ${hi?'hl':''}" id="spot-${spot.id}" onclick="focusSpot(${spot.id})">
+      <div class="spot-icon-box">${iconOf(spot.genre)}</div>
+      <div class="spot-info">
+        <div class="spot-name">${spot.name}</div>
+        <div class="spot-meta">${spot.genre}${spot.area?' · '+spot.area:''}</div>
+        ${spot.rating?`<div class="spot-stars">${starsHTML(spot.rating)}</div>`:''}
+        ${spot.comment?`<div class="spot-comment">「${spot.comment.substring(0,40)}…」</div>`:''}
+        <div class="spot-tag" style="background:${user.color};">${lbl} ${user.name}</div>
+      </div>
+      ${canDel?`<button class="spot-del" onclick="event.stopPropagation();deleteSpot(${spot.id})">✕</button>`:''}
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════
+function toggleFollow(fid) {
+  const f = FRIENDS.find(f=>f.id===fid);
+  if (!f) return;
+  f.following = !f.following;
+  if (!f.following) f.showOnMap = false;
+  renderMarkers(); renderSidebar(); fitToVisible();
+}
+function toggleMapVisibility(fid) {
+  const f = FRIENDS.find(f=>f.id===fid);
+  if (!f||!f.following) return;
+  f.showOnMap = !f.showOnMap;
+  renderMarkers(); renderSidebar();
+}
+function focusSpot(spotId) {
+  highlightedSpotId = spotId;
+  renderSidebar();
+  if (openProfileId !== null) renderProfilePanel(openProfileId);
+  const spot = getAllSpots().find(s=>s.id===spotId);
+  if (!spot) return;
+  map.panTo({lat:spot.lat, lng:spot.lng});
+  map.setZoom(16);
+  const marker = gmMarkers[spotId];
+  if (marker) { infoWindow.setContent(infoHTML(spot, getUserById(spot.userId))); infoWindow.open(map, marker); }
+}
+function fitToVisible() {
+  const spots = mapVisibleSpots();
+  if (!spots.length) return;
+  const b = new google.maps.LatLngBounds();
+  spots.forEach(s => b.extend({lat:s.lat, lng:s.lng}));
+  map.fitBounds(b, 60);
+}
+function deleteSpot(id) {
+  if (!confirm('このスポットを削除しますか？')) return;
+  mySpots = mySpots.filter(s=>s.id!==id);
+  localStorage.setItem('fwy_mySpots', JSON.stringify(mySpots));
+  if (gmMarkers[id]) { gmMarkers[id].setMap(null); delete gmMarkers[id]; }
+  renderSidebar();
+  if (openProfileId === 0) renderProfilePanel(0);
+}
+
+// ═══════════════════════════════════════
+// PLACES AUTOCOMPLETE
+// ═══════════════════════════════════════
+function initAutocomplete() {
+  const input = document.getElementById('inputSearch');
+  autocomplete = new google.maps.places.Autocomplete(input, {
+    types:['establishment'], componentRestrictions:{country:'jp'},
+    fields:['name','geometry','formatted_address','address_components','types'],
+  });
+  autocomplete.bindTo('bounds', map);
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry?.location) { alert('お店が見つかりませんでした。'); return; }
+    openModalWithPlace(place);
+  });
+}
+
+function openModalWithPlace(place) {
+  pendingLat  = place.geometry.location.lat();
+  pendingLng  = place.geometry.location.lng();
+  pendingName = place.name;
+  pendingAddr = place.formatted_address||'';
+  pendingArea = '';
+  if (place.address_components) {
+    const w = place.address_components.find(c=>c.types.includes('sublocality_level_1')||c.types.includes('locality'));
+    if (w) pendingArea = w.long_name;
+  }
+  currentRating = 0;
+  document.getElementById('inputComment').value = '';
+  document.getElementById('inputGenre').selectedIndex = 0;
+  autoSelectGenre(place.types||[]);
+  onGenreChange(); updateStarUI(0);
+  document.getElementById('selectedPlaceCard').innerHTML = `
+    <div class="pc">✅ Googleマップから取得</div>
+    <div class="pn">${pendingName}</div>
+    <div class="pa">${pendingAddr}</div>`;
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('btnSubmit').disabled = false;
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('inputComment').focus(), 150);
+}
+
+// ═══════════════════════════════════════
+// ADD SPOT
+// ═══════════════════════════════════════
+function autoSelectGenre(types) {
+  const map2 = [
+    {keys:['ramen','noodle'],             genre:'ラーメン・麺類'},
+    {keys:['sushi','japanese_restaurant'],genre:'寿司・和食'},
+    {keys:['bbq','yakitori','yakiniku'],  genre:'焼肉・焼鳥'},
+    {keys:['cafe','bakery','dessert'],    genre:'カフェ・スイーツ'},
+    {keys:['italian','pizza'],           genre:'イタリアン・パスタ'},
+    {keys:['chinese','dim_sum'],         genre:'中華料理'},
+    {keys:['korean'],                    genre:'韓国料理'},
+    {keys:['thai','vietnamese','indian'],genre:'エスニック料理'},
+    {keys:['bar','night_club'],          genre:'居酒屋・バー'},
+  ];
+  const ts = types.join(' ').toLowerCase();
+  const sel = document.getElementById('inputGenre');
+  for (const e of map2) {
+    if (e.keys.some(k=>ts.includes(k))) {
+      for (let i=0;i<sel.options.length;i++) { if (sel.options[i].value===e.genre){sel.selectedIndex=i;return;} }
+    }
+  }
+}
+function onGenreChange() {
+  const g = document.getElementById('inputGenre').value;
+  document.getElementById('genreEmoji').textContent = iconOf(g);
+  document.getElementById('genreText').textContent  = g;
+}
+function setRating(v) { currentRating=v; updateStarUI(v); }
+function updateStarUI(v) {
+  document.querySelectorAll('#starInput .si').forEach(s=>s.classList.toggle('filled', parseInt(s.dataset.v)<=v));
+  document.getElementById('ratingLabel').textContent = v>0 ? RATING_WORDS[v] : 'タップして評価';
+}
+function startAddSpot() {
+  pendingLat=null; pendingLng=null; pendingName=null; pendingAddr=null; pendingArea=null; currentRating=0;
+  document.getElementById('inputSearch').value='';
+  document.getElementById('inputComment').value='';
+  document.getElementById('inputGenre').selectedIndex=0;
+  document.getElementById('btnSubmit').disabled=true;
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('modalOverlay').classList.add('open');
+  onGenreChange(); updateStarUI(0);
+  setTimeout(()=>document.getElementById('inputSearch').focus(), 100);
+}
+function resetSearch() {
+  document.getElementById('step1').style.display='block';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('btnSubmit').disabled=true;
+  document.getElementById('inputSearch').value='';
+  pendingLat=null; pendingLng=null;
+  setTimeout(()=>document.getElementById('inputSearch').focus(), 50);
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function submitSpot() {
+  if (!pendingLat||!pendingName) { alert('お店を選択してください'); return; }
+  const genre = document.getElementById('inputGenre').value;
+  const spot  = {
+    id:nextId++, userId:0, name:pendingName, genre,
+    comment: document.getElementById('inputComment').value.trim(),
+    area: pendingArea||'', addr: pendingAddr||'',
+    lat: pendingLat, lng: pendingLng, rating: currentRating||null,
+  };
+  mySpots.push(spot);
+  localStorage.setItem('fwy_mySpots', JSON.stringify(mySpots));
+  localStorage.setItem('fwy_nextId', String(nextId));
+  closeModal();
+  const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map, icon:makeIcon(MY_USER), title:spot.name, animation:google.maps.Animation.DROP });
+  marker.addListener('click',()=>{ infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker); highlightedSpotId=spot.id; renderSidebar(); });
+  gmMarkers[spot.id]=marker;
+  map.panTo({lat:spot.lat,lng:spot.lng}); map.setZoom(16);
+  infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker);
+  switchTab('myspots');
+}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1-BJlcbh9cp487vyBZnpAtemMIq7sjbs&libraries=places&callback=initMap&language=ja&region=JP" async defer></script>
+</body>
+</html>
