@@ -372,9 +372,39 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .ppc-time { font-size: 11px; color: #8e8e8e; }
 .ppc-caption { font-size: 12.5px; color: #444; margin-top: 4px; line-height: 1.4; }
 .ppc-meta { font-size: 11.5px; color: #8e8e8e; margin-top: 5px; }
+
+/* ── LOGIN GATE ── */
+.login-gate-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #fff7f4 0%, #ffeef0 100%);
+}
+.login-gate-card {
+  width: 320px; padding: 36px 28px; text-align: center;
+  background: #fff; border-radius: 16px; box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+.login-gate-logo { font-size: 22px; font-weight: 800; color: #dc2743; margin-bottom: 8px; }
+.login-gate-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 24px; }
+.login-gate-btn {
+  width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid #ddd;
+  background: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.login-gate-btn:hover { background: #f7f7f7; }
+.login-gate-note { font-size: 12px; margin-top: 14px; }
 </style>
 </head>
 <body>
+
+<!-- ══════════════ LOGIN GATE ══════════════ -->
+<div class="login-gate-overlay" id="loginGateOverlay">
+  <div class="login-gate-card">
+    <div class="login-gate-logo">Food with you</div>
+    <p class="login-gate-desc">友達とお気に入りのお店を共有するグルメSNS</p>
+    <button class="login-gate-btn" id="googleSignInBtn" onclick="signInWithGoogle()">Googleでログイン</button>
+    <p class="login-gate-note" id="loginGateError" style="display:none;color:#dc2743;"></p>
+  </div>
+</div>
 
 <header>
   <div class="logo">Food with you</div>
@@ -663,9 +693,12 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
-      <button class="btn-submit" onclick="saveProfile()">保存する</button>
+    <div class="modal-footer" style="justify-content: space-between;">
+      <button class="btn-cancel" onclick="signOutOfApp()" style="color:#dc2743;">ログアウト</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
+        <button class="btn-submit" onclick="saveProfile()">保存する</button>
+      </div>
     </div>
   </div>
 </div>
@@ -925,9 +958,48 @@ function mapVisibleSpots() {
 }
 
 // ═══════════════════════════════════════
+// ログインゲート（Firebase認証との連携）
+// ═══════════════════════════════════════
+let mapsReady = false;
+let appStarted = false;
+let currentFirebaseUser = null;
+
+function initMap() {
+  mapsReady = true;
+  tryStartApp();
+}
+
+function tryStartApp() {
+  if (!mapsReady || !currentFirebaseUser || appStarted) return;
+  appStarted = true;
+  startApp();
+}
+
+// firebase-init.js（モジュールscript）からGoogleログイン状態が変わるたびに呼ばれる
+window.onFirebaseAuthChange = function(user) {
+  currentFirebaseUser = user;
+  const overlay = document.getElementById('loginGateOverlay');
+  if (user) {
+    if (overlay) overlay.style.display = 'none';
+    MY_USER.uid      = user.uid;
+    MY_USER.email    = user.email || null;
+    MY_USER.photoURL = user.photoURL || null;
+    if (!localStorage.getItem('fwy_myuser')) {
+      // 初回ログイン時はGoogleの名前を初期値として使う
+      MY_USER.name  = user.displayName || MY_USER.name;
+      MY_USER.label = (user.displayName || MY_USER.name).charAt(0);
+    }
+    tryStartApp();
+  } else {
+    appStarted = false;
+    if (overlay) overlay.style.display = 'flex';
+  }
+};
+
+// ═══════════════════════════════════════
 // MAP
 // ═══════════════════════════════════════
-function initMap() {
+function startApp() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
     mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
@@ -1888,6 +1960,51 @@ function submitSpot() {
   switchTab('myspots');
 }
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+
+<!-- ══════════════ FIREBASE（ログイン機能） ══════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDbHBc8VkkDQswScj6rjagLMD0yMy44HYs",
+    authDomain: "food-with-you.firebaseapp.com",
+    projectId: "food-with-you",
+    storageBucket: "food-with-you.firebasestorage.app",
+    messagingSenderId: "1094661998370",
+    appId: "1:1094661998370:web:e7d5e20bcc5fa95de0c77b",
+    measurementId: "G-529ZEM1KHZ"
+  };
+
+  const fbApp  = initializeApp(firebaseConfig);
+  const fbAuth = getAuth(fbApp);
+  const fbDb   = getFirestore(fbApp);
+  const googleProvider = new GoogleAuthProvider();
+
+  // 他のscript（非module）からも使えるようにwindowに公開
+  window.FWY_FB = { app: fbApp, auth: fbAuth, db: fbDb };
+
+  window.signInWithGoogle = function () {
+    const errEl = document.getElementById('loginGateError');
+    if (errEl) errEl.style.display = 'none';
+    signInWithPopup(fbAuth, googleProvider).catch((err) => {
+      console.error('Googleログイン失敗:', err);
+      if (errEl) { errEl.textContent = 'ログインに失敗しました。もう一度お試しください。'; errEl.style.display = 'block'; }
+    });
+  };
+
+  window.signOutOfApp = function () {
+    signOut(fbAuth);
+  };
+
+  onAuthStateChanged(fbAuth, (user) => {
+    if (typeof window.onFirebaseAuthChange === 'function') {
+      window.onFirebaseAuthChange(user);
+    }
+  });
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1-BJlcbh9cp487vyBZnpAtemMIq7sjbs&libraries=places,geometry&callback=initMap&language=ja&region=JP" async defer></script>
