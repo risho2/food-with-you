@@ -224,6 +224,17 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .btn-submit:disabled { background: #dbdbdb; cursor: not-allowed; opacity: 1; }
 .btn-back { width: 100%; padding: 7px; border: none; background: none; font-size: 12px; color: #8e8e8e; cursor: pointer; margin-bottom: 2px; }
 
+/* ── Avatar upload (編集モーダル／オンボーディング) ── */
+.avatar-edit-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 18px; }
+.avatar-edit-preview {
+  width: 84px; height: 84px; border-radius: 50%; overflow: hidden;
+  background: #f1f1f1; border: 3px solid #fff; box-shadow: 0 0 0 1.5px #dbdbdb;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 800; color: #dc2743;
+}
+.avatar-edit-btn-label { font-size: 12px; font-weight: 700; color: #dc2743; cursor: pointer; }
+.avatar-edit-input { display: none; }
+
 /* ── InfoWindow ── */
 .gm-popup { font-family: -apple-system, 'Hiragino Sans', sans-serif; width: 220px; }
 .gm-popup-icon { font-size: 26px; margin-bottom: 5px; }
@@ -680,6 +691,13 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <button class="modal-close" onclick="closeEditProfileModal()">✕</button>
     </div>
     <div class="modal-body">
+      <div class="avatar-edit-wrap">
+        <div class="avatar-edit-preview" id="editProfilePhotoPreview"></div>
+        <label class="avatar-edit-btn-label">
+          📷 写真を変更
+          <input type="file" accept="image/*" class="avatar-edit-input" id="editProfilePhotoInput" onchange="onProfilePhotoSelected(event,'edit')"/>
+        </label>
+      </div>
       <div class="form-row">
         <label class="form-label">名前</label>
         <input class="form-input" id="editProfileName" placeholder="名前" maxlength="20"/>
@@ -699,6 +717,35 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
         <button class="btn-submit" onclick="saveProfile()">保存する</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ONBOARDING（初回登録時のプロフィール設定） ══════════════ -->
+<div class="modal-overlay" id="onboardingOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🎉 プロフィールを設定しよう</div>
+    </div>
+    <div class="modal-body">
+      <div class="avatar-edit-wrap">
+        <div class="avatar-edit-preview" id="onboardPhotoPreview"></div>
+        <label class="avatar-edit-btn-label">
+          📷 写真を選ぶ
+          <input type="file" accept="image/*" class="avatar-edit-input" id="onboardPhotoInput" onchange="onProfilePhotoSelected(event,'onboard')"/>
+        </label>
+      </div>
+      <div class="form-row">
+        <label class="form-label">名前</label>
+        <input class="form-input" id="onboardName" placeholder="名前" maxlength="20"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">自己紹介</label>
+        <textarea class="form-input" id="onboardBio" placeholder="自己紹介を書いてみよう" maxlength="120"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-submit" style="flex:1;" onclick="finishOnboarding()">始める</button>
     </div>
   </div>
 </div>
@@ -726,6 +773,53 @@ function pickColorForUid(uid) {
   let hash = 0;
   for (let i = 0; i < uid.length; i++) hash = (hash * 31 + uid.charCodeAt(i)) | 0;
   return COLOR_PALETTE[Math.abs(hash) % COLOR_PALETTE.length];
+}
+
+// アバター表示：photoURLがあれば画像、なければ文字アバター（既存の挙動）
+function avatarInner(user) {
+  return user && user.photoURL
+    ? `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+    : (user ? user.label : '');
+}
+
+// 画像ファイルをリサイズ＆圧縮してbase64データURLに変換（Firestoreのドキュメントサイズ制限に収めるため）
+function resizeImageToDataURL(file, maxSize = 240, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; } }
+        else       { if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; } }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('画像の読み込みに失敗しました'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('ファイルの読み込みに失敗しました'));
+    reader.readAsDataURL(file);
+  });
+}
+
+// 編集モーダル／オンボーディングで選択中の新しい写真（未選択ならnull＝既存のまま）
+let editPhotoDataUrl = null;
+let onboardPhotoDataUrl = null;
+
+async function onProfilePhotoSelected(event, which) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const dataUrl = await resizeImageToDataURL(file);
+    const previewId = which === 'edit' ? 'editProfilePhotoPreview' : 'onboardPhotoPreview';
+    document.getElementById(previewId).innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    if (which === 'edit') editPhotoDataUrl = dataUrl; else onboardPhotoDataUrl = dataUrl;
+  } catch (err) {
+    alert('画像の読み込みに失敗しました。別の画像でお試しください。');
+  }
 }
 
 const MY_USER = {
@@ -814,33 +908,41 @@ function toRealId(id)   { return id === '0' ? MY_USER.uid : id; }
 // ═══════════════════════════════════════
 // FIRESTORE データ連携
 // ═══════════════════════════════════════
+// 既存ユーザーならFirestoreのデータを読み込んでtrueを返す。
+// 新規ユーザー（ドキュメントが存在しない）ならfalseを返す（呼び出し元でオンボーディングを表示する）。
 async function upsertMyUserDoc() {
-  const { db, doc, getDoc, setDoc } = window.FWY_FB;
+  const { db, doc, getDoc } = window.FWY_FB;
   const ref = doc(db, 'users', MY_USER.uid);
   const snap = await getDoc(ref);
-  if (snap.exists()) {
-    const data = snap.data();
-    MY_USER.name  = data.name  || MY_USER.name;
-    MY_USER.label = data.label || MY_USER.label;
-    MY_USER.bio   = data.bio   || MY_USER.bio;
-    MY_USER.tags  = data.tags  || MY_USER.tags;
-    MY_USER.followingUids  = data.followingUids  || [];
-    MY_USER.mapVisibleUids = data.mapVisibleUids || [];
-  } else {
-    await setDoc(ref, {
-      name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags,
-      email: MY_USER.email, photoURL: MY_USER.photoURL,
-      followingUids: [], mapVisibleUids: [],
-      createdAt: new Date().toISOString(),
-    });
-  }
+  if (!snap.exists()) return false;
+  const data = snap.data();
+  MY_USER.name  = data.name  || MY_USER.name;
+  MY_USER.label = data.label || MY_USER.label;
+  MY_USER.bio   = data.bio   || MY_USER.bio;
+  MY_USER.tags  = data.tags  || MY_USER.tags;
+  MY_USER.photoURL = data.photoURL || MY_USER.photoURL;
+  MY_USER.followingUids  = data.followingUids  || [];
+  MY_USER.mapVisibleUids = data.mapVisibleUids || [];
+  refreshHeaderIdentity();
+  return true;
+}
+
+// 初回登録時：オンボーディングで入力した内容でユーザードキュメントを新規作成
+async function createMyUserDoc() {
+  const { db, doc, setDoc } = window.FWY_FB;
+  await setDoc(doc(db, 'users', MY_USER.uid), {
+    name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags,
+    email: MY_USER.email, photoURL: MY_USER.photoURL,
+    followingUids: [], mapVisibleUids: [],
+    createdAt: new Date().toISOString(),
+  });
   refreshHeaderIdentity();
 }
 
 async function persistMyProfile() {
   const { db, doc, updateDoc } = window.FWY_FB;
   await updateDoc(doc(db, 'users', MY_USER.uid), {
-    name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags,
+    name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags, photoURL: MY_USER.photoURL,
   });
 }
 
@@ -860,7 +962,7 @@ async function loadUsersFromFirestore() {
     const data = docSnap.data();
     list.push({
       id: docSnap.id, name: data.name || '名無し', label: data.label || (data.name||'？').charAt(0),
-      color: pickColorForUid(docSnap.id),
+      color: pickColorForUid(docSnap.id), photoURL: data.photoURL || null,
       desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
       following: MY_USER.followingUids.includes(docSnap.id),
       showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
@@ -1004,11 +1106,15 @@ function startApp() {
 
   initAutocomplete();
   (async () => {
-    await upsertMyUserDoc();
-    await loadAllData();
-    renderMarkers();
-    renderStories();
-    renderSidebar();
+    const exists = await upsertMyUserDoc();
+    if (exists) {
+      await loadAllData();
+      renderMarkers();
+      renderStories();
+      renderSidebar();
+    } else {
+      openOnboardingModal();
+    }
   })();
 }
 
@@ -1019,12 +1125,14 @@ function refreshHeaderIdentity() {
   const nameEl = document.querySelector('.my-name');
   const ringEl = document.querySelector('.ig-ring-inner');
   if (nameEl) nameEl.textContent = MY_USER.name;
-  if (ringEl) ringEl.textContent = MY_USER.label;
+  if (ringEl) ringEl.innerHTML = avatarInner(MY_USER);
 }
 function openEditProfileModal() {
   document.getElementById('editProfileName').value = MY_USER.name;
   document.getElementById('editProfileBio').value = MY_USER.bio || '';
   document.getElementById('editProfileTags').value = (MY_USER.tags||[]).join(', ');
+  editPhotoDataUrl = null;
+  document.getElementById('editProfilePhotoPreview').innerHTML = avatarInner(MY_USER);
   document.getElementById('editProfileModalOverlay').classList.add('open');
 }
 function closeEditProfileModal() {
@@ -1037,12 +1145,40 @@ async function saveProfile() {
   MY_USER.label = name.charAt(0);
   MY_USER.bio   = document.getElementById('editProfileBio').value.trim();
   MY_USER.tags  = document.getElementById('editProfileTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  if (editPhotoDataUrl) MY_USER.photoURL = editPhotoDataUrl;
   await persistMyProfile();
   refreshHeaderIdentity();
   closeEditProfileModal();
   renderStories();
   renderSidebar();
+  renderMarkers();
   renderProfilePanel('0');
+}
+
+// ═══════════════════════════════════════
+// ONBOARDING（初回登録時のプロフィール設定）
+// ═══════════════════════════════════════
+function openOnboardingModal() {
+  document.getElementById('onboardName').value = MY_USER.name || '';
+  document.getElementById('onboardBio').value = '';
+  onboardPhotoDataUrl = null;
+  // Googleアカウントの写真があれば初期表示（変更もできる）
+  document.getElementById('onboardPhotoPreview').innerHTML = avatarInner(MY_USER);
+  document.getElementById('onboardingOverlay').classList.add('open');
+}
+async function finishOnboarding() {
+  const name = document.getElementById('onboardName').value.trim();
+  if (!name) { alert('名前を入力してください'); return; }
+  MY_USER.name  = name;
+  MY_USER.label = name.charAt(0);
+  MY_USER.bio   = document.getElementById('onboardBio').value.trim();
+  if (onboardPhotoDataUrl) MY_USER.photoURL = onboardPhotoDataUrl;
+  await createMyUserDoc();
+  document.getElementById('onboardingOverlay').classList.remove('open');
+  await loadAllData();
+  renderMarkers();
+  renderStories();
+  renderSidebar();
 }
 
 // ═══════════════════════════════════════
@@ -1381,7 +1517,7 @@ function renderAccountResults() {
   if (list.length===0) { box.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>該当するアカウントが見つかりませんでした</p></div>`; return; }
   box.innerHTML = list.map(f => `
     <div class="acc-card" onclick="openProfile('${f.id}'); goPage('map');">
-      <div class="acc-ring ${f.following?'ig':'gray'}" style="background:${f.color};"><div class="acc-inner">${f.label}</div></div>
+      <div class="acc-ring ${f.following?'ig':'gray'}" style="background:${f.color};"><div class="acc-inner">${avatarInner(f)}</div></div>
       <div class="acc-info">
         <div class="acc-name">${f.name}</div>
         <div class="acc-desc">${f.desc}</div>
@@ -1419,13 +1555,12 @@ function renderTimeline() {
 }
 function postCardHTML(p) {
   const user = getUserById(p.userId);
-  const lbl = user.label;
   p.likes = p.likes || []; p.comments = p.comments || [];
   const liked = p.likes.includes('0');
   const spot = getAllSpots().find(s=>s.id===p.spotId) || { genre:p.genre, rating:null };
   return `<div class="post-card" id="post-${p.id}">
     <div class="pc-head">
-      <div class="pc-ring ${user.isMe?'ig':'ig'}" onclick="openProfile('${p.userId}');goPage('map');"><div class="pc-inner">${lbl}</div></div>
+      <div class="pc-ring ${user.isMe?'ig':'ig'}" onclick="openProfile('${p.userId}');goPage('map');"><div class="pc-inner">${avatarInner(user)}</div></div>
       <div>
         <div><span class="pc-name" onclick="openProfile('${p.userId}');goPage('map');">${user.name}</span><span class="pc-action"> さんが新しいお店を登録しました</span></div>
         <div class="pc-time">${timeAgo(p.createdAt)}</div>
@@ -1449,7 +1584,7 @@ function postCardHTML(p) {
     <div class="post-comments" id="comments-${p.id}" style="display:none;">
       ${commentsHTML(p.id, p.comments)}
       <div class="add-comment-row">
-        <div class="ac-av-me">${MY_USER.label}</div>
+        <div class="ac-av-me">${avatarInner(MY_USER)}</div>
         <input class="ac-input" id="commentInput-${p.id}" placeholder="コメントを追加..." onkeydown="if(event.key==='Enter')submitComment('${p.id}')"/>
         <button class="ac-submit" onclick="submitComment('${p.id}')">送信</button>
       </div>
@@ -1462,10 +1597,9 @@ function commentsHTML(postId, comments) {
   return comments.map(c => {
     const u = getUserById(c.userId);
     if (!u) return '';
-    const lbl = u.label;
     const cLiked = (c.likes||[]).includes('0');
     return `<div class="cm-item">
-      <div class="cm-av" style="background:${u.color};">${lbl}</div>
+      <div class="cm-av" style="background:${u.color};">${avatarInner(u)}</div>
       <div class="cm-body">
         <div class="cm-text-wrap"><span class="cm-name">${u.name}</span>${c.text}</div>
         <div class="cm-meta">
@@ -1519,17 +1653,20 @@ function focusFromTimeline(spotId) {
 }
 
 function makeIcon(user) {
-  const label = user.label;
-  const fs    = 13;
+  const fs = 13;
+  const avatarPart = user.photoURL
+    ? `<defs><clipPath id="pinClip"><circle cx="20" cy="18" r="14"/></clipPath></defs>
+       <image href="${user.photoURL}" x="6" y="4" width="28" height="28" clip-path="url(#pinClip)" preserveAspectRatio="xMidYMid slice"/>
+       <circle cx="20" cy="18" r="14" fill="none" stroke="white" stroke-width="1.5"/>`
+    : `<text x="20" y="27" text-anchor="middle" font-size="${fs}" fill="white" font-weight="bold" font-family="sans-serif">${user.label}</text>`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">
     <path d="M20 0C8.95 0 0 8.95 0 20c0 15 20 28 20 28S40 35 40 20C40 8.95 31.05 0 20 0z" fill="${user.color}" stroke="white" stroke-width="2.5"/>
-    <text x="20" y="27" text-anchor="middle" font-size="${fs}" fill="white" font-weight="bold" font-family="sans-serif">${label}</text>
+    ${avatarPart}
   </svg>`;
   return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(40,48), anchor: new google.maps.Point(20,48) };
 }
 
 function infoHTML(spot, user) {
-  const lbl = user.label;
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
@@ -1537,7 +1674,7 @@ function infoHTML(spot, user) {
     ${spot.rating?`<div class="gm-popup-stars">${starsHTML(spot.rating)}</div>`:''}
     ${spot.comment?`<div class="gm-popup-comment">「${spot.comment}」</div>`:''}
     <div class="gm-popup-footer">
-      <div class="gm-popup-av" style="background:${user.color};">${lbl}</div>
+      <div class="gm-popup-av" style="background:${user.color};">${avatarInner(user)}</div>
       <div class="gm-popup-by">by</div>
       <div class="gm-popup-author" style="color:${user.color};">${user.name}</div>
     </div>
@@ -1572,7 +1709,7 @@ function renderStories() {
   row.innerHTML = all.map(u => {
     const hasSpots = getAllSpots().some(s => s.userId === u.id);
     const isActive = mapFilterId === u.id;
-    const inner    = `<div class="story-inner ${u.isMe?'me':''}">${u.label}</div>`;
+    const inner    = `<div class="story-inner ${u.isMe?'me':''}">${avatarInner(u)}</div>`;
     return `<div class="story-item" onclick="openProfile('${u.id}')">
       <div class="story-ring ${hasSpots?'ig':'gray'} ${isActive?'active':''}">
         ${inner}
@@ -1615,7 +1752,7 @@ function renderProfilePanel(userId) {
   document.getElementById('profileBackLabel').textContent = user.name;
 
   // Hero section
-  const innerHTML = `<div class="profile-big-inner ${isMe?'me':''}">${user.label}</div>`;
+  const innerHTML = `<div class="profile-big-inner ${isMe?'me':''}">${avatarInner(user)}</div>`;
 
   const followBtn = (!isMe) ? `
     <button class="profile-follow-btn ${friend.following?'following':'not-following'}"
@@ -1709,7 +1846,7 @@ function renderSidebar() {
       html += `
         <div class="friend-card">
           <div class="fc-avatar ${f.following?'ig':'gray'}" onclick="openProfile('${f.id}')" style="background:${f.color};">
-            <div class="fc-avatar-inner">${f.label}</div>
+            <div class="fc-avatar-inner">${avatarInner(f)}</div>
           </div>
           <div class="fc-info" onclick="openProfile('${f.id}')">
             <div class="fc-name">${f.name}</div>
