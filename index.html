@@ -174,6 +174,11 @@ header {
   background: #fff; font-size: 12px; font-weight: 600; cursor: pointer; color: #262626;
 }
 .profile-map-btn.on { background: #fff0f3; border-color: #dc2743; color: #dc2743; }
+.profile-edit-btn {
+  flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #dbdbdb;
+  background: #fff; font-size: 13px; font-weight: 700; cursor: pointer; color: #262626;
+}
+.profile-edit-btn:hover { background: #fafafa; }
 .profile-panel-body { overflow-y: auto; flex: 1; }
 .profile-panel-body::-webkit-scrollbar { width: 4px; }
 .profile-panel-body::-webkit-scrollbar-thumb { background: #dbdbdb; border-radius: 2px; }
@@ -230,6 +235,143 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .gm-popup-av { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
 .gm-popup-author { font-size: 11px; font-weight: 700; }
 .gm-popup-by { font-size: 11px; color: #8e8e8e; }
+
+/* ══════════════ BOTTOM NAV & PAGES ══════════════ */
+.app-page { display: none; width: 100%; }
+.app-page.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.app-page.active.row { flex-direction: row; }
+.main { display: flex; flex: 1; overflow: hidden; width: 100%; }
+.bottom-nav { height: 56px; background: #fff; border-top: 1px solid #dbdbdb; display: flex; flex-shrink: 0; z-index: 300; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: none; border: none; cursor: pointer; color: #8e8e8e; }
+.nav-item.active { color: #262626; }
+.nav-item .ni-icon { font-size: 21px; line-height: 1; }
+.nav-item .ni-label { font-size: 10px; font-weight: 700; }
+
+/* ══════════════ SEARCH PAGE ══════════════ */
+.search-tabs { display: flex; border-bottom: 1px solid #dbdbdb; flex-shrink: 0; background: #fff; }
+.se-tab { flex: 1; padding: 11px 4px; text-align: center; font-size: 13px; font-weight: 700; color: #8e8e8e; cursor: pointer; border-bottom: 2px solid transparent; }
+.se-tab.active { color: #262626; border-bottom-color: #262626; }
+.search-body { flex: 1; overflow: hidden; display: none; flex-direction: column; }
+.search-body.active { display: flex; }
+.filter-panel { background: #fff; border-bottom: 1px solid #efefef; padding: 10px 14px; flex-shrink: 0; }
+.filter-row { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; flex-wrap: wrap; }
+.filter-row:last-child { margin-bottom: 0; }
+.f-label { font-size: 11px; font-weight: 700; color: #8e8e8e; min-width: 44px; flex-shrink: 0; }
+.chip { padding: 4px 11px; border-radius: 14px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 600; cursor: pointer; color: #555; white-space: nowrap; transition: all 0.15s; }
+.chip.on { background: #262626; border-color: #262626; color: #fff; }
+.dist-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+.dist-input-wrap { position: relative; flex: 1; min-width: 130px; }
+.dist-input-wrap input { width: 100%; padding: 7px 10px; border: 1.5px solid #dbdbdb; border-radius: 8px; font-size: 13px; background: #fafafa; outline: none; font-family: inherit; }
+.dist-input-wrap input:focus { border-color: #dc2743; background: #fff; }
+.mode-btn { padding: 5px 9px; border-radius: 7px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 13px; cursor: pointer; }
+.mode-btn.on { background: #262626; border-color: #262626; color: #fff; }
+.min-wrap { display: flex; align-items: center; gap: 5px; }
+.min-wrap input[type=range] { width: 80px; accent-color: #dc2743; }
+.min-label { font-size: 12px; font-weight: 700; min-width: 38px; }
+.loc-btn { padding: 6px 10px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.dist-clear-btn { padding: 5px 10px; border-radius: 8px; border: 1.5px solid #dc2743; background: #fff0f3; color: #dc2743; font-size: 12px; font-weight: 700; cursor: pointer; display: none; }
+.search-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.sr-count { font-size: 12px; color: #8e8e8e; font-weight: 600; flex: 1; }
+.tb-btn { padding: 5px 12px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; color: #262626; white-space: nowrap; }
+.tb-btn.active { background: #262626; border-color: #262626; color: #fff; }
+.search-views { flex: 1; overflow: hidden; position: relative; }
+.sv-map { width: 100%; height: 100%; display: none; }
+.sv-map.active { display: block; }
+.sv-list { height: 100%; overflow-y: auto; display: none; }
+.sv-list.active { display: block; }
+.sv-list::-webkit-scrollbar { width: 4px; }
+.sv-list::-webkit-scrollbar-thumb { background: #dbdbdb; }
+.result-card { display: flex; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #efefef; background: #fff; cursor: pointer; }
+.result-card:hover { background: #fafafa; }
+.result-icon { width: 46px; height: 46px; border-radius: 10px; border: 1px solid #efefef; background: #fafafa; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.result-info { flex: 1; min-width: 0; }
+.result-name { font-size: 13px; font-weight: 700; }
+.result-meta { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
+.result-stars { color: #ffc107; font-size: 11px; margin-top: 2px; }
+.result-dist { font-size: 11px; color: #27ae60; font-weight: 700; margin-top: 2px; }
+.result-by { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; margin-top: 4px; color: #fff; }
+.account-search-box { padding: 10px 14px; background: #fff; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.account-search-box input { width: 100%; padding: 9px 14px; border: 1.5px solid #dbdbdb; border-radius: 10px; font-size: 14px; background: #fafafa; outline: none; font-family: inherit; }
+.account-search-box input:focus { border-color: #dc2743; background: #fff; }
+.account-results { flex: 1; overflow-y: auto; }
+.acc-card { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #efefef; background: #fff; cursor: pointer; }
+.acc-card:hover { background: #fafafa; }
+.acc-ring { width: 46px; height: 46px; border-radius: 50%; padding: 2px; flex-shrink: 0; }
+.acc-ring.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.acc-ring.gray { background: #dbdbdb; }
+.acc-inner { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 2px solid #fff; }
+.acc-info { flex: 1; min-width: 0; }
+.acc-name { font-size: 14px; font-weight: 700; }
+.acc-desc { font-size: 12px; color: #8e8e8e; margin-top: 2px; }
+.acc-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+.acc-tag { padding: 2px 7px; border-radius: 9px; background: #efefef; font-size: 10px; font-weight: 600; color: #555; }
+
+/* ══════════════ TIMELINE PAGE ══════════════ */
+.tl-header { padding: 10px 14px; background: #fff; border-bottom: 1px solid #dbdbdb; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.tl-title { font-size: 16px; font-weight: 800; flex: 1; }
+.tl-fbtn { padding: 5px 12px; border-radius: 14px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; color: #555; }
+.tl-fbtn.on { background: #262626; border-color: #262626; color: #fff; }
+.tl-feed { flex: 1; overflow-y: auto; }
+.tl-feed::-webkit-scrollbar { width: 4px; }
+.tl-feed::-webkit-scrollbar-thumb { background: #dbdbdb; }
+.post-card { background: #fff; border-bottom: 8px solid #fafafa; }
+.pc-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px 8px; }
+.pc-ring { width: 36px; height: 36px; border-radius: 50%; padding: 2px; flex-shrink: 0; cursor: pointer; }
+.pc-ring.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.pc-inner { width: 100%; height: 100%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 2px solid #fff; }
+.pc-name { font-size: 13px; font-weight: 700; cursor: pointer; }
+.pc-action { font-size: 12px; color: #8e8e8e; font-weight: 400; }
+.pc-time { font-size: 11px; color: #8e8e8e; }
+.post-restaurant { margin: 0 14px 10px; background: #fafafa; border-radius: 12px; padding: 10px 12px; border: 1px solid #efefef; cursor: pointer; }
+.prr-top { display: flex; align-items: center; gap: 10px; }
+.prr-icon { font-size: 26px; }
+.prr-name { font-size: 14px; font-weight: 800; }
+.prr-meta { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
+.prr-stars { color: #ffc107; font-size: 12px; margin-top: 2px; }
+.post-caption { padding: 0 14px 8px; font-size: 14px; line-height: 1.6; color: #262626; }
+.post-caption .ht { color: #0095f6; font-weight: 600; cursor: pointer; }
+.post-actions { display: flex; align-items: center; gap: 16px; padding: 4px 14px 6px; }
+.act-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; color: #262626; font-size: 13px; font-weight: 700; padding: 4px 0; }
+.act-btn .ic { font-size: 20px; }
+.act-btn.liked { color: #ed4956; }
+.post-comments { padding: 0 14px 10px; }
+.cm-toggle { font-size: 13px; color: #8e8e8e; font-weight: 600; cursor: pointer; padding: 4px 0 8px; display: block; border: none; background: none; }
+.cm-item { display: flex; gap: 8px; margin-bottom: 8px; }
+.cm-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.cm-body { flex: 1; }
+.cm-text-wrap { font-size: 13px; line-height: 1.5; }
+.cm-name { font-weight: 700; margin-right: 4px; }
+.cm-meta { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+.cm-meta span { font-size: 11px; color: #8e8e8e; }
+.cm-like-btn { background: none; border: none; cursor: pointer; font-size: 11px; color: #8e8e8e; font-weight: 700; display: flex; align-items: center; gap: 3px; }
+.cm-like-btn.on { color: #ed4956; }
+.add-comment-row { display: flex; gap: 8px; align-items: center; border-top: 1px solid #efefef; padding-top: 8px; margin-top: 4px; }
+.ac-av-me { width: 26px; height: 26px; border-radius: 50%; background: #dc2743; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.ac-input { flex: 1; border: none; outline: none; font-size: 13px; font-family: inherit; background: transparent; }
+.ac-submit { background: none; border: none; font-size: 12px; font-weight: 700; color: #0095f6; cursor: pointer; }
+
+/* ══════════════ POST PAGE ══════════════ */
+.price-chips { display: flex; gap: 7px; margin-top: 4px; }
+.price-chip { padding: 7px 16px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 13px; font-weight: 700; cursor: pointer; }
+.price-chip.on { background: #262626; border-color: #262626; color: #fff; }
+.hashtag-preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.ht-tag { padding: 3px 10px; border-radius: 12px; background: #e8f4fd; color: #0095f6; font-size: 12px; font-weight: 600; }
+.post-submit-btn { width: 100%; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+.post-submit-btn:hover { opacity: 0.9; }
+.my-shop-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1.5px solid #efefef; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+.my-shop-card:hover { background: #fafafa; border-color: #dbdbdb; }
+.msc-emoji { font-size: 20px; flex-shrink: 0; }
+.msc-info { flex: 1; min-width: 0; }
+.msc-name { font-size: 13px; font-weight: 700; }
+.msc-meta { font-size: 11.5px; color: #8e8e8e; margin-top: 2px; }
+.profile-post-card { margin: 0 14px 10px; padding: 10px 12px; background: #fafafa; border: 1px solid #efefef; border-radius: 10px; cursor: pointer; }
+.profile-post-card:hover { background: #f3f3f3; }
+.ppc-head { display: flex; align-items: center; gap: 6px; }
+.ppc-emoji { font-size: 15px; }
+.ppc-name { font-weight: 700; font-size: 13px; flex: 1; }
+.ppc-time { font-size: 11px; color: #8e8e8e; }
+.ppc-caption { font-size: 12.5px; color: #444; margin-top: 4px; line-height: 1.4; }
+.ppc-meta { font-size: 11.5px; color: #8e8e8e; margin-top: 5px; }
 </style>
 </head>
 <body>
@@ -247,7 +389,8 @@ select.form-input { background: #fafafa; cursor: pointer; }
   </div>
 </header>
 
-<div class="main">
+<div class="app-page active row" id="page-map">
+  <div class="main">
   <div class="sidebar">
     <!-- Stories -->
     <div class="stories-row" id="storiesRow"></div>
@@ -274,7 +417,175 @@ select.form-input { background: #fafafa; cursor: pointer; }
     <div id="map-hint">🍽 地図上のお店をクリックして追加できます</div>
     <div id="poi-loading">⏳ お店の情報を取得中...</div>
   </div>
+  </div>
 </div>
+
+<!-- ══════════════ SEARCH PAGE ══════════════ -->
+<div class="app-page" id="page-search">
+  <div class="search-tabs">
+    <div class="se-tab active" id="se-tab-shop" onclick="switchSearchTab('shop')">🍽 お店検索</div>
+    <div class="se-tab" id="se-tab-account" onclick="switchSearchTab('account')">👤 アカウント検索</div>
+  </div>
+
+  <!-- Shop search -->
+  <div class="search-body active" id="search-shop">
+    <div class="filter-panel">
+      <div class="filter-row">
+        <span class="f-label">ジャンル</span>
+        <div class="chip on" data-genre="all" onclick="toggleGenreChip('all')">すべて</div>
+        <div class="chip" data-genre="ラーメン・麺類" onclick="toggleGenreChip('ラーメン・麺類')">🍜 ラーメン</div>
+        <div class="chip" data-genre="寿司・和食" onclick="toggleGenreChip('寿司・和食')">🍣 和食</div>
+        <div class="chip" data-genre="焼肉・焼鳥" onclick="toggleGenreChip('焼肉・焼鳥')">🔥 焼肉</div>
+        <div class="chip" data-genre="カフェ・スイーツ" onclick="toggleGenreChip('カフェ・スイーツ')">☕ カフェ</div>
+        <div class="chip" data-genre="イタリアン・パスタ" onclick="toggleGenreChip('イタリアン・パスタ')">🍝 イタリアン</div>
+        <div class="chip" data-genre="中華料理" onclick="toggleGenreChip('中華料理')">🥟 中華</div>
+        <div class="chip" data-genre="韓国料理" onclick="toggleGenreChip('韓国料理')">🌶️ 韓国</div>
+        <div class="chip" data-genre="エスニック料理" onclick="toggleGenreChip('エスニック料理')">🍛 エスニック</div>
+        <div class="chip" data-genre="居酒屋・バー" onclick="toggleGenreChip('居酒屋・バー')">🍺 居酒屋</div>
+        <div class="chip" data-genre="ベーカリー・パン" onclick="toggleGenreChip('ベーカリー・パン')">🥐 パン</div>
+      </div>
+      <div class="filter-row">
+        <span class="f-label">価格帯</span>
+        <div class="chip" data-price="¥" onclick="togglePriceChip('¥')">¥ 〜1000円</div>
+        <div class="chip" data-price="¥¥" onclick="togglePriceChip('¥¥')">¥¥ 〜2000円</div>
+        <div class="chip" data-price="¥¥¥" onclick="togglePriceChip('¥¥¥')">¥¥¥ 〜5000円</div>
+        <div class="chip" data-price="¥¥¥¥" onclick="togglePriceChip('¥¥¥¥')">¥¥¥¥ 5000円〜</div>
+      </div>
+      <div class="filter-row">
+        <span class="f-label">評価</span>
+        <div class="chip" data-rating="3" onclick="toggleRatingChip(3)">★3以上</div>
+        <div class="chip" data-rating="4" onclick="toggleRatingChip(4)">★4以上</div>
+        <div class="chip" data-rating="5" onclick="toggleRatingChip(5)">★5のみ</div>
+      </div>
+      <div class="filter-row">
+        <span class="f-label">駅・距離</span>
+        <div class="dist-row">
+          <div class="dist-input-wrap">
+            <input id="distOriginInput" placeholder="駅名・場所を入力（例：渋谷駅）" autocomplete="off"/>
+          </div>
+          <button class="loc-btn" onclick="useCurrentLocation()">📍 現在地</button>
+          <div class="mode-btn on" data-mode="walk" onclick="setTravelMode('walk')">🚶 徒歩</div>
+          <div class="mode-btn" data-mode="bike" onclick="setTravelMode('bike')">🚲 自転車</div>
+          <div class="mode-btn" data-mode="train" onclick="setTravelMode('train')">🚃 電車</div>
+          <div class="mode-btn" data-mode="car" onclick="setTravelMode('car')">🚗 車</div>
+          <div class="min-wrap">
+            <input type="range" id="distMinutesRange" min="5" max="60" step="5" value="15" oninput="onMinutesChange()"/>
+            <span class="min-label" id="distMinutesLabel">15分</span>
+          </div>
+          <button class="dist-clear-btn" id="distClearBtn" onclick="clearDistanceFilter()">✕ 解除</button>
+        </div>
+      </div>
+    </div>
+    <div class="search-toolbar">
+      <span class="sr-count" id="searchResultCount">0件のお店</span>
+      <div class="tb-btn" id="viewListBtn" onclick="setSearchView('list')">📋 リスト</div>
+      <div class="tb-btn active" id="viewMapBtn" onclick="setSearchView('map')">🗺 マップ</div>
+    </div>
+    <div class="search-views">
+      <div class="sv-map active" id="sv-map"><div id="search-map" style="width:100%;height:100%;"></div></div>
+      <div class="sv-list" id="sv-list"></div>
+    </div>
+  </div>
+
+  <!-- Account search -->
+  <div class="search-body" id="search-account">
+    <div class="account-search-box">
+      <input id="accountSearchInput" placeholder="名前・タグで検索（例：ラーメン、カフェ）" oninput="renderAccountResults()"/>
+    </div>
+    <div class="account-results" id="accountResults"></div>
+  </div>
+</div>
+
+<!-- ══════════════ TIMELINE PAGE ══════════════ -->
+<div class="app-page" id="page-timeline">
+  <div class="tl-header">
+    <div class="tl-title">タイムライン</div>
+    <div class="tl-fbtn on" id="tlFilterFollowing" onclick="setTimelineFilter('following')">フォロー中</div>
+    <div class="tl-fbtn" id="tlFilterAll" onclick="setTimelineFilter('all')">すべて</div>
+  </div>
+  <div class="tl-feed" id="tlFeed"></div>
+</div>
+
+<!-- ══════════════ POST PAGE ══════════════ -->
+<div class="app-page" id="page-post" style="overflow-y:auto;background:#fff;">
+  <div style="max-width:480px;margin:0 auto;padding:18px;width:100%;">
+    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">📍 新しい投稿</div>
+    <div id="post-step1">
+      <div class="form-row">
+        <label class="form-label">お店を検索</label>
+        <input class="form-input" id="postSearchInput" placeholder="お店名・住所で検索..." autocomplete="off"/>
+        <div class="search-hint">Googleマップに登録されているお店から選択できます</div>
+      </div>
+      <div id="myShopsQuickPick" style="display:none;">
+        <div class="section-label" style="margin:14px 0 8px;">📍 登録済みのお店から選ぶ</div>
+        <div id="myShopsList"></div>
+      </div>
+    </div>
+    <div id="post-step2" style="display:none;">
+      <div class="selected-place" id="postSelectedPlaceCard"></div>
+      <div class="form-row">
+        <label class="form-label">ジャンル</label>
+        <select class="form-input" id="postGenre" onchange="onPostGenreChange()">
+          <option>ラーメン・麺類</option><option>寿司・和食</option><option>焼肉・焼鳥</option>
+          <option>カフェ・スイーツ</option><option>イタリアン・パスタ</option><option>中華料理</option>
+          <option>韓国料理</option><option>エスニック料理</option><option>居酒屋・バー</option>
+          <option>ファミレス・カジュアル</option><option>ベーカリー・パン</option><option>その他</option>
+        </select>
+        <div class="genre-preview">
+          <span class="genre-preview-emoji" id="postGenreEmoji">🍜</span>
+          <span class="genre-preview-text" id="postGenreText">ラーメン・麺類</span>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">価格帯</label>
+        <div class="price-chips">
+          <div class="price-chip" data-pprice="¥" onclick="setPostPrice('¥')">¥</div>
+          <div class="price-chip on" data-pprice="¥¥" onclick="setPostPrice('¥¥')">¥¥</div>
+          <div class="price-chip" data-pprice="¥¥¥" onclick="setPostPrice('¥¥¥')">¥¥¥</div>
+          <div class="price-chip" data-pprice="¥¥¥¥" onclick="setPostPrice('¥¥¥¥')">¥¥¥¥</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">評価</label>
+        <div class="star-input" id="postStarInput">
+          <span class="si" data-v="1" onclick="setPostRating(1)">★</span>
+          <span class="si" data-v="2" onclick="setPostRating(2)">★</span>
+          <span class="si" data-v="3" onclick="setPostRating(3)">★</span>
+          <span class="si" data-v="4" onclick="setPostRating(4)">★</span>
+          <span class="si" data-v="5" onclick="setPostRating(5)">★</span>
+        </div>
+        <div class="rating-label" id="postRatingLabel">タップして評価</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">キャプション</label>
+        <textarea class="form-input" id="postCaption" placeholder="おすすめポイントを書いてみよう！ #ラーメン #渋谷グルメ" oninput="onPostCaptionInput()"></textarea>
+        <div class="search-hint">文中に #タグ を入れるとタイムラインで検索できるようになります</div>
+        <div class="hashtag-preview" id="postHashtagPreview"></div>
+      </div>
+      <button class="btn-back" onclick="resetPostSearch()">← 別のお店を検索する</button>
+      <button class="post-submit-btn" id="postSubmitBtn" onclick="submitPost()">投稿する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BOTTOM NAV ══════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-map" onclick="goPage('map')">
+    <span class="ni-icon">🗺</span><span class="ni-label">マップ</span>
+  </button>
+  <button class="nav-item" id="nav-search" onclick="goPage('search')">
+    <span class="ni-icon">🔍</span><span class="ni-label">検索</span>
+  </button>
+  <button class="nav-item" id="nav-add" onclick="goPage('post')">
+    <span class="ni-icon">➕</span><span class="ni-label">投稿</span>
+  </button>
+  <button class="nav-item" id="nav-timeline" onclick="goPage('timeline')">
+    <span class="ni-icon">📰</span><span class="ni-label">タイムライン</span>
+  </button>
+  <button class="nav-item" id="nav-profile" onclick="openProfile(0); goPage('map')">
+    <span class="ni-icon">👤</span><span class="ni-label">プロフィール</span>
+  </button>
+</nav>
 
 <!-- Add Spot Modal -->
 <div class="modal-overlay" id="modalOverlay">
@@ -331,6 +642,34 @@ select.form-input { background: #fafafa; cursor: pointer; }
   </div>
 </div>
 
+<!-- ══════════════ EDIT PROFILE MODAL ══════════════ -->
+<div class="modal-overlay" id="editProfileModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ プロフィールを編集</div>
+      <button class="modal-close" onclick="closeEditProfileModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">名前</label>
+        <input class="form-input" id="editProfileName" placeholder="名前" maxlength="20"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">自己紹介</label>
+        <textarea class="form-input" id="editProfileBio" placeholder="自己紹介を書いてみよう" maxlength="120"></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">タグ（カンマ区切り）</label>
+        <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
+      <button class="btn-submit" onclick="saveProfile()">保存する</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════
 // CONSTANTS
@@ -342,6 +681,9 @@ const GENRE_ICONS = {
   'ファミレス・カジュアル':'🍽️','ベーカリー・パン':'🥐','その他':'📍',
 };
 const RATING_WORDS = ['','いまいち','ふつう','おいしい','とてもおいしい','最高！'];
+const PRICE_BY_SPOT = { 1:'¥¥',2:'¥¥¥¥',3:'¥',4:'¥¥',5:'¥¥¥',6:'¥',7:'¥¥',8:'¥¥¥',9:'¥¥',10:'¥¥',11:'¥¥',12:'¥¥',13:'¥¥',14:'¥¥',15:'¥¥',16:'¥',17:'¥¥' };
+const TRAVEL_SPEED_M_PER_MIN = { walk:80, bike:230, train:300, car:380 };
+const MODE_LABEL = { walk:'🚶 徒歩', bike:'🚲 自転車', train:'🚃 電車', car:'🚗 車' };
 
 // ═══════════════════════════════════════
 // USERS
@@ -481,8 +823,67 @@ const SAMPLE_SPOTS = [
 ];
 
 // ═══════════════════════════════════════
+// TIMELINE POSTS (初期データ)
+// ═══════════════════════════════════════
+const INITIAL_POSTS = [
+  { id:'ip1', userId:1, spotId:1, restaurantName:'一蘭 渋谷店', genre:'ラーメン・麺類', area:'渋谷',
+    caption:'渋谷でひとりラーメン🍜 天然とんこつ、やっぱり最高！集中して食べられる個室スタイルも好き。 #ラーメン #渋谷グルメ #一蘭 #とんこつ',
+    createdAt: new Date(Date.now()-1*3600000).toISOString(),
+    likes:[2,5], comments:[ {id:'ic1',userId:2,text:'ここ行ってみたい！並んでました？',likes:[1],createdAt:new Date(Date.now()-0.5*3600000).toISOString()} ] },
+  { id:'ip2', userId:5, spotId:14, restaurantName:'Blue Bottle Coffee 清澄白河', genre:'カフェ・スイーツ', area:'清澄白河',
+    caption:'週末の朝はここから☕ 倉庫を改装した空間が最高。シングルオリジンのドリップは必飲！ #カフェ #清澄白河 #コーヒー好き',
+    createdAt: new Date(Date.now()-3*3600000).toISOString(),
+    likes:[1], comments:[ {id:'ic2',userId:1,text:'清澄白河カフェ巡りいつかしたい🙏',likes:[5],createdAt:new Date(Date.now()-2.5*3600000).toISOString()} ] },
+  { id:'ip3', userId:3, spotId:8, restaurantName:'新大久保 ハヌリ', genre:'韓国料理', area:'新大久保',
+    caption:'新大久保ランチ🌶️ サムギョプサルが本物！スタッフさんが焼いてくれるから楽チン。 #韓国料理 #新大久保 #サムギョプサル',
+    createdAt: new Date(Date.now()-5*3600000).toISOString(), likes:[5], comments:[] },
+  { id:'ip4', userId:4, spotId:12, restaurantName:'蒙古タンメン中本 上野店', genre:'ラーメン・麺類', area:'上野',
+    caption:'北極ラーメンでLV10に挑戦💪 汗が止まらないけどやめられない。 #ラーメン #激辛 #上野 #中本',
+    createdAt: new Date(Date.now()-8*3600000).toISOString(),
+    likes:[1,3], comments:[
+      {id:'ic3',userId:1,text:'LV10は無理…いつもLV5で限界です😂',likes:[4],createdAt:new Date(Date.now()-7*3600000).toISOString()},
+      {id:'ic4',userId:3,text:'激辛チャレンジ動画見たい笑',likes:[],createdAt:new Date(Date.now()-6*3600000).toISOString()},
+    ]},
+  { id:'ip5', userId:5, spotId:17, restaurantName:'ル・プチメック 表参道店', genre:'ベーカリー・パン', area:'表参道',
+    caption:'表参道のおすすめベーカリー🥐 クロワッサンの層が美しすぎる。開店前から並ぶ価値あり！ #ベーカリー #表参道 #パン活',
+    createdAt: new Date(Date.now()-12*3600000).toISOString(),
+    likes:[1,2], comments:[ {id:'ic5',userId:2,text:'娘がパン好きなので連れて行きたい！',likes:[5],createdAt:new Date(Date.now()-11*3600000).toISOString()} ] },
+  { id:'ip6', userId:2, spotId:5, restaurantName:"Eggs 'n Things 原宿店", genre:'カフェ・スイーツ', area:'原宿',
+    caption:'娘と原宿パンケーキデート🥞 山盛りホイップに大興奮してました。 #パンケーキ #原宿 #子連れOK #ファミリー',
+    createdAt: new Date(Date.now()-24*3600000).toISOString(),
+    likes:[1,5], comments:[ {id:'ic6',userId:5,text:'このパンケーキかわいすぎる😍',likes:[2],createdAt:new Date(Date.now()-23*3600000).toISOString()} ] },
+  { id:'ip7', userId:1, spotId:2, restaurantName:'久兵衛 銀座本店', genre:'寿司・和食', area:'銀座',
+    caption:'特別な日は久兵衛で🍣 昭和23年創業、ネタの鮮度が段違い。 #寿司 #銀座 #和食 #記念日',
+    createdAt: new Date(Date.now()-30*3600000).toISOString(), likes:[2], comments:[] },
+];
+
+// ═══════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════
+let myPosts = JSON.parse(localStorage.getItem('fwy_posts') || '[]');
+let postState = {}; // { postId: {likes:[], comments:[]} } 実行時の状態（いいね・コメント）
+let timelineFilter = 'following';
+let searchTab = 'shop';
+let searchView = 'map';
+let selectedGenres = new Set();      // 空 = すべて
+let selectedPrices = new Set();
+let minRatingFilter = 0;
+let distOrigin = null;               // {lat,lng,label}
+let distMode = 'walk';
+let distMaxMinutes = 15;
+let distanceFilterOn = false;
+let searchMap = null, distOriginAutocomplete = null;
+let searchMarkers = {};
+
+function getAllPosts() { return [...INITIAL_POSTS, ...myPosts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)); }
+function initPostState() {
+  const saved = JSON.parse(localStorage.getItem('fwy_post_state') || '{}');
+  getAllPosts().forEach(p => {
+    postState[p.id] = saved[p.id] ? saved[p.id] : { likes:[...(p.likes||[])], comments:(p.comments||[]).map(c=>({...c, likes:[...(c.likes||[])]})) };
+  });
+}
+function savePostState() { localStorage.setItem('fwy_post_state', JSON.stringify(postState)); }
+
 let map, infoWindow, placesService, autocomplete;
 let gmMarkers = {}, highlightedSpotId = null, activeTab = 'friends';
 let openProfileId = null;   // プロフィールパネルに表示中のユーザーID
@@ -501,6 +902,22 @@ function getUserById(id) { return id === 0 ? MY_USER : FRIENDS.find(f => f.id ==
 function getAllSpots()    { return [...SAMPLE_SPOTS, ...mySpots]; }
 function iconOf(genre)   { return GENRE_ICONS[genre] || '📍'; }
 function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) : ''; }
+function priceOf(spot)   { return spot.price || PRICE_BY_SPOT[spot.id] || '¥¥'; }
+function extractHashtags(text) { const m = text.match(/#[^\s#]+/g); return m ? m.map(h=>h.slice(1)) : []; }
+function linkifyCaption(text) {
+  return (text||'').replace(/#([^\s#]+)/g, '<span class="ht" onclick="searchByHashtag(\'$1\')">#$1</span>');
+}
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff/60000);
+  if (mins < 1) return 'たった今';
+  if (mins < 60) return mins+'分前';
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24) return hrs+'時間前';
+  const days = Math.floor(hrs/24);
+  if (days < 7) return days+'日前';
+  return Math.floor(days/7)+'週間前';
+}
 function mapVisibleSpots() {
   if (mapFilterId !== null) return getAllSpots().filter(s => s.userId === mapFilterId);
   const ids = new Set([0, ...FRIENDS.filter(f => f.showOnMap).map(f => f.id)]);
@@ -538,14 +955,528 @@ function initMap() {
     );
   });
 
+  loadMyProfile();
   initAutocomplete();
   renderMarkers();
   renderStories();
   renderSidebar();
+  initPostState();
+}
+
+// ═══════════════════════════════════════
+// MY PROFILE（編集）
+// ═══════════════════════════════════════
+function loadMyProfile() {
+  const saved = localStorage.getItem('fwy_myuser');
+  if (saved) {
+    try { Object.assign(MY_USER, JSON.parse(saved)); } catch(e) {}
+  }
+  refreshHeaderIdentity();
+}
+function refreshHeaderIdentity() {
+  const nameEl = document.querySelector('.my-name');
+  const ringEl = document.querySelector('.ig-ring-inner');
+  if (nameEl) nameEl.textContent = MY_USER.name;
+  if (ringEl) ringEl.textContent = MY_USER.label;
+}
+function openEditProfileModal() {
+  document.getElementById('editProfileName').value = MY_USER.name;
+  document.getElementById('editProfileBio').value = MY_USER.bio || '';
+  document.getElementById('editProfileTags').value = (MY_USER.tags||[]).join(', ');
+  document.getElementById('editProfileModalOverlay').classList.add('open');
+}
+function closeEditProfileModal() {
+  document.getElementById('editProfileModalOverlay').classList.remove('open');
+}
+function saveProfile() {
+  const name = document.getElementById('editProfileName').value.trim();
+  if (!name) { alert('名前を入力してください'); return; }
+  MY_USER.name  = name;
+  MY_USER.label = name.charAt(0);
+  MY_USER.bio   = document.getElementById('editProfileBio').value.trim();
+  MY_USER.tags  = document.getElementById('editProfileTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  localStorage.setItem('fwy_myuser', JSON.stringify({
+    name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags,
+  }));
+  refreshHeaderIdentity();
+  closeEditProfileModal();
+  renderStories();
+  renderSidebar();
+  renderProfilePanel(0);
+}
+
+// ═══════════════════════════════════════
+// PAGE NAVIGATION
+// ═══════════════════════════════════════
+function goPage(page) {
+  document.querySelectorAll('.app-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const navBtn = document.getElementById('nav-'+page);
+  if (navBtn) navBtn.classList.add('active');
+  if (page === 'map' && map) setTimeout(()=>google.maps.event.trigger(map,'resize'), 80);
+  if (page === 'search') { initSearchPage(); }
+  if (page === 'timeline') { renderTimeline(); }
+  if (page === 'post') { initPostPage(); }
+}
+
+// ═══════════════════════════════════════
+// POST PAGE（投稿ページ）
+// ═══════════════════════════════════════
+let postPendingLat=null, postPendingLng=null, postPendingName=null, postPendingAddr=null, postPendingArea=null;
+let postCurrentRating=0, postCurrentPrice='¥¥', postPlaceAutocomplete=null, postPendingSpotId=null;
+
+function initPostPage() {
+  if (!postPlaceAutocomplete) {
+    const input = document.getElementById('postSearchInput');
+    postPlaceAutocomplete = new google.maps.places.Autocomplete(input, {
+      types:['establishment'], componentRestrictions:{country:'jp'},
+      fields:['name','geometry','formatted_address','address_components','types'],
+    });
+    postPlaceAutocomplete.addListener('place_changed', () => {
+      const place = postPlaceAutocomplete.getPlace();
+      if (!place.geometry?.location) { alert('お店が見つかりませんでした。'); return; }
+      openPostStep2WithPlace(place);
+    });
+  }
+  renderMyShopsQuickPick();
+}
+function renderMyShopsQuickPick() {
+  const wrap = document.getElementById('myShopsQuickPick');
+  const list = document.getElementById('myShopsList');
+  if (!wrap || !list) return;
+  if (mySpots.length === 0) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML = mySpots.map(spot => `
+    <div class="my-shop-card" onclick="selectExistingSpot(${spot.id})">
+      <span class="msc-emoji">${iconOf(spot.genre)}</span>
+      <div class="msc-info">
+        <div class="msc-name">${spot.name}</div>
+        <div class="msc-meta">${spot.genre}${spot.area?' · '+spot.area:''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function openPostStep2WithPlace(place) {
+  postPendingSpotId = null;
+  postPendingLat = place.geometry.location.lat();
+  postPendingLng = place.geometry.location.lng();
+  postPendingName = place.name;
+  postPendingAddr = place.formatted_address || '';
+  postPendingArea = '';
+  if (place.address_components) {
+    const w = place.address_components.find(c=>c.types.includes('sublocality_level_1')||c.types.includes('locality'));
+    if (w) postPendingArea = w.long_name;
+  }
+  postCurrentRating = 0; postCurrentPrice = '¥¥';
+  document.getElementById('postCaption').value = '';
+  document.getElementById('postGenre').selectedIndex = 0;
+  autoSelectGenre(place.types||[], 'postGenre');
+  onPostGenreChange();
+  updatePostStarUI(0);
+  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice==='¥¥'));
+  document.getElementById('postHashtagPreview').innerHTML = '';
+  document.getElementById('postSelectedPlaceCard').innerHTML = `
+    <div class="pc">✅ Googleマップから取得</div>
+    <div class="pn">${postPendingName}</div>
+    <div class="pa">${postPendingAddr}</div>`;
+  document.getElementById('post-step1').style.display = 'none';
+  document.getElementById('post-step2').style.display = 'block';
+}
+function selectExistingSpot(spotId) {
+  const spot = mySpots.find(s=>s.id===spotId);
+  if (!spot) return;
+  postPendingSpotId = spot.id;
+  postPendingLat = spot.lat;
+  postPendingLng = spot.lng;
+  postPendingName = spot.name;
+  postPendingAddr = spot.addr || '';
+  postPendingArea = spot.area || '';
+  postCurrentRating = spot.rating || 0;
+  postCurrentPrice = priceOf(spot);
+  document.getElementById('postCaption').value = '';
+  const genreSelect = document.getElementById('postGenre');
+  const idx = Array.from(genreSelect.options).findIndex(o=>o.value===spot.genre);
+  genreSelect.selectedIndex = idx >= 0 ? idx : 0;
+  onPostGenreChange();
+  updatePostStarUI(postCurrentRating);
+  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice===postCurrentPrice));
+  document.getElementById('postHashtagPreview').innerHTML = '';
+  document.getElementById('postSelectedPlaceCard').innerHTML = `
+    <div class="pc">📍 登録済みのお店</div>
+    <div class="pn">${postPendingName}</div>
+    <div class="pa">${postPendingAddr}</div>`;
+  document.getElementById('post-step1').style.display = 'none';
+  document.getElementById('post-step2').style.display = 'block';
+}
+function resetPostSearch() {
+  document.getElementById('post-step1').style.display = 'block';
+  document.getElementById('post-step2').style.display = 'none';
+  document.getElementById('postSearchInput').value = '';
+  postPendingLat = null;
+  postPendingSpotId = null;
+  setTimeout(()=>document.getElementById('postSearchInput').focus(), 50);
+}
+function onPostGenreChange() {
+  const g = document.getElementById('postGenre').value;
+  document.getElementById('postGenreEmoji').textContent = iconOf(g);
+  document.getElementById('postGenreText').textContent = g;
+}
+function setPostPrice(p) {
+  postCurrentPrice = p;
+  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice===p));
+}
+function setPostRating(v) { postCurrentRating = v; updatePostStarUI(v); }
+function updatePostStarUI(v) {
+  document.querySelectorAll('#postStarInput .si').forEach(s=>s.classList.toggle('filled', parseInt(s.dataset.v)<=v));
+  document.getElementById('postRatingLabel').textContent = v>0 ? RATING_WORDS[v] : 'タップして評価';
+}
+function onPostCaptionInput() {
+  const text = document.getElementById('postCaption').value;
+  const tags = extractHashtags(text);
+  document.getElementById('postHashtagPreview').innerHTML = tags.map(t=>`<span class="ht-tag">#${t}</span>`).join('');
+}
+function submitPost() {
+  if (!postPendingLat || !postPendingName) { alert('お店を選択してください'); return; }
+  const genre = document.getElementById('postGenre').value;
+  const caption = document.getElementById('postCaption').value.trim();
+  let spotId, area;
+
+  if (postPendingSpotId) {
+    // 登録済みのお店から再投稿：新しいスポットは作らず既存スポットを参照する
+    spotId = postPendingSpotId;
+    area = postPendingArea || '';
+  } else {
+    const spot = {
+      id: nextId++, userId: 0, name: postPendingName, genre,
+      comment: caption.replace(/#[^\s#]+/g,'').trim(), area: postPendingArea||'', addr: postPendingAddr||'',
+      lat: postPendingLat, lng: postPendingLng, rating: postCurrentRating||null, price: postCurrentPrice,
+    };
+    mySpots.push(spot);
+    localStorage.setItem('fwy_mySpots', JSON.stringify(mySpots));
+    localStorage.setItem('fwy_nextId', String(nextId));
+    spotId = spot.id;
+    area = spot.area;
+
+    if (map) {
+      const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map, icon:makeIcon(MY_USER), title:spot.name, animation:google.maps.Animation.DROP });
+      marker.addListener('click',()=>{ infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker); highlightedSpotId=spot.id; renderSidebar(); });
+      gmMarkers[spot.id]=marker;
+    }
+    renderSidebar();
+  }
+
+  const post = {
+    id: 'p'+Date.now(), userId: 0, spotId, restaurantName: postPendingName,
+    genre, area, caption, createdAt: new Date().toISOString(), likes: [], comments: [],
+  };
+  myPosts.push(post);
+  localStorage.setItem('fwy_posts', JSON.stringify(myPosts));
+  postState[post.id] = { likes: [], comments: [] };
+  savePostState();
+
+  resetPostSearch();
+  goPage('timeline');
+}
+
+// ═══════════════════════════════════════
+// SEARCH PAGE
+// ═══════════════════════════════════════
+function switchSearchTab(tab) {
+  searchTab = tab;
+  document.getElementById('se-tab-shop').classList.toggle('active', tab==='shop');
+  document.getElementById('se-tab-account').classList.toggle('active', tab==='account');
+  document.getElementById('search-shop').classList.toggle('active', tab==='shop');
+  document.getElementById('search-account').classList.toggle('active', tab==='account');
+  if (tab === 'account') renderAccountResults();
+  if (tab === 'shop' && searchMap) setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
+}
+
+function initSearchPage() {
+  if (!searchMap) {
+    searchMap = new google.maps.Map(document.getElementById('search-map'), {
+      center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
+      mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
+    });
+    const distInput = document.getElementById('distOriginInput');
+    distOriginAutocomplete = new google.maps.places.Autocomplete(distInput, { fields:['name','geometry'], componentRestrictions:{country:'jp'} });
+    distOriginAutocomplete.addListener('place_changed', () => {
+      const place = distOriginAutocomplete.getPlace();
+      if (!place.geometry?.location) return;
+      distOrigin = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), label: place.name };
+      distanceFilterOn = true;
+      document.getElementById('distClearBtn').style.display = 'inline-block';
+      renderSearchResults();
+    });
+  } else {
+    setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
+  }
+  renderSearchResults();
+}
+
+function toggleGenreChip(g) {
+  if (g === 'all') { selectedGenres.clear(); }
+  else {
+    selectedGenres.has(g) ? selectedGenres.delete(g) : selectedGenres.add(g);
+  }
+  document.querySelectorAll('[data-genre]').forEach(c => {
+    const cg = c.dataset.genre;
+    c.classList.toggle('on', cg==='all' ? selectedGenres.size===0 : selectedGenres.has(cg));
+  });
+  renderSearchResults();
+}
+function togglePriceChip(p) {
+  selectedPrices.has(p) ? selectedPrices.delete(p) : selectedPrices.add(p);
+  document.querySelectorAll('[data-price]').forEach(c => c.classList.toggle('on', selectedPrices.has(c.dataset.price)));
+  renderSearchResults();
+}
+function toggleRatingChip(r) {
+  minRatingFilter = (minRatingFilter === r) ? 0 : r;
+  document.querySelectorAll('[data-rating]').forEach(c => c.classList.toggle('on', parseInt(c.dataset.rating)===minRatingFilter));
+  renderSearchResults();
+}
+function setTravelMode(m) {
+  distMode = m;
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode===m));
+  if (distanceFilterOn) renderSearchResults();
+}
+function onMinutesChange() {
+  distMaxMinutes = parseInt(document.getElementById('distMinutesRange').value);
+  document.getElementById('distMinutesLabel').textContent = distMaxMinutes+'分';
+  if (distanceFilterOn) renderSearchResults();
+}
+function useCurrentLocation() {
+  if (!navigator.geolocation) { alert('現在地を取得できません。'); return; }
+  navigator.geolocation.getCurrentPosition((pos) => {
+    distOrigin = { lat: pos.coords.latitude, lng: pos.coords.longitude, label: '現在地' };
+    distanceFilterOn = true;
+    document.getElementById('distOriginInput').value = '📍 現在地';
+    document.getElementById('distClearBtn').style.display = 'inline-block';
+    renderSearchResults();
+  }, () => alert('現在地を取得できませんでした。位置情報の利用を許可してください。'));
+}
+function clearDistanceFilter() {
+  distOrigin = null; distanceFilterOn = false;
+  document.getElementById('distOriginInput').value = '';
+  document.getElementById('distClearBtn').style.display = 'none';
+  renderSearchResults();
+}
+function setSearchView(v) {
+  searchView = v;
+  document.getElementById('sv-map').classList.toggle('active', v==='map');
+  document.getElementById('sv-list').classList.toggle('active', v==='list');
+  document.getElementById('viewMapBtn').classList.toggle('active', v==='map');
+  document.getElementById('viewListBtn').classList.toggle('active', v==='list');
+  if (v==='map') setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
+}
+function estimateMinutes(spot) {
+  if (!distOrigin) return null;
+  const d = google.maps.geometry.spherical.computeDistanceBetween(
+    new google.maps.LatLng(distOrigin.lat, distOrigin.lng), new google.maps.LatLng(spot.lat, spot.lng)
+  );
+  return Math.round(d / TRAVEL_SPEED_M_PER_MIN[distMode]);
+}
+function getFilteredSpots() {
+  let spots = getAllSpots();
+  if (selectedGenres.size > 0) spots = spots.filter(s => selectedGenres.has(s.genre));
+  if (selectedPrices.size > 0) spots = spots.filter(s => selectedPrices.has(priceOf(s)));
+  if (minRatingFilter > 0) spots = spots.filter(s => (s.rating||0) >= minRatingFilter);
+  if (distanceFilterOn && distOrigin) {
+    spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
+  }
+  return spots;
+}
+function renderSearchResults() {
+  const spots = getFilteredSpots();
+  document.getElementById('searchResultCount').textContent = spots.length+'件のお店';
+  // Map markers
+  Object.values(searchMarkers).forEach(m=>m.setMap(null));
+  searchMarkers = {};
+  spots.forEach(spot => {
+    const user = getUserById(spot.userId);
+    const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map:searchMap, icon:makeIcon(user), title:spot.name });
+    marker.addListener('click', () => {
+      const mins = estimateMinutes(spot);
+      const extra = mins!==null ? `<div class="gm-popup-comment">起点から約${mins}分（${MODE_LABEL[distMode]}・概算）</div>` : '';
+      infoWindow.setContent(infoHTML(spot,user)+extra);
+      infoWindow.open(searchMap, marker);
+    });
+    searchMarkers[spot.id] = marker;
+  });
+  // List view
+  const list = document.getElementById('sv-list');
+  if (spots.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="big">🔍</div><p>条件に合うお店が見つかりませんでした</p></div>`;
+    return;
+  }
+  list.innerHTML = spots.map(spot => {
+    const user = getUserById(spot.userId);
+    const lbl = user.isMe ? MY_USER.label : user.emoji;
+    const mins = estimateMinutes(spot);
+    return `<div class="result-card" onclick="focusSearchResult(${spot.id})">
+      <div class="result-icon">${iconOf(spot.genre)}</div>
+      <div class="result-info">
+        <div class="result-name">${spot.name}</div>
+        <div class="result-meta">${spot.genre}${spot.area?' · '+spot.area:''} · ${priceOf(spot)}</div>
+        ${spot.rating?`<div class="result-stars">${starsHTML(spot.rating)}</div>`:''}
+        ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
+        <div class="result-by" style="background:${user.color};">${lbl} ${user.name}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function focusSearchResult(spotId) {
+  const spot = getAllSpots().find(s=>s.id===spotId);
+  if (!spot) return;
+  setSearchView('map');
+  setTimeout(() => {
+    searchMap.panTo({lat:spot.lat,lng:spot.lng});
+    searchMap.setZoom(16);
+    const marker = searchMarkers[spotId];
+    if (marker) { infoWindow.setContent(infoHTML(spot, getUserById(spot.userId))); infoWindow.open(searchMap, marker); }
+  }, 100);
+}
+function renderAccountResults() {
+  const q = (document.getElementById('accountSearchInput').value||'').trim().toLowerCase();
+  let list = FRIENDS;
+  if (q) list = list.filter(f => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q) || (f.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  const box = document.getElementById('accountResults');
+  if (list.length===0) { box.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>該当するアカウントが見つかりませんでした</p></div>`; return; }
+  box.innerHTML = list.map(f => `
+    <div class="acc-card" onclick="openProfile(${f.id}); goPage('map');">
+      <div class="acc-ring ${f.following?'ig':'gray'}"><div class="acc-inner">${f.emoji}</div></div>
+      <div class="acc-info">
+        <div class="acc-name">${f.name}</div>
+        <div class="acc-desc">${f.desc}</div>
+        <div class="acc-tags">${(f.tags||[]).map(t=>`<span class="acc-tag">${t}</span>`).join('')}</div>
+      </div>
+      <button class="follow-btn ${f.following?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow(${f.id});renderAccountResults();">${f.following?'フォロー中':'フォロー'}</button>
+    </div>`).join('');
+}
+function searchByHashtag(tag) {
+  goPage('timeline');
+  setTimeout(()=>alert('#'+tag+' のハッシュタグ検索結果を表示します（タイムラインに同じタグの投稿が表示されています）'), 50);
+}
+
+// ═══════════════════════════════════════
+// TIMELINE PAGE
+// ═══════════════════════════════════════
+function setTimelineFilter(f) {
+  timelineFilter = f;
+  document.getElementById('tlFilterFollowing').classList.toggle('on', f==='following');
+  document.getElementById('tlFilterAll').classList.toggle('on', f==='all');
+  renderTimeline();
+}
+function renderTimeline() {
+  let posts = getAllPosts();
+  if (timelineFilter === 'following') {
+    const followingIds = new Set([0, ...FRIENDS.filter(f=>f.following).map(f=>f.id)]);
+    posts = posts.filter(p => followingIds.has(p.userId));
+  }
+  const feed = document.getElementById('tlFeed');
+  if (posts.length === 0) {
+    feed.innerHTML = `<div class="empty-state"><div class="big">📰</div><p>まだ投稿がありません</p></div>`;
+    return;
+  }
+  feed.innerHTML = posts.map(p => postCardHTML(p)).join('');
+}
+function postCardHTML(p) {
+  const user = getUserById(p.userId);
+  const lbl = user.isMe ? MY_USER.label : user.emoji;
+  const st = postState[p.id] || {likes:[],comments:[]};
+  const liked = st.likes.includes(0);
+  const spot = getAllSpots().find(s=>s.id===p.spotId) || { genre:p.genre, rating:null };
+  return `<div class="post-card" id="post-${p.id}">
+    <div class="pc-head">
+      <div class="pc-ring ${user.isMe?'ig':'ig'}" onclick="openProfile(${p.userId});goPage('map');"><div class="pc-inner">${lbl}</div></div>
+      <div>
+        <div><span class="pc-name" onclick="openProfile(${p.userId});goPage('map');">${user.name}</span><span class="pc-action"> さんが新しいお店を登録しました</span></div>
+        <div class="pc-time">${timeAgo(p.createdAt)}</div>
+      </div>
+    </div>
+    <div class="post-restaurant" onclick="focusFromTimeline(${p.spotId})">
+      <div class="prr-top">
+        <div class="prr-icon">${iconOf(p.genre)}</div>
+        <div>
+          <div class="prr-name">${p.restaurantName}</div>
+          <div class="prr-meta">${p.genre}${p.area?' · '+p.area:''}</div>
+        </div>
+      </div>
+      ${spot.rating?`<div class="prr-stars">${starsHTML(spot.rating)}</div>`:''}
+    </div>
+    <div class="post-caption">${linkifyCaption(p.caption)}</div>
+    <div class="post-actions">
+      <button class="act-btn ${liked?'liked':''}" onclick="toggleLikePost('${p.id}')"><span class="ic">${liked?'❤️':'🤍'}</span>${st.likes.length}</button>
+      <button class="act-btn" onclick="toggleComments('${p.id}')"><span class="ic">💬</span>${st.comments.length}</button>
+    </div>
+    <div class="post-comments" id="comments-${p.id}" style="display:none;">
+      ${commentsHTML(p.id, st.comments)}
+      <div class="add-comment-row">
+        <div class="ac-av-me">${MY_USER.label}</div>
+        <input class="ac-input" id="commentInput-${p.id}" placeholder="コメントを追加..." onkeydown="if(event.key==='Enter')submitComment('${p.id}')"/>
+        <button class="ac-submit" onclick="submitComment('${p.id}')">送信</button>
+      </div>
+    </div>
+    <button class="cm-toggle" style="padding-left:14px;" onclick="toggleComments('${p.id}')">${st.comments.length>0?st.comments.length+'件のコメントを見る':'コメントする'}</button>
+  </div>`;
+}
+function commentsHTML(postId, comments) {
+  if (!comments.length) return '';
+  return comments.map(c => {
+    const u = getUserById(c.userId);
+    const lbl = u.isMe ? MY_USER.label : u.emoji;
+    const cLiked = (c.likes||[]).includes(0);
+    return `<div class="cm-item">
+      <div class="cm-av" style="background:${u.color};">${lbl}</div>
+      <div class="cm-body">
+        <div class="cm-text-wrap"><span class="cm-name">${u.name}</span>${c.text}</div>
+        <div class="cm-meta">
+          <span>${timeAgo(c.createdAt)}</span>
+          <button class="cm-like-btn ${cLiked?'on':''}" onclick="toggleLikeComment('${postId}','${c.id}')">${cLiked?'❤️':'🤍'} ${(c.likes||[]).length||''}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleComments(postId) {
+  const el = document.getElementById('comments-'+postId);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function toggleLikePost(postId) {
+  const st = postState[postId];
+  const i = st.likes.indexOf(0);
+  if (i>=0) st.likes.splice(i,1); else st.likes.push(0);
+  savePostState();
+  renderTimeline();
+}
+function toggleLikeComment(postId, commentId) {
+  const st = postState[postId];
+  const c = st.comments.find(c=>c.id===commentId);
+  if (!c) return;
+  c.likes = c.likes || [];
+  const i = c.likes.indexOf(0);
+  if (i>=0) c.likes.splice(i,1); else c.likes.push(0);
+  savePostState();
+  renderTimeline();
+  setTimeout(()=>{ const el=document.getElementById('comments-'+postId); if(el) el.style.display='block'; }, 0);
+}
+function submitComment(postId) {
+  const input = document.getElementById('commentInput-'+postId);
+  const text = input.value.trim();
+  if (!text) return;
+  const st = postState[postId];
+  st.comments.push({ id:'c'+Date.now(), userId:0, text, likes:[], createdAt:new Date().toISOString() });
+  savePostState();
+  renderTimeline();
+  setTimeout(()=>{ const el=document.getElementById('comments-'+postId); if(el) el.style.display='block'; }, 0);
+}
+function focusFromTimeline(spotId) {
+  goPage('map');
+  setTimeout(()=>focusSpot(spotId), 150);
 }
 
 function makeIcon(user) {
-  const label = user.isMe ? 'り' : user.emoji;
+  const label = user.isMe ? MY_USER.label : user.emoji;
   const fs    = user.isMe ? 13 : 16;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">
     <path d="M20 0C8.95 0 0 8.95 0 20c0 15 20 28 20 28S40 35 40 20C40 8.95 31.05 0 20 0z" fill="${user.color}" stroke="white" stroke-width="2.5"/>
@@ -555,7 +1486,7 @@ function makeIcon(user) {
 }
 
 function infoHTML(spot, user) {
-  const lbl = user.isMe ? 'り' : user.emoji;
+  const lbl = user.isMe ? MY_USER.label : user.emoji;
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
@@ -598,7 +1529,7 @@ function renderStories() {
   row.innerHTML = all.map(u => {
     const hasSpots = getAllSpots().some(s => s.userId === u.id);
     const isActive = mapFilterId === u.id;
-    const inner    = u.isMe ? `<div class="story-inner me">り</div>` : `<div class="story-inner">${u.emoji}</div>`;
+    const inner    = u.isMe ? `<div class="story-inner me">${MY_USER.label}</div>` : `<div class="story-inner">${u.emoji}</div>`;
     return `<div class="story-item" onclick="openProfile(${u.id})">
       <div class="story-ring ${hasSpots?'ig':'gray'} ${isActive?'active':''}">
         ${inner}
@@ -641,7 +1572,7 @@ function renderProfilePanel(userId) {
 
   // Hero section
   const innerHTML = isMe
-    ? `<div class="profile-big-inner me">り</div>`
+    ? `<div class="profile-big-inner me">${MY_USER.label}</div>`
     : `<div class="profile-big-inner">${user.emoji}</div>`;
 
   const followBtn = (!isMe) ? `
@@ -658,6 +1589,9 @@ function renderProfilePanel(userId) {
 
   const tagsHTML = (user.tags||[]).map(t=>`<span class="profile-tag">${t}</span>`).join('');
 
+  const editBtn = isMe ? `
+    <button class="profile-edit-btn" onclick="openEditProfileModal()">✏️ プロフィールを編集</button>` : '';
+
   document.getElementById('profileHero').innerHTML = `
     <div class="profile-hero-top">
       <div class="profile-big-ring ${spots.length?'ig':'gray'}" style="width:78px;height:78px;">
@@ -673,18 +1607,42 @@ function renderProfilePanel(userId) {
     <div class="profile-name">${user.name}</div>
     <div class="profile-bio">${user.bio||''}</div>
     <div class="profile-tags">${tagsHTML}</div>
-    <div class="profile-actions">${followBtn}${mapBtn}</div>
+    <div class="profile-actions">${followBtn}${mapBtn}${editBtn}</div>
   `;
 
   // Spot list
   const body = document.getElementById('profilePanelBody');
-  if (spots.length === 0) {
+  const posts = getAllPosts().filter(p => p.userId === userId).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const postsHTML = posts.length ? `
+    <div class="section-head"><div class="section-label">📰 ${user.name}の投稿 (${posts.length})</div></div>
+    ${posts.map(p => profilePostCardHTML(p)).join('')}
+  ` : '';
+
+  if (spots.length === 0 && posts.length === 0) {
     body.innerHTML = `<div class="empty-state"><div class="big">📍</div><p>まだスポットがありません</p></div>`;
     return;
   }
-  body.innerHTML = `
+  const spotsHTML = spots.length ? `
     <div class="section-head"><div class="section-label">📍 ${user.name}のスポット (${spots.length})</div></div>
     ${spots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+  ` : '';
+  body.innerHTML = postsHTML + spotsHTML;
+}
+
+function profilePostCardHTML(p) {
+  const user = getUserById(p.userId);
+  const st = postState[p.id] || { likes:[], comments:[] };
+  const likeCount = st.likes.length, cmCount = st.comments.length;
+  return `
+    <div class="profile-post-card" onclick="goPage('timeline'); setTimeout(()=>focusFromTimeline(${p.spotId}),100);">
+      <div class="ppc-head">
+        <span class="ppc-emoji">${iconOf(p.genre)}</span>
+        <span class="ppc-name">${p.restaurantName}</span>
+        <span class="ppc-time">${timeAgo(p.createdAt)}</span>
+      </div>
+      ${p.caption ? `<div class="ppc-caption">${linkifyCaption(p.caption)}</div>` : ''}
+      <div class="ppc-meta">❤️ ${likeCount}　💬 ${cmCount}</div>
+    </div>
   `;
 }
 
@@ -743,7 +1701,7 @@ function renderSidebar() {
 
 function spotCardHTML(spot, user, canDel) {
   const hi  = spot.id === highlightedSpotId;
-  const lbl = user.isMe ? 'り' : user.emoji;
+  const lbl = user.isMe ? MY_USER.label : user.emoji;
   return `
     <div class="spot-card ${hi?'hl':''}" id="spot-${spot.id}" onclick="focusSpot(${spot.id})">
       <div class="spot-icon-box">${iconOf(spot.genre)}</div>
@@ -847,7 +1805,8 @@ function openModalWithPlace(place) {
 // ═══════════════════════════════════════
 // ADD SPOT
 // ═══════════════════════════════════════
-function autoSelectGenre(types) {
+function autoSelectGenre(types, selectId) {
+  selectId = selectId || 'inputGenre';
   const map2 = [
     {keys:['ramen','noodle'],             genre:'ラーメン・麺類'},
     {keys:['sushi','japanese_restaurant'],genre:'寿司・和食'},
@@ -860,7 +1819,7 @@ function autoSelectGenre(types) {
     {keys:['bar','night_club'],          genre:'居酒屋・バー'},
   ];
   const ts = types.join(' ').toLowerCase();
-  const sel = document.getElementById('inputGenre');
+  const sel = document.getElementById(selectId);
   for (const e of map2) {
     if (e.keys.some(k=>ts.includes(k))) {
       for (let i=0;i<sel.options.length;i++) { if (sel.options[i].value===e.genre){sel.selectedIndex=i;return;} }
@@ -910,6 +1869,16 @@ function submitSpot() {
   mySpots.push(spot);
   localStorage.setItem('fwy_mySpots', JSON.stringify(mySpots));
   localStorage.setItem('fwy_nextId', String(nextId));
+  // タイムラインにも投稿として追加
+  const post = {
+    id: 'p'+spot.id, userId: 0, spotId: spot.id, restaurantName: spot.name,
+    genre: spot.genre, area: spot.area||'', caption: spot.comment||'',
+    createdAt: new Date().toISOString(), likes: [], comments: [],
+  };
+  myPosts.push(post);
+  localStorage.setItem('fwy_posts', JSON.stringify(myPosts));
+  postState[post.id] = { likes: [], comments: [] };
+  savePostState();
   closeModal();
   const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map, icon:makeIcon(MY_USER), title:spot.name, animation:google.maps.Animation.DROP });
   marker.addListener('click',()=>{ infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker); highlightedSpotId=spot.id; renderSidebar(); });
@@ -921,6 +1890,6 @@ function submitSpot() {
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1-BJlcbh9cp487vyBZnpAtemMIq7sjbs&libraries=places&callback=initMap&language=ja&region=JP" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1-BJlcbh9cp487vyBZnpAtemMIq7sjbs&libraries=places,geometry&callback=initMap&language=ja&region=JP" async defer></script>
 </body>
 </html>
