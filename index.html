@@ -246,6 +246,8 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .gm-popup-av { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
 .gm-popup-author { font-size: 11px; font-weight: 700; }
 .gm-popup-by { font-size: 11px; color: #8e8e8e; }
+.gm-popup-maplink { display: inline-block; margin-top: 8px; font-size: 11.5px; font-weight: 700; color: #0095f6; text-decoration: none; }
+.gm-popup-maplink:hover { text-decoration: underline; }
 
 /* ══════════════ BOTTOM NAV & PAGES ══════════════ */
 .app-page { display: none; width: 100%; }
@@ -472,6 +474,11 @@ select.form-input { background: #fafafa; cursor: pointer; }
   <div class="search-body active" id="search-shop">
     <div class="filter-panel">
       <div class="filter-row">
+        <span class="f-label">対象</span>
+        <div class="chip on" data-scope="all" onclick="setSearchScope('all')">🗺 マップ上の全てのお店</div>
+        <div class="chip" data-scope="following" onclick="setSearchScope('following')">👥 フォロー中の人のみ</div>
+      </div>
+      <div class="filter-row">
         <span class="f-label">ジャンル</span>
         <div class="chip on" data-genre="all" onclick="toggleGenreChip('all')">すべて</div>
         <div class="chip" data-genre="ラーメン・麺類" onclick="toggleGenreChip('ラーメン・麺類')">🍜 ラーメン</div>
@@ -487,10 +494,10 @@ select.form-input { background: #fafafa; cursor: pointer; }
       </div>
       <div class="filter-row">
         <span class="f-label">価格帯</span>
-        <div class="chip" data-price="¥" onclick="togglePriceChip('¥')">¥ 〜1000円</div>
-        <div class="chip" data-price="¥¥" onclick="togglePriceChip('¥¥')">¥¥ 〜2000円</div>
-        <div class="chip" data-price="¥¥¥" onclick="togglePriceChip('¥¥¥')">¥¥¥ 〜5000円</div>
-        <div class="chip" data-price="¥¥¥¥" onclick="togglePriceChip('¥¥¥¥')">¥¥¥¥ 5000円〜</div>
+        <div class="min-wrap" style="flex:1;">
+          <input type="range" id="priceMaxRange" min="1" max="4" step="1" value="4" style="width:140px;" oninput="onPriceRangeChange()"/>
+          <span class="min-label" id="priceMaxLabel" style="min-width:90px;">指定なし</span>
+        </div>
       </div>
       <div class="filter-row">
         <span class="f-label">評価</span>
@@ -537,20 +544,15 @@ select.form-input { background: #fafafa; cursor: pointer; }
   </div>
 </div>
 
-<!-- ══════════════ TIMELINE PAGE ══════════════ -->
+<!-- ══════════════ TIMELINE PAGE（投稿機能を内包） ══════════════ -->
 <div class="app-page" id="page-timeline">
   <div class="tl-header">
     <div class="tl-title">タイムライン</div>
+    <button class="tl-fbtn" id="tlComposerToggle" onclick="toggleTimelineComposer()">＋ 投稿する</button>
     <div class="tl-fbtn on" id="tlFilterFollowing" onclick="setTimelineFilter('following')">フォロー中</div>
     <div class="tl-fbtn" id="tlFilterAll" onclick="setTimelineFilter('all')">すべて</div>
   </div>
-  <div class="tl-feed" id="tlFeed"></div>
-</div>
-
-<!-- ══════════════ POST PAGE ══════════════ -->
-<div class="app-page" id="page-post" style="overflow-y:auto;background:#fff;">
-  <div style="max-width:480px;margin:0 auto;padding:18px;width:100%;">
-    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">📍 新しい投稿</div>
+  <div id="timelineComposer" style="display:none;background:#fff;border-bottom:8px solid #fafafa;padding:16px 14px;">
     <div id="post-step1">
       <div class="form-row">
         <label class="form-label">お店を検索</label>
@@ -579,11 +581,9 @@ select.form-input { background: #fafafa; cursor: pointer; }
       </div>
       <div class="form-row">
         <label class="form-label">価格帯</label>
-        <div class="price-chips">
-          <div class="price-chip" data-pprice="¥" onclick="setPostPrice('¥')">¥</div>
-          <div class="price-chip on" data-pprice="¥¥" onclick="setPostPrice('¥¥')">¥¥</div>
-          <div class="price-chip" data-pprice="¥¥¥" onclick="setPostPrice('¥¥¥')">¥¥¥</div>
-          <div class="price-chip" data-pprice="¥¥¥¥" onclick="setPostPrice('¥¥¥¥')">¥¥¥¥</div>
+        <div class="min-wrap" style="margin-top:4px;">
+          <input type="range" id="postPriceRange" min="1" max="4" step="1" value="2" style="width:140px;" oninput="onPostPriceRangeChange()"/>
+          <span class="min-label" id="postPriceLabel" style="min-width:54px;">¥¥</span>
         </div>
       </div>
       <div class="form-row">
@@ -607,6 +607,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <button class="post-submit-btn" id="postSubmitBtn" onclick="submitPost()">投稿する</button>
     </div>
   </div>
+  <div class="tl-feed" id="tlFeed"></div>
 </div>
 
 <!-- ══════════════ BOTTOM NAV ══════════════ -->
@@ -617,7 +618,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
   <button class="nav-item" id="nav-search" onclick="goPage('search')">
     <span class="ni-icon">🔍</span><span class="ni-label">検索</span>
   </button>
-  <button class="nav-item" id="nav-add" onclick="goPage('post')">
+  <button class="nav-item" id="nav-add" onclick="goPage('timeline'); openTimelineComposer();">
     <span class="ni-icon">➕</span><span class="ni-label">投稿</span>
   </button>
   <button class="nav-item" id="nav-timeline" onclick="goPage('timeline')">
@@ -761,6 +762,8 @@ const GENRE_ICONS = {
   'ファミレス・カジュアル':'🍽️','ベーカリー・パン':'🥐','その他':'📍',
 };
 const RATING_WORDS = ['','いまいち','ふつう','おいしい','とてもおいしい','最高！'];
+const PRICE_LEVELS = ['¥','¥¥','¥¥¥','¥¥¥¥'];
+function priceLevelNum(spot) { const i = PRICE_LEVELS.indexOf(priceOf(spot)); return i >= 0 ? i+1 : 2; }
 const PRICE_BY_SPOT = { 1:'¥¥',2:'¥¥¥¥',3:'¥',4:'¥¥',5:'¥¥¥',6:'¥',7:'¥¥',8:'¥¥¥',9:'¥¥',10:'¥¥',11:'¥¥',12:'¥¥',13:'¥¥',14:'¥¥',15:'¥¥',16:'¥',17:'¥¥' };
 const TRAVEL_SPEED_M_PER_MIN = { walk:80, bike:230, train:300, car:380 };
 const MODE_LABEL = { walk:'🚶 徒歩', bike:'🚲 自転車', train:'🚃 電車', car:'🚗 車' };
@@ -846,8 +849,9 @@ let timelineFilter = 'following';
 let searchTab = 'shop';
 let searchView = 'map';
 let selectedGenres = new Set();      // 空 = すべて
-let selectedPrices = new Set();
+let maxPriceFilter = 4;              // 4(¥¥¥¥) = 絞り込みなし
 let minRatingFilter = 0;
+let searchScope = 'all';             // 'all' = マップ上の全登録店, 'following' = フォロー中の人のみ
 let distOrigin = null;               // {lat,lng,label}
 let distMode = 'walk';
 let distMaxMinutes = 15;
@@ -1088,6 +1092,7 @@ function startApp() {
   });
   infoWindow    = new google.maps.InfoWindow();
   placesService = new google.maps.places.PlacesService(map);
+  showMyLocationOnMap(map);
 
   map.addListener('click', (e) => {
     if (!e.placeId) return;
@@ -1193,7 +1198,20 @@ function goPage(page) {
   if (page === 'map' && map) setTimeout(()=>google.maps.event.trigger(map,'resize'), 80);
   if (page === 'search') { initSearchPage(); }
   if (page === 'timeline') { renderTimeline(); }
-  if (page === 'post') { initPostPage(); }
+}
+
+// ═══════════════════════════════════════
+// タイムライン内の投稿コンポーザー（開閉）
+// ═══════════════════════════════════════
+function toggleTimelineComposer() {
+  const el = document.getElementById('timelineComposer');
+  const opening = el.style.display === 'none' || el.style.display === '';
+  el.style.display = opening ? 'block' : 'none';
+  if (opening) initPostPage();
+}
+function openTimelineComposer() {
+  document.getElementById('timelineComposer').style.display = 'block';
+  initPostPage();
 }
 
 // ═══════════════════════════════════════
@@ -1250,7 +1268,8 @@ function openPostStep2WithPlace(place) {
   autoSelectGenre(place.types||[], 'postGenre');
   onPostGenreChange();
   updatePostStarUI(0);
-  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice==='¥¥'));
+  document.getElementById('postPriceRange').value = 2;
+  document.getElementById('postPriceLabel').textContent = '¥¥';
   document.getElementById('postHashtagPreview').innerHTML = '';
   document.getElementById('postSelectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
@@ -1276,7 +1295,9 @@ function selectExistingSpot(spotId) {
   genreSelect.selectedIndex = idx >= 0 ? idx : 0;
   onPostGenreChange();
   updatePostStarUI(postCurrentRating);
-  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice===postCurrentPrice));
+  const priceIdx = PRICE_LEVELS.indexOf(postCurrentPrice) + 1 || 2;
+  document.getElementById('postPriceRange').value = priceIdx;
+  document.getElementById('postPriceLabel').textContent = postCurrentPrice;
   document.getElementById('postHashtagPreview').innerHTML = '';
   document.getElementById('postSelectedPlaceCard').innerHTML = `
     <div class="pc">📍 登録済みのお店</div>
@@ -1298,9 +1319,10 @@ function onPostGenreChange() {
   document.getElementById('postGenreEmoji').textContent = iconOf(g);
   document.getElementById('postGenreText').textContent = g;
 }
-function setPostPrice(p) {
-  postCurrentPrice = p;
-  document.querySelectorAll('[data-pprice]').forEach(c=>c.classList.toggle('on', c.dataset.pprice===p));
+function onPostPriceRangeChange() {
+  const v = parseInt(document.getElementById('postPriceRange').value);
+  postCurrentPrice = PRICE_LEVELS[v-1];
+  document.getElementById('postPriceLabel').textContent = postCurrentPrice;
 }
 function setPostRating(v) { postCurrentRating = v; updatePostStarUI(v); }
 function updatePostStarUI(v) {
@@ -1349,6 +1371,7 @@ async function submitPost() {
   await createPostInFirestore(post);
 
   resetPostSearch();
+  document.getElementById('timelineComposer').style.display = 'none';
   goPage('timeline');
 }
 
@@ -1371,6 +1394,7 @@ function initSearchPage() {
       center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
       mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
     });
+    showMyLocationOnMap(searchMap);
     const distInput = document.getElementById('distOriginInput');
     distOriginAutocomplete = new google.maps.places.Autocomplete(distInput, { fields:['name','geometry'], componentRestrictions:{country:'jp'} });
     distOriginAutocomplete.addListener('place_changed', () => {
@@ -1387,6 +1411,11 @@ function initSearchPage() {
   renderSearchResults();
 }
 
+function setSearchScope(s) {
+  searchScope = s;
+  document.querySelectorAll('[data-scope]').forEach(c => c.classList.toggle('on', c.dataset.scope===s));
+  renderSearchResults();
+}
 function toggleGenreChip(g) {
   if (g === 'all') { selectedGenres.clear(); }
   else {
@@ -1398,9 +1427,9 @@ function toggleGenreChip(g) {
   });
   renderSearchResults();
 }
-function togglePriceChip(p) {
-  selectedPrices.has(p) ? selectedPrices.delete(p) : selectedPrices.add(p);
-  document.querySelectorAll('[data-price]').forEach(c => c.classList.toggle('on', selectedPrices.has(c.dataset.price)));
+function onPriceRangeChange() {
+  maxPriceFilter = parseInt(document.getElementById('priceMaxRange').value);
+  document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 4 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1]+'まで';
   renderSearchResults();
 }
 function toggleRatingChip(r) {
@@ -1422,6 +1451,8 @@ function useCurrentLocation() {
   if (!navigator.geolocation) { alert('現在地を取得できません。'); return; }
   navigator.geolocation.getCurrentPosition((pos) => {
     distOrigin = { lat: pos.coords.latitude, lng: pos.coords.longitude, label: '現在地' };
+    cachedMyLocation = { lat: distOrigin.lat, lng: distOrigin.lng };
+    placeLocationMarker(searchMap, cachedMyLocation);
     distanceFilterOn = true;
     document.getElementById('distOriginInput').value = '📍 現在地';
     document.getElementById('distClearBtn').style.display = 'inline-block';
@@ -1451,8 +1482,12 @@ function estimateMinutes(spot) {
 }
 function getFilteredSpots() {
   let spots = getAllSpots();
+  if (searchScope === 'following') {
+    const followingIds = new Set(['0', ...FRIENDS.filter(f=>f.following).map(f=>f.id)]);
+    spots = spots.filter(s => followingIds.has(s.userId));
+  }
   if (selectedGenres.size > 0) spots = spots.filter(s => selectedGenres.has(s.genre));
-  if (selectedPrices.size > 0) spots = spots.filter(s => selectedPrices.has(priceOf(s)));
+  if (maxPriceFilter < 4) spots = spots.filter(s => priceLevelNum(s) <= maxPriceFilter);
   if (minRatingFilter > 0) spots = spots.filter(s => (s.rating||0) >= minRatingFilter);
   if (distanceFilterOn && distOrigin) {
     spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
@@ -1652,6 +1687,29 @@ function focusFromTimeline(spotId) {
   setTimeout(()=>focusSpot(spotId), 150);
 }
 
+// ═══════════════════════════════════════
+// 現在地ピン（絵文字マーカー）
+// ═══════════════════════════════════════
+let cachedMyLocation = null;
+function currentLocationIcon() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+    <text x="17" y="27" text-anchor="middle" font-size="26">📍</text>
+  </svg>`;
+  return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(34,34), anchor: new google.maps.Point(17,30) };
+}
+function placeLocationMarker(targetMap, loc) {
+  return new google.maps.Marker({ position: loc, map: targetMap, icon: currentLocationIcon(), title:'現在地', zIndex: 999 });
+}
+// 一度だけ位置情報の許可を取り、以降は他の地図にも同じ位置でピンを表示する（失敗時は何も表示しない）
+function showMyLocationOnMap(targetMap) {
+  if (!navigator.geolocation) return;
+  if (cachedMyLocation) { placeLocationMarker(targetMap, cachedMyLocation); return; }
+  navigator.geolocation.getCurrentPosition((pos) => {
+    cachedMyLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    placeLocationMarker(targetMap, cachedMyLocation);
+  }, () => { /* 拒否された場合は何も表示しない */ });
+}
+
 function makeIcon(user) {
   const fs = 13;
   const avatarPart = user.photoURL
@@ -1666,6 +1724,10 @@ function makeIcon(user) {
   return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(40,48), anchor: new google.maps.Point(20,48) };
 }
 
+function googleMapsLinkFor(spot) {
+  const q = encodeURIComponent(spot.name + (spot.addr ? ' ' + spot.addr : ''));
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
 function infoHTML(spot, user) {
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
@@ -1678,6 +1740,7 @@ function infoHTML(spot, user) {
       <div class="gm-popup-by">by</div>
       <div class="gm-popup-author" style="color:${user.color};">${user.name}</div>
     </div>
+    <a class="gm-popup-maplink" href="${googleMapsLinkFor(spot)}" target="_blank" rel="noopener">🗺 Googleマップで開く</a>
   </div>`;
 }
 
