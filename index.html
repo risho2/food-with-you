@@ -871,6 +871,11 @@ let distMaxMinutes = 15;
 let distanceFilterOn = false;
 let searchMap = null, distOriginAutocomplete = null;
 let searchMarkers = {};
+// 「マップ上の全てのお店」スコープ用：友達の登録店に加えて、Googleマップ上の実際のお店も検索結果に表示する
+let googlePlacesService = null;
+let googlePlaceResults = [];       // 現在の地図表示範囲でGoogle Places検索した結果（疑似スポット形式）
+let googlePlacesLoading = false;
+let googlePlacesFetchTimer = null;
 
 function getAllPosts() { return [...INITIAL_POSTS, ...myPosts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)); }
 
@@ -1439,6 +1444,8 @@ function initSearchPage() {
     searchMap.addListener('zoom_changed', () => captureSharedView(searchMap));
     if (sharedMapView) applySharedViewTo(searchMap);
     showMyLocationOnMap(searchMap);
+    googlePlacesService = new google.maps.places.PlacesService(searchMap);
+    searchMap.addListener('idle', () => scheduleGooglePlacesFetch());
     const distInput = document.getElementById('distOriginInput');
     distOriginAutocomplete = new google.maps.places.Autocomplete(distInput, { fields:['name','geometry'], componentRestrictions:{country:'jp'} });
     distOriginAutocomplete.addListener('place_changed', () => {
@@ -1458,7 +1465,66 @@ function initSearchPage() {
 function setSearchScope(s) {
   searchScope = s;
   document.querySelectorAll('[data-scope]').forEach(c => c.classList.toggle('on', c.dataset.scope===s));
+  if (s === 'all') { scheduleGooglePlacesFetch(true); }
+  else { googlePlaceResults = []; }
   renderSearchResults();
+}
+
+// ─── Googleマップ上の実際のお店を「マップ上の全てのお店」に合流させる ───
+function scheduleGooglePlacesFetch(immediate) {
+  if (searchScope !== 'all' || !googlePlacesService) return;
+  clearTimeout(googlePlacesFetchTimer);
+  googlePlacesFetchTimer = setTimeout(fetchGooglePlacesInView, immediate ? 0 : 500);
+}
+function fetchGooglePlacesInView() {
+  if (!googlePlacesService || searchScope !== 'all') return;
+  const bounds = searchMap.getBounds();
+  if (!bounds) return;
+  const center = searchMap.getCenter();
+  const ne = bounds.getNorthEast();
+  const radius = Math.min(3000, Math.max(300, google.maps.geometry.spherical.computeDistanceBetween(center, ne)));
+  googlePlacesLoading = true;
+  googlePlacesService.nearbySearch({ location: center, radius, type: 'restaurant' }, (results, status) => {
+    googlePlacesLoading = false;
+    googlePlaceResults = (status === google.maps.places.PlacesServiceStatus.OK && results)
+      ? results.filter(p => p.geometry && p.geometry.location).map(toGooglePseudoSpot)
+      : [];
+    renderSearchResults();
+  });
+}
+function toGooglePseudoSpot(place) {
+  return {
+    id: 'g_' + place.place_id, source: 'google', placeRef: place,
+    name: place.name,
+    genre: genreFromTypes(place.types || []),
+    lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),
+    rating: place.rating ? Math.round(place.rating) : null,
+    googleRating: place.rating || null,
+    price: googlePriceLevelToOurs(place.price_level),
+    area: place.vicinity || '',
+  };
+}
+function genreFromTypes(types) {
+  const ts = types.join(' ').toLowerCase();
+  const map2 = [
+    {keys:['ramen','noodle'],              genre:'ラーメン'},
+    {keys:['sushi','japanese_restaurant'], genre:'和食'},
+    {keys:['bbq','yakitori','yakiniku'],   genre:'焼肉・ホルモン'},
+    {keys:['cafe','bakery','dessert'],     genre:'カフェ・スイーツ'},
+    {keys:['italian','pizza','french'],    genre:'イタリアン・フレンチ'},
+    {keys:['chinese','dim_sum'],           genre:'中華'},
+    {keys:['korean'],                      genre:'韓国料理'},
+    {keys:['thai','vietnamese','indian','asian'], genre:'アジア・エスニック料理'},
+    {keys:['izakaya'],                     genre:'居酒屋'},
+    {keys:['bar','night_club'],            genre:'バー・カクテル'},
+  ];
+  for (const e of map2) { if (e.keys.some(k=>ts.includes(k))) return e.genre; }
+  return 'その他';
+}
+function googlePriceLevelToOurs(level) {
+  // Googleの価格帯(0〜4)をアプリの価格帯表記に概算でマッピング（不明な場合はnull＝価格帯フィルタの対象外）
+  const table = { 0:'1000円以下', 1:'2000円以下', 2:'5000円以下', 3:'10000円以下', 4:'20000円以上' };
+  return (level != null && table[level]) ? table[level] : null;
 }
 function toggleGenreChip(g) {
   if (g === 'all') { selectedGenres.clear(); }
@@ -1529,9 +1595,12 @@ function getFilteredSpots() {
   if (searchScope === 'following') {
     const followingIds = new Set(['0', ...FRIENDS.filter(f=>f.following).map(f=>f.id)]);
     spots = spots.filter(s => followingIds.has(s.userId));
+  } else if (searchScope === 'all') {
+    spots = [...spots, ...googlePlaceResults];
   }
   if (selectedGenres.size > 0) spots = spots.filter(s => selectedGenres.has(s.genre));
-  if (maxPriceFilter < 9) spots = spots.filter(s => priceLevelNum(s) <= maxPriceFilter);
+  // Googleのお店は価格帯が不明な場合があるため、不明なものは価格帯フィルタの対象外とする（概算のため）
+  if (maxPriceFilter < 9) spots = spots.filter(s => (s.source==='google' && !s.price) ? true : priceLevelNum(s) <= maxPriceFilter);
   if (minRatingFilter > 0) spots = spots.filter(s => (s.rating||0) >= minRatingFilter);
   if (distanceFilterOn && distOrigin) {
     spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
@@ -1540,17 +1609,19 @@ function getFilteredSpots() {
 }
 function renderSearchResults() {
   const spots = getFilteredSpots();
-  document.getElementById('searchResultCount').textContent = spots.length+'件のお店';
+  document.getElementById('searchResultCount').textContent = spots.length+'件のお店'+(googlePlacesLoading?'（Googleマップのお店を検索中…）':'');
   // Map markers
   Object.values(searchMarkers).forEach(m=>m.setMap(null));
   searchMarkers = {};
   spots.forEach(spot => {
-    const user = getUserById(spot.userId);
-    const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map:searchMap, icon:makeIcon(user), title:spot.name });
+    const isGoogle = spot.source === 'google';
+    const user = isGoogle ? null : getUserById(spot.userId);
+    const icon = isGoogle ? makeIcon({ color:'#4285F4', label:'G', photoURL:null }) : makeIcon(user);
+    const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map:searchMap, icon, title:spot.name });
     marker.addListener('click', () => {
       const mins = estimateMinutes(spot);
       const extra = mins!==null ? `<div class="gm-popup-comment">起点から約${mins}分（${MODE_LABEL[distMode]}・概算）</div>` : '';
-      infoWindow.setContent(infoHTML(spot,user)+extra);
+      infoWindow.setContent((isGoogle ? googlePlaceInfoHTML(spot) : infoHTML(spot,user))+extra);
       infoWindow.open(searchMap, marker);
     });
     searchMarkers[spot.id] = marker;
@@ -1562,9 +1633,22 @@ function renderSearchResults() {
     return;
   }
   list.innerHTML = spots.map(spot => {
+    const isGoogle = spot.source === 'google';
+    const mins = estimateMinutes(spot);
+    if (isGoogle) {
+      return `<div class="result-card" onclick="focusSearchResult('${spot.id}')">
+        <div class="result-icon">${iconOf(spot.genre)}</div>
+        <div class="result-info">
+          <div class="result-name">${spot.name}</div>
+          <div class="result-meta">${spot.genre}${spot.area?' · '+spot.area:''}${spot.price?' · '+spot.price+'（概算）':''}</div>
+          ${spot.googleRating?`<div class="result-stars">★${spot.googleRating}（Google評価）</div>`:''}
+          ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
+          <div class="result-by" style="background:#4285F4;">🌐 Googleマップ（未登録）</div>
+        </div>
+      </div>`;
+    }
     const user = getUserById(spot.userId);
     const lbl = user.label;
-    const mins = estimateMinutes(spot);
     return `<div class="result-card" onclick="focusSearchResult('${spot.id}')">
       <div class="result-icon">${iconOf(spot.genre)}</div>
       <div class="result-info">
@@ -1577,15 +1661,43 @@ function renderSearchResults() {
     </div>`;
   }).join('');
 }
+function googlePlaceInfoHTML(spot) {
+  return `<div class="gm-popup">
+    <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
+    <div class="gm-popup-title">${spot.name}</div>
+    <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}</div>
+    ${spot.googleRating?`<div class="gm-popup-stars">★${spot.googleRating}（Google評価）</div>`:''}
+    <div class="gm-popup-footer">
+      <div class="gm-popup-by" style="color:#4285F4;">🌐 Googleマップ掲載のお店（未登録）</div>
+    </div>
+    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addGooglePlaceAsSpot('${spot.id}')">＋ Food with youに追加</button>
+    <a class="gm-popup-maplink" href="https://www.google.com/maps/place/?q=place_id:${spot.placeRef.place_id}" target="_blank" rel="noopener">🗺 Googleマップで開く</a>
+  </div>`;
+}
+function addGooglePlaceAsSpot(id) {
+  const spot = googlePlaceResults.find(s=>s.id===id);
+  if (!spot) return;
+  const place = spot.placeRef;
+  openModalWithPlace({
+    name: place.name,
+    geometry: place.geometry,
+    formatted_address: place.vicinity || '',
+    address_components: null,
+    types: place.types || [],
+  });
+}
 function focusSearchResult(spotId) {
-  const spot = getAllSpots().find(s=>s.id===spotId);
+  const spot = getAllSpots().find(s=>s.id===spotId) || googlePlaceResults.find(s=>s.id===spotId);
   if (!spot) return;
   setSearchView('map');
   setTimeout(() => {
     searchMap.panTo({lat:spot.lat,lng:spot.lng});
     searchMap.setZoom(16);
     const marker = searchMarkers[spotId];
-    if (marker) { infoWindow.setContent(infoHTML(spot, getUserById(spot.userId))); infoWindow.open(searchMap, marker); }
+    if (marker) {
+      infoWindow.setContent(spot.source==='google' ? googlePlaceInfoHTML(spot) : infoHTML(spot, getUserById(spot.userId)));
+      infoWindow.open(searchMap, marker);
+    }
   }, 100);
 }
 function renderAccountResults() {
