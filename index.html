@@ -481,21 +481,25 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <div class="filter-row">
         <span class="f-label">ジャンル</span>
         <div class="chip on" data-genre="all" onclick="toggleGenreChip('all')">すべて</div>
-        <div class="chip" data-genre="ラーメン・麺類" onclick="toggleGenreChip('ラーメン・麺類')">🍜 ラーメン</div>
-        <div class="chip" data-genre="寿司・和食" onclick="toggleGenreChip('寿司・和食')">🍣 和食</div>
-        <div class="chip" data-genre="焼肉・焼鳥" onclick="toggleGenreChip('焼肉・焼鳥')">🔥 焼肉</div>
-        <div class="chip" data-genre="カフェ・スイーツ" onclick="toggleGenreChip('カフェ・スイーツ')">☕ カフェ</div>
-        <div class="chip" data-genre="イタリアン・パスタ" onclick="toggleGenreChip('イタリアン・パスタ')">🍝 イタリアン</div>
-        <div class="chip" data-genre="中華料理" onclick="toggleGenreChip('中華料理')">🥟 中華</div>
+        <div class="chip" data-genre="居酒屋" onclick="toggleGenreChip('居酒屋')">🍶 居酒屋</div>
+        <div class="chip" data-genre="ダイニングバー・バル" onclick="toggleGenreChip('ダイニングバー・バル')">🍷 バル</div>
+        <div class="chip" data-genre="創作料理" onclick="toggleGenreChip('創作料理')">🍳 創作料理</div>
+        <div class="chip" data-genre="和食" onclick="toggleGenreChip('和食')">🍣 和食</div>
+        <div class="chip" data-genre="洋食" onclick="toggleGenreChip('洋食')">🍴 洋食</div>
+        <div class="chip" data-genre="イタリアン・フレンチ" onclick="toggleGenreChip('イタリアン・フレンチ')">🍝 イタリアン</div>
+        <div class="chip" data-genre="中華" onclick="toggleGenreChip('中華')">🥟 中華</div>
+        <div class="chip" data-genre="焼肉・ホルモン" onclick="toggleGenreChip('焼肉・ホルモン')">🔥 焼肉</div>
         <div class="chip" data-genre="韓国料理" onclick="toggleGenreChip('韓国料理')">🌶️ 韓国</div>
-        <div class="chip" data-genre="エスニック料理" onclick="toggleGenreChip('エスニック料理')">🍛 エスニック</div>
-        <div class="chip" data-genre="居酒屋・バー" onclick="toggleGenreChip('居酒屋・バー')">🍺 居酒屋</div>
-        <div class="chip" data-genre="ベーカリー・パン" onclick="toggleGenreChip('ベーカリー・パン')">🥐 パン</div>
+        <div class="chip" data-genre="アジア・エスニック料理" onclick="toggleGenreChip('アジア・エスニック料理')">🍛 エスニック</div>
+        <div class="chip" data-genre="カラオケ・パーティ" onclick="toggleGenreChip('カラオケ・パーティ')">🎤 カラオケ</div>
+        <div class="chip" data-genre="バー・カクテル" onclick="toggleGenreChip('バー・カクテル')">🍸 バー</div>
+        <div class="chip" data-genre="ラーメン" onclick="toggleGenreChip('ラーメン')">🍜 ラーメン</div>
+        <div class="chip" data-genre="カフェ・スイーツ" onclick="toggleGenreChip('カフェ・スイーツ')">☕ カフェ</div>
       </div>
       <div class="filter-row">
         <span class="f-label">価格帯</span>
         <div class="min-wrap" style="flex:1;">
-          <input type="range" id="priceMaxRange" min="1" max="4" step="1" value="4" style="width:140px;" oninput="onPriceRangeChange()"/>
+          <input type="range" id="priceMaxRange" min="1" max="9" step="1" value="9" style="width:200px;" oninput="onPriceRangeChange()"/>
           <span class="min-label" id="priceMaxLabel" style="min-width:90px;">指定なし</span>
         </div>
       </div>
@@ -548,64 +552,9 @@ select.form-input { background: #fafafa; cursor: pointer; }
 <div class="app-page" id="page-timeline">
   <div class="tl-header">
     <div class="tl-title">タイムライン</div>
-    <button class="tl-fbtn" id="tlComposerToggle" onclick="toggleTimelineComposer()">＋ 投稿する</button>
+    <button class="tl-fbtn" id="tlComposerToggle" onclick="openTimelineComposer()">投稿</button>
     <div class="tl-fbtn on" id="tlFilterFollowing" onclick="setTimelineFilter('following')">フォロー中</div>
     <div class="tl-fbtn" id="tlFilterAll" onclick="setTimelineFilter('all')">すべて</div>
-  </div>
-  <div id="timelineComposer" style="display:none;background:#fff;border-bottom:8px solid #fafafa;padding:16px 14px;">
-    <div id="post-step1">
-      <div class="form-row">
-        <label class="form-label">お店を検索</label>
-        <input class="form-input" id="postSearchInput" placeholder="お店名・住所で検索..." autocomplete="off"/>
-        <div class="search-hint">Googleマップに登録されているお店から選択できます</div>
-      </div>
-      <div id="myShopsQuickPick" style="display:none;">
-        <div class="section-label" style="margin:14px 0 8px;">📍 登録済みのお店から選ぶ</div>
-        <div id="myShopsList"></div>
-      </div>
-    </div>
-    <div id="post-step2" style="display:none;">
-      <div class="selected-place" id="postSelectedPlaceCard"></div>
-      <div class="form-row">
-        <label class="form-label">ジャンル</label>
-        <select class="form-input" id="postGenre" onchange="onPostGenreChange()">
-          <option>ラーメン・麺類</option><option>寿司・和食</option><option>焼肉・焼鳥</option>
-          <option>カフェ・スイーツ</option><option>イタリアン・パスタ</option><option>中華料理</option>
-          <option>韓国料理</option><option>エスニック料理</option><option>居酒屋・バー</option>
-          <option>ファミレス・カジュアル</option><option>ベーカリー・パン</option><option>その他</option>
-        </select>
-        <div class="genre-preview">
-          <span class="genre-preview-emoji" id="postGenreEmoji">🍜</span>
-          <span class="genre-preview-text" id="postGenreText">ラーメン・麺類</span>
-        </div>
-      </div>
-      <div class="form-row">
-        <label class="form-label">価格帯</label>
-        <div class="min-wrap" style="margin-top:4px;">
-          <input type="range" id="postPriceRange" min="1" max="4" step="1" value="2" style="width:140px;" oninput="onPostPriceRangeChange()"/>
-          <span class="min-label" id="postPriceLabel" style="min-width:54px;">¥¥</span>
-        </div>
-      </div>
-      <div class="form-row">
-        <label class="form-label">評価</label>
-        <div class="star-input" id="postStarInput">
-          <span class="si" data-v="1" onclick="setPostRating(1)">★</span>
-          <span class="si" data-v="2" onclick="setPostRating(2)">★</span>
-          <span class="si" data-v="3" onclick="setPostRating(3)">★</span>
-          <span class="si" data-v="4" onclick="setPostRating(4)">★</span>
-          <span class="si" data-v="5" onclick="setPostRating(5)">★</span>
-        </div>
-        <div class="rating-label" id="postRatingLabel">タップして評価</div>
-      </div>
-      <div class="form-row">
-        <label class="form-label">キャプション</label>
-        <textarea class="form-input" id="postCaption" placeholder="おすすめポイントを書いてみよう！ #ラーメン #渋谷グルメ" oninput="onPostCaptionInput()"></textarea>
-        <div class="search-hint">文中に #タグ を入れるとタイムラインで検索できるようになります</div>
-        <div class="hashtag-preview" id="postHashtagPreview"></div>
-      </div>
-      <button class="btn-back" onclick="resetPostSearch()">← 別のお店を検索する</button>
-      <button class="post-submit-btn" id="postSubmitBtn" onclick="submitPost()">投稿する</button>
-    </div>
   </div>
   <div class="tl-feed" id="tlFeed"></div>
 </div>
@@ -617,9 +566,6 @@ select.form-input { background: #fafafa; cursor: pointer; }
   </button>
   <button class="nav-item" id="nav-search" onclick="goPage('search')">
     <span class="ni-icon">🔍</span><span class="ni-label">検索</span>
-  </button>
-  <button class="nav-item" id="nav-add" onclick="goPage('timeline'); openTimelineComposer();">
-    <span class="ni-icon">➕</span><span class="ni-label">投稿</span>
   </button>
   <button class="nav-item" id="nav-timeline" onclick="goPage('timeline')">
     <span class="ni-icon">📰</span><span class="ni-label">タイムライン</span>
@@ -649,14 +595,15 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <div class="form-row">
           <label class="form-label">ジャンル</label>
           <select class="form-input" id="inputGenre" onchange="onGenreChange()">
-            <option>ラーメン・麺類</option><option>寿司・和食</option><option>焼肉・焼鳥</option>
-            <option>カフェ・スイーツ</option><option>イタリアン・パスタ</option><option>中華料理</option>
-            <option>韓国料理</option><option>エスニック料理</option><option>居酒屋・バー</option>
-            <option>ファミレス・カジュアル</option><option>ベーカリー・パン</option><option>その他</option>
+            <option>居酒屋</option><option>ダイニングバー・バル</option><option>創作料理</option>
+            <option>和食</option><option>洋食</option><option>イタリアン・フレンチ</option>
+            <option>中華</option><option>焼肉・ホルモン</option><option>韓国料理</option>
+            <option>アジア・エスニック料理</option><option>カラオケ・パーティ</option><option>バー・カクテル</option>
+            <option>ラーメン</option><option>カフェ・スイーツ</option><option>その他</option>
           </select>
           <div class="genre-preview">
-            <span class="genre-preview-emoji" id="genreEmoji">🍜</span>
-            <span class="genre-preview-text" id="genreText">ラーメン・麺類</span>
+            <span class="genre-preview-emoji" id="genreEmoji">🍶</span>
+            <span class="genre-preview-text" id="genreText">居酒屋</span>
           </div>
         </div>
         <div class="form-row">
@@ -680,6 +627,72 @@ select.form-input { background: #fafafa; cursor: pointer; }
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
       <button class="btn-submit" id="btnSubmit" onclick="submitSpot()" disabled>保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 投稿モーダル（タイムライン） ══════════════ -->
+<div class="modal-overlay" id="timelineComposerOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📝 投稿する</div>
+      <button class="modal-close" onclick="closeTimelineComposer()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="post-step1">
+        <div class="form-row">
+          <label class="form-label">お店を検索</label>
+          <input class="form-input" id="postSearchInput" placeholder="お店名・住所で検索..." autocomplete="off"/>
+          <div class="search-hint">Googleマップに登録されているお店から選択できます</div>
+        </div>
+        <div id="myShopsQuickPick" style="display:none;">
+          <div class="section-label" style="margin:14px 0 8px;">📍 登録済みのお店から選ぶ</div>
+          <div id="myShopsList"></div>
+        </div>
+      </div>
+      <div id="post-step2" style="display:none;">
+        <div class="selected-place" id="postSelectedPlaceCard"></div>
+        <div class="form-row">
+          <label class="form-label">ジャンル</label>
+          <select class="form-input" id="postGenre" onchange="onPostGenreChange()">
+            <option>居酒屋</option><option>ダイニングバー・バル</option><option>創作料理</option>
+            <option>和食</option><option>洋食</option><option>イタリアン・フレンチ</option>
+            <option>中華</option><option>焼肉・ホルモン</option><option>韓国料理</option>
+            <option>アジア・エスニック料理</option><option>カラオケ・パーティ</option><option>バー・カクテル</option>
+            <option>ラーメン</option><option>カフェ・スイーツ</option><option>その他</option>
+          </select>
+          <div class="genre-preview">
+            <span class="genre-preview-emoji" id="postGenreEmoji">🍶</span>
+            <span class="genre-preview-text" id="postGenreText">居酒屋</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">価格帯</label>
+          <div class="min-wrap" style="margin-top:4px;">
+            <input type="range" id="postPriceRange" min="1" max="9" step="1" value="3" style="width:140px;" oninput="onPostPriceRangeChange()"/>
+            <span class="min-label" id="postPriceLabel" style="min-width:90px;">3000円以下</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">評価</label>
+          <div class="star-input" id="postStarInput">
+            <span class="si" data-v="1" onclick="setPostRating(1)">★</span>
+            <span class="si" data-v="2" onclick="setPostRating(2)">★</span>
+            <span class="si" data-v="3" onclick="setPostRating(3)">★</span>
+            <span class="si" data-v="4" onclick="setPostRating(4)">★</span>
+            <span class="si" data-v="5" onclick="setPostRating(5)">★</span>
+          </div>
+          <div class="rating-label" id="postRatingLabel">タップして評価</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">キャプション</label>
+          <textarea class="form-input" id="postCaption" placeholder="おすすめポイントを書いてみよう！ #ラーメン #渋谷グルメ" oninput="onPostCaptionInput()"></textarea>
+          <div class="search-hint">文中に #タグ を入れるとタイムラインで検索できるようになります</div>
+          <div class="hashtag-preview" id="postHashtagPreview"></div>
+        </div>
+        <button class="btn-back" onclick="resetPostSearch()">← 別のお店を検索する</button>
+        <button class="post-submit-btn" id="postSubmitBtn" onclick="submitPost()">投稿する</button>
+      </div>
     </div>
   </div>
 </div>
@@ -756,15 +769,15 @@ select.form-input { background: #fafafa; cursor: pointer; }
 // CONSTANTS
 // ═══════════════════════════════════════
 const GENRE_ICONS = {
-  'ラーメン・麺類':'🍜','寿司・和食':'🍣','焼肉・焼鳥':'🔥',
-  'カフェ・スイーツ':'☕','イタリアン・パスタ':'🍝','中華料理':'🥟',
-  '韓国料理':'🌶️','エスニック料理':'🍛','居酒屋・バー':'🍺',
-  'ファミレス・カジュアル':'🍽️','ベーカリー・パン':'🥐','その他':'📍',
+  '居酒屋':'🍶','ダイニングバー・バル':'🍷','創作料理':'🍳','和食':'🍣','洋食':'🍴',
+  'イタリアン・フレンチ':'🍝','中華':'🥟','焼肉・ホルモン':'🔥','韓国料理':'🌶️',
+  'アジア・エスニック料理':'🍛','カラオケ・パーティ':'🎤','バー・カクテル':'🍸',
+  'ラーメン':'🍜','カフェ・スイーツ':'☕','その他':'📍',
 };
 const RATING_WORDS = ['','いまいち','ふつう','おいしい','とてもおいしい','最高！'];
-const PRICE_LEVELS = ['¥','¥¥','¥¥¥','¥¥¥¥'];
-function priceLevelNum(spot) { const i = PRICE_LEVELS.indexOf(priceOf(spot)); return i >= 0 ? i+1 : 2; }
-const PRICE_BY_SPOT = { 1:'¥¥',2:'¥¥¥¥',3:'¥',4:'¥¥',5:'¥¥¥',6:'¥',7:'¥¥',8:'¥¥¥',9:'¥¥',10:'¥¥',11:'¥¥',12:'¥¥',13:'¥¥',14:'¥¥',15:'¥¥',16:'¥',17:'¥¥' };
+const PRICE_LEVELS = ['1000円以下','2000円以下','3000円以下','5000円以下','7000円以下','10000円以下','15000円以下','20000円以下','20000円以上'];
+function priceLevelNum(spot) { const i = PRICE_LEVELS.indexOf(priceOf(spot)); return i >= 0 ? i+1 : 3; }
+const PRICE_BY_SPOT = {};
 const TRAVEL_SPEED_M_PER_MIN = { walk:80, bike:230, train:300, car:380 };
 const MODE_LABEL = { walk:'🚶 徒歩', bike:'🚲 自転車', train:'🚃 電車', car:'🚗 車' };
 
@@ -849,7 +862,7 @@ let timelineFilter = 'following';
 let searchTab = 'shop';
 let searchView = 'map';
 let selectedGenres = new Set();      // 空 = すべて
-let maxPriceFilter = 4;              // 4(¥¥¥¥) = 絞り込みなし
+let maxPriceFilter = 9;              // 9(20000円以上) = 絞り込みなし
 let minRatingFilter = 0;
 let searchScope = 'all';             // 'all' = マップ上の全登録店, 'following' = フォロー中の人のみ
 let distOrigin = null;               // {lat,lng,label}
@@ -860,6 +873,33 @@ let searchMap = null, distOriginAutocomplete = null;
 let searchMarkers = {};
 
 function getAllPosts() { return [...INITIAL_POSTS, ...myPosts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)); }
+
+// 「マップ」「検索」で表示中の地図の範囲を共有するための状態
+// ①優先：マップ／検索のどちらかで表示させた地域を、もう一方にも反映する
+// ②優先：まだどちらも操作していない場合は、現在地付近をデフォルトで表示する
+let sharedMapView = null;       // {lat, lng, zoom}
+let applyingSharedView = false; // プログラムからの移動中はユーザー操作として記録しない
+function defaultMapCenter() {
+  return cachedMyLocation
+    ? { center: cachedMyLocation, zoom: 14 }
+    : { center: { lat: 35.6762, lng: 139.7346 }, zoom: 12 };
+}
+function captureSharedView(m) {
+  if (applyingSharedView) return;
+  sharedMapView = { lat: m.getCenter().lat(), lng: m.getCenter().lng(), zoom: m.getZoom() };
+}
+function applySharedViewTo(m) {
+  applyingSharedView = true;
+  if (sharedMapView) {
+    m.setCenter({ lat: sharedMapView.lat, lng: sharedMapView.lng });
+    m.setZoom(sharedMapView.zoom);
+  } else {
+    const d = defaultMapCenter();
+    m.setCenter(d.center);
+    m.setZoom(d.zoom);
+  }
+  setTimeout(() => { applyingSharedView = false; }, 0);
+}
 
 let map, infoWindow, placesService, autocomplete;
 let gmMarkers = {}, highlightedSpotId = null, activeTab = 'friends';
@@ -878,7 +918,7 @@ function getUserById(id) { return id === '0' ? MY_USER : FRIENDS.find(f => f.id 
 function getAllSpots()    { return [...SAMPLE_SPOTS, ...mySpots]; }
 function iconOf(genre)   { return GENRE_ICONS[genre] || '📍'; }
 function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) : ''; }
-function priceOf(spot)   { return spot.price || PRICE_BY_SPOT[spot.id] || '¥¥'; }
+function priceOf(spot)   { return spot.price || PRICE_BY_SPOT[spot.id] || '3000円以下'; }
 function extractHashtags(text) { const m = text.match(/#[^\s#]+/g); return m ? m.map(h=>h.slice(1)) : []; }
 function linkifyCaption(text) {
   return (text||'').replace(/#([^\s#]+)/g, '<span class="ht" onclick="searchByHashtag(\'$1\')">#$1</span>');
@@ -1081,8 +1121,9 @@ window.onFirebaseAuthChange = function(user) {
 // MAP
 // ═══════════════════════════════════════
 function startApp() {
+  const initial = defaultMapCenter();
   map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
+    center: initial.center, zoom: initial.zoom,
     mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
     styles: [
       { featureType:'poi.business', elementType:'labels', stylers:[{visibility:'on'}] },
@@ -1090,6 +1131,8 @@ function startApp() {
       { featureType:'poi.school',   elementType:'labels', stylers:[{visibility:'off'}] },
     ],
   });
+  map.addListener('dragend', () => captureSharedView(map));
+  map.addListener('zoom_changed', () => captureSharedView(map));
   infoWindow    = new google.maps.InfoWindow();
   placesService = new google.maps.places.PlacesService(map);
   showMyLocationOnMap(map);
@@ -1195,7 +1238,7 @@ function goPage(page) {
   document.getElementById('page-'+page).classList.add('active');
   const navBtn = document.getElementById('nav-'+page);
   if (navBtn) navBtn.classList.add('active');
-  if (page === 'map' && map) setTimeout(()=>google.maps.event.trigger(map,'resize'), 80);
+  if (page === 'map' && map) setTimeout(()=>{ google.maps.event.trigger(map,'resize'); applySharedViewTo(map); }, 80);
   if (page === 'search') { initSearchPage(); }
   if (page === 'timeline') { renderTimeline(); }
 }
@@ -1203,22 +1246,19 @@ function goPage(page) {
 // ═══════════════════════════════════════
 // タイムライン内の投稿コンポーザー（開閉）
 // ═══════════════════════════════════════
-function toggleTimelineComposer() {
-  const el = document.getElementById('timelineComposer');
-  const opening = el.style.display === 'none' || el.style.display === '';
-  el.style.display = opening ? 'block' : 'none';
-  if (opening) initPostPage();
-}
 function openTimelineComposer() {
-  document.getElementById('timelineComposer').style.display = 'block';
+  document.getElementById('timelineComposerOverlay').classList.add('open');
   initPostPage();
+}
+function closeTimelineComposer() {
+  document.getElementById('timelineComposerOverlay').classList.remove('open');
 }
 
 // ═══════════════════════════════════════
 // POST PAGE（投稿ページ）
 // ═══════════════════════════════════════
 let postPendingLat=null, postPendingLng=null, postPendingName=null, postPendingAddr=null, postPendingArea=null;
-let postCurrentRating=0, postCurrentPrice='¥¥', postPlaceAutocomplete=null, postPendingSpotId=null;
+let postCurrentRating=0, postCurrentPrice=PRICE_LEVELS[2], postPlaceAutocomplete=null, postPendingSpotId=null;
 
 function initPostPage() {
   if (!postPlaceAutocomplete) {
@@ -1262,14 +1302,14 @@ function openPostStep2WithPlace(place) {
     const w = place.address_components.find(c=>c.types.includes('sublocality_level_1')||c.types.includes('locality'));
     if (w) postPendingArea = w.long_name;
   }
-  postCurrentRating = 0; postCurrentPrice = '¥¥';
+  postCurrentRating = 0; postCurrentPrice = PRICE_LEVELS[2];
   document.getElementById('postCaption').value = '';
   document.getElementById('postGenre').selectedIndex = 0;
   autoSelectGenre(place.types||[], 'postGenre');
   onPostGenreChange();
   updatePostStarUI(0);
-  document.getElementById('postPriceRange').value = 2;
-  document.getElementById('postPriceLabel').textContent = '¥¥';
+  document.getElementById('postPriceRange').value = 3;
+  document.getElementById('postPriceLabel').textContent = PRICE_LEVELS[2];
   document.getElementById('postHashtagPreview').innerHTML = '';
   document.getElementById('postSelectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
@@ -1295,7 +1335,7 @@ function selectExistingSpot(spotId) {
   genreSelect.selectedIndex = idx >= 0 ? idx : 0;
   onPostGenreChange();
   updatePostStarUI(postCurrentRating);
-  const priceIdx = PRICE_LEVELS.indexOf(postCurrentPrice) + 1 || 2;
+  const priceIdx = PRICE_LEVELS.indexOf(postCurrentPrice) + 1 || 3;
   document.getElementById('postPriceRange').value = priceIdx;
   document.getElementById('postPriceLabel').textContent = postCurrentPrice;
   document.getElementById('postHashtagPreview').innerHTML = '';
@@ -1371,7 +1411,7 @@ async function submitPost() {
   await createPostInFirestore(post);
 
   resetPostSearch();
-  document.getElementById('timelineComposer').style.display = 'none';
+  closeTimelineComposer();
   goPage('timeline');
 }
 
@@ -1390,10 +1430,14 @@ function switchSearchTab(tab) {
 
 function initSearchPage() {
   if (!searchMap) {
+    const initial = defaultMapCenter();
     searchMap = new google.maps.Map(document.getElementById('search-map'), {
-      center: { lat: 35.6762, lng: 139.7346 }, zoom: 12,
+      center: initial.center, zoom: initial.zoom,
       mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
     });
+    searchMap.addListener('dragend', () => captureSharedView(searchMap));
+    searchMap.addListener('zoom_changed', () => captureSharedView(searchMap));
+    if (sharedMapView) applySharedViewTo(searchMap);
     showMyLocationOnMap(searchMap);
     const distInput = document.getElementById('distOriginInput');
     distOriginAutocomplete = new google.maps.places.Autocomplete(distInput, { fields:['name','geometry'], componentRestrictions:{country:'jp'} });
@@ -1406,7 +1450,7 @@ function initSearchPage() {
       renderSearchResults();
     });
   } else {
-    setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
+    setTimeout(()=>{ google.maps.event.trigger(searchMap,'resize'); applySharedViewTo(searchMap); }, 80);
   }
   renderSearchResults();
 }
@@ -1429,7 +1473,7 @@ function toggleGenreChip(g) {
 }
 function onPriceRangeChange() {
   maxPriceFilter = parseInt(document.getElementById('priceMaxRange').value);
-  document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 4 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1]+'まで';
+  document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 9 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1];
   renderSearchResults();
 }
 function toggleRatingChip(r) {
@@ -1487,7 +1531,7 @@ function getFilteredSpots() {
     spots = spots.filter(s => followingIds.has(s.userId));
   }
   if (selectedGenres.size > 0) spots = spots.filter(s => selectedGenres.has(s.genre));
-  if (maxPriceFilter < 4) spots = spots.filter(s => priceLevelNum(s) <= maxPriceFilter);
+  if (maxPriceFilter < 9) spots = spots.filter(s => priceLevelNum(s) <= maxPriceFilter);
   if (minRatingFilter > 0) spots = spots.filter(s => (s.rating||0) >= minRatingFilter);
   if (distanceFilterOn && distOrigin) {
     spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
@@ -1703,10 +1747,15 @@ function placeLocationMarker(targetMap, loc) {
 // 一度だけ位置情報の許可を取り、以降は他の地図にも同じ位置でピンを表示する（失敗時は何も表示しない）
 function showMyLocationOnMap(targetMap) {
   if (!navigator.geolocation) return;
-  if (cachedMyLocation) { placeLocationMarker(targetMap, cachedMyLocation); return; }
+  if (cachedMyLocation) {
+    placeLocationMarker(targetMap, cachedMyLocation);
+    if (!sharedMapView) applySharedViewTo(targetMap); // ②まだマップ操作がない場合は現在地付近を表示
+    return;
+  }
   navigator.geolocation.getCurrentPosition((pos) => {
     cachedMyLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
     placeLocationMarker(targetMap, cachedMyLocation);
+    if (!sharedMapView) applySharedViewTo(targetMap); // ②まだマップ操作がない場合は現在地付近を表示
   }, () => { /* 拒否された場合は何も表示しない */ });
 }
 
@@ -2064,15 +2113,16 @@ function openModalWithPlace(place) {
 function autoSelectGenre(types, selectId) {
   selectId = selectId || 'inputGenre';
   const map2 = [
-    {keys:['ramen','noodle'],             genre:'ラーメン・麺類'},
-    {keys:['sushi','japanese_restaurant'],genre:'寿司・和食'},
-    {keys:['bbq','yakitori','yakiniku'],  genre:'焼肉・焼鳥'},
-    {keys:['cafe','bakery','dessert'],    genre:'カフェ・スイーツ'},
-    {keys:['italian','pizza'],           genre:'イタリアン・パスタ'},
-    {keys:['chinese','dim_sum'],         genre:'中華料理'},
-    {keys:['korean'],                    genre:'韓国料理'},
-    {keys:['thai','vietnamese','indian'],genre:'エスニック料理'},
-    {keys:['bar','night_club'],          genre:'居酒屋・バー'},
+    {keys:['ramen','noodle'],              genre:'ラーメン'},
+    {keys:['sushi','japanese_restaurant'], genre:'和食'},
+    {keys:['bbq','yakitori','yakiniku'],   genre:'焼肉・ホルモン'},
+    {keys:['cafe','bakery','dessert'],     genre:'カフェ・スイーツ'},
+    {keys:['italian','pizza','french'],    genre:'イタリアン・フレンチ'},
+    {keys:['chinese','dim_sum'],           genre:'中華'},
+    {keys:['korean'],                      genre:'韓国料理'},
+    {keys:['thai','vietnamese','indian','asian'], genre:'アジア・エスニック料理'},
+    {keys:['izakaya'],                     genre:'居酒屋'},
+    {keys:['bar','night_club'],            genre:'バー・カクテル'},
   ];
   const ts = types.join(' ').toLowerCase();
   const sel = document.getElementById(selectId);
@@ -2141,6 +2191,7 @@ async function submitSpot() {
   switchTab('myspots');
 }
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('timelineComposerOverlay').addEventListener('click',function(e){if(e.target===this)closeTimelineComposer();});
 </script>
 
 <!-- ══════════════ FIREBASE（ログイン機能） ══════════════ -->
