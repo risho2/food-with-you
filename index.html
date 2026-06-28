@@ -870,6 +870,7 @@ let distMode = 'walk';
 let distMaxMinutes = 15;
 let distanceFilterOn = false;
 let searchMap = null, distOriginAutocomplete = null;
+let distRadiusCircle = null;
 let searchMarkers = {};
 // 「マップ上の全てのお店」スコープ用：友達の登録店に加えて、Googleマップ上の実際のお店も検索結果に表示する
 let googlePlacesService = null;
@@ -1152,7 +1153,7 @@ function startApp() {
       (place, status) => {
         document.getElementById('poi-loading').style.display = 'none';
         if (status !== google.maps.places.PlacesServiceStatus.OK || !place) { alert('取得できませんでした。'); return; }
-        openModalWithPlace(place);
+        showMapAddPopup(place);
       }
     );
   });
@@ -1310,7 +1311,7 @@ function openPostStep2WithPlace(place) {
   postCurrentRating = 0; postCurrentPrice = PRICE_LEVELS[2];
   document.getElementById('postCaption').value = '';
   document.getElementById('postGenre').selectedIndex = 0;
-  autoSelectGenre(place.types||[], 'postGenre');
+  autoSelectGenre(place.types||[], 'postGenre', place.name||'');
   onPostGenreChange();
   updatePostStarUI(0);
   document.getElementById('postPriceRange').value = 3;
@@ -1454,6 +1455,8 @@ function initSearchPage() {
       distOrigin = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), label: place.name };
       distanceFilterOn = true;
       document.getElementById('distClearBtn').style.display = 'inline-block';
+      searchMap.panTo({ lat: distOrigin.lat, lng: distOrigin.lng });
+      searchMap.setZoom(15);
       renderSearchResults();
     });
   } else {
@@ -1496,7 +1499,7 @@ function toGooglePseudoSpot(place) {
   return {
     id: 'g_' + place.place_id, source: 'google', placeRef: place,
     name: place.name,
-    genre: genreFromTypes(place.types || []),
+    genre: guessGenre(place.types || [], place.name || ''),
     lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),
     rating: place.rating ? Math.round(place.rating) : null,
     googleRating: place.rating || null,
@@ -1504,21 +1507,29 @@ function toGooglePseudoSpot(place) {
     area: place.vicinity || '',
   };
 }
-function genreFromTypes(types) {
-  const ts = types.join(' ').toLowerCase();
-  const map2 = [
-    {keys:['ramen','noodle'],              genre:'ラーメン'},
-    {keys:['sushi','japanese_restaurant'], genre:'和食'},
-    {keys:['bbq','yakitori','yakiniku'],   genre:'焼肉・ホルモン'},
-    {keys:['cafe','bakery','dessert'],     genre:'カフェ・スイーツ'},
-    {keys:['italian','pizza','french'],    genre:'イタリアン・フレンチ'},
-    {keys:['chinese','dim_sum'],           genre:'中華'},
-    {keys:['korean'],                      genre:'韓国料理'},
-    {keys:['thai','vietnamese','indian','asian'], genre:'アジア・エスニック料理'},
-    {keys:['izakaya'],                     genre:'居酒屋'},
-    {keys:['bar','night_club'],            genre:'バー・カクテル'},
-  ];
-  for (const e of map2) { if (e.keys.some(k=>ts.includes(k))) return e.genre; }
+// Googleの店舗種別（types）と店名から、アプリの15ジャンルを推定する共通ロジック
+// マップページの追加モーダル（autoSelectGenre）と検索ページのGoogle合流結果（guessGenre）の両方で使う
+const GENRE_GUESS_RULES = [
+  {genre:'ラーメン',              keys:['ramen','noodle'],                                   nameKeys:['ラーメン','らーめん','拉麺']},
+  {genre:'和食',                  keys:['sushi','japanese_restaurant','seafood'],            nameKeys:['寿司','すし','和食','割烹','料亭','天ぷら','てんぷら','蕎麦','そば','うどん','懐石','定食']},
+  {genre:'焼肉・ホルモン',         keys:['bbq','yakitori','yakiniku','barbecue'],             nameKeys:['焼肉','やきにく','ホルモン','焼き鳥','やきとり']},
+  {genre:'カフェ・スイーツ',       keys:['cafe','bakery','dessert','coffee','ice_cream','donut','bagel'], nameKeys:['カフェ','喫茶','スイーツ','ケーキ','パン屋','タルト','クレープ']},
+  {genre:'イタリアン・フレンチ',   keys:['italian','pizza','french'],                          nameKeys:['イタリアン','イタリア','フレンチ','フランス料理','ピザ','パスタ','トラットリア','ビストロ']},
+  {genre:'中華',                  keys:['chinese','dim_sum'],                                 nameKeys:['中華','中国料理','餃子','麻婆','飲茶']},
+  {genre:'韓国料理',              keys:['korean'],                                            nameKeys:['韓国','コリアン','サムギョプサル','タッカルビ','ダッカルビ']},
+  {genre:'アジア・エスニック料理', keys:['thai','vietnamese','indian','asian','middle_eastern','indonesian'], nameKeys:['タイ料理','ベトナム','インド料理','エスニック','カレー','フォー']},
+  {genre:'カラオケ・パーティ',     keys:['karaoke'],                                           nameKeys:['カラオケ','宴会']},
+  {genre:'バー・カクテル',         keys:['bar','pub','wine_bar','night_club'],                 nameKeys:['バー','カクテル','ワインバー','パブ']},
+  {genre:'居酒屋',                keys:['izakaya'],                                           nameKeys:['居酒屋','酒場']},
+  {genre:'ダイニングバー・バル',   keys:['bar_and_grill'],                                     nameKeys:['ダイニングバー','バル']},
+  {genre:'洋食',                  keys:['steak_house','hamburger','american_restaurant'],     nameKeys:['洋食','ハンバーグ','ステーキ','オムライス']},
+  {genre:'創作料理',              keys:[],                                                    nameKeys:['創作料理','創作']},
+];
+function guessGenre(types, name) {
+  const ts = (types||[]).join(' ').toLowerCase();
+  for (const r of GENRE_GUESS_RULES) { if (r.keys.some(k=>ts.includes(k))) return r.genre; }
+  const nm = name || '';
+  for (const r of GENRE_GUESS_RULES) { if (r.nameKeys.some(k=>nm.includes(k))) return r.genre; }
   return 'その他';
 }
 function googlePriceLevelToOurs(level) {
@@ -1566,6 +1577,8 @@ function useCurrentLocation() {
     distanceFilterOn = true;
     document.getElementById('distOriginInput').value = '📍 現在地';
     document.getElementById('distClearBtn').style.display = 'inline-block';
+    searchMap.panTo(cachedMyLocation);
+    searchMap.setZoom(15);
     renderSearchResults();
   }, () => alert('現在地を取得できませんでした。位置情報の利用を許可してください。'));
 }
@@ -1607,7 +1620,22 @@ function getFilteredSpots() {
   }
   return spots;
 }
+// 距離フィルタが有効なとき、地図上に「ここまでが範囲内」の円を表示する
+function updateDistRadiusCircle() {
+  if (distRadiusCircle) { distRadiusCircle.setMap(null); distRadiusCircle = null; }
+  if (!distanceFilterOn || !distOrigin || !searchMap) return;
+  const radius = distMaxMinutes * TRAVEL_SPEED_M_PER_MIN[distMode];
+  distRadiusCircle = new google.maps.Circle({
+    center: { lat: distOrigin.lat, lng: distOrigin.lng },
+    radius,
+    map: searchMap,
+    strokeColor: '#0095f6', strokeOpacity: 0.6, strokeWeight: 1.5,
+    fillColor: '#0095f6', fillOpacity: 0.08,
+    clickable: false,
+  });
+}
 function renderSearchResults() {
+  updateDistRadiusCircle();
   const spots = getFilteredSpots();
   document.getElementById('searchResultCount').textContent = spots.length+'件のお店'+(googlePlacesLoading?'（Googleマップのお店を検索中…）':'');
   // Map markers
@@ -1665,13 +1693,8 @@ function googlePlaceInfoHTML(spot) {
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
-    <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}</div>
-    ${spot.googleRating?`<div class="gm-popup-stars">★${spot.googleRating}（Google評価）</div>`:''}
-    <div class="gm-popup-footer">
-      <div class="gm-popup-by" style="color:#4285F4;">🌐 Googleマップ掲載のお店（未登録）</div>
-    </div>
-    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addGooglePlaceAsSpot('${spot.id}')">＋ Food with youに追加</button>
-    <a class="gm-popup-maplink" href="https://www.google.com/maps/place/?q=place_id:${spot.placeRef.place_id}" target="_blank" rel="noopener">🗺 Googleマップで開く</a>
+    <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}${spot.googleRating?' · ★'+spot.googleRating:''}</div>
+    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addGooglePlaceAsSpot('${spot.id}')">＋追加</button>
   </div>`;
 }
 function addGooglePlaceAsSpot(id) {
@@ -2193,6 +2216,22 @@ function initAutocomplete() {
   });
 }
 
+// マップページで未登録のお店をクリックしたときの軽量ポップアップ（名前＋「＋追加」ボタン）
+let mapClickPendingPlace = null;
+function showMapAddPopup(place) {
+  mapClickPendingPlace = place;
+  infoWindow.setContent(`<div class="gm-popup">
+    <div class="gm-popup-icon">${iconOf(guessGenre(place.types||[], place.name||''))}</div>
+    <div class="gm-popup-title">${place.name}</div>
+    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addPendingPlaceFromMap()">＋追加</button>
+  </div>`);
+  infoWindow.setPosition(place.geometry.location);
+  infoWindow.open(map);
+}
+function addPendingPlaceFromMap() {
+  if (!mapClickPendingPlace) return;
+  openModalWithPlace(mapClickPendingPlace);
+}
 function openModalWithPlace(place) {
   pendingLat  = place.geometry.location.lat();
   pendingLng  = place.geometry.location.lng();
@@ -2206,7 +2245,7 @@ function openModalWithPlace(place) {
   currentRating = 0;
   document.getElementById('inputComment').value = '';
   document.getElementById('inputGenre').selectedIndex = 0;
-  autoSelectGenre(place.types||[]);
+  autoSelectGenre(place.types||[], 'inputGenre', place.name||'');
   onGenreChange(); updateStarUI(0);
   document.getElementById('selectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
@@ -2222,27 +2261,12 @@ function openModalWithPlace(place) {
 // ═══════════════════════════════════════
 // ADD SPOT
 // ═══════════════════════════════════════
-function autoSelectGenre(types, selectId) {
+function autoSelectGenre(types, selectId, name) {
   selectId = selectId || 'inputGenre';
-  const map2 = [
-    {keys:['ramen','noodle'],              genre:'ラーメン'},
-    {keys:['sushi','japanese_restaurant'], genre:'和食'},
-    {keys:['bbq','yakitori','yakiniku'],   genre:'焼肉・ホルモン'},
-    {keys:['cafe','bakery','dessert'],     genre:'カフェ・スイーツ'},
-    {keys:['italian','pizza','french'],    genre:'イタリアン・フレンチ'},
-    {keys:['chinese','dim_sum'],           genre:'中華'},
-    {keys:['korean'],                      genre:'韓国料理'},
-    {keys:['thai','vietnamese','indian','asian'], genre:'アジア・エスニック料理'},
-    {keys:['izakaya'],                     genre:'居酒屋'},
-    {keys:['bar','night_club'],            genre:'バー・カクテル'},
-  ];
-  const ts = types.join(' ').toLowerCase();
+  const genre = guessGenre(types, name);
+  if (genre === 'その他') return; // 推定できない場合はユーザーに選んでもらう（先頭の選択のまま）
   const sel = document.getElementById(selectId);
-  for (const e of map2) {
-    if (e.keys.some(k=>ts.includes(k))) {
-      for (let i=0;i<sel.options.length;i++) { if (sel.options[i].value===e.genre){sel.selectedIndex=i;return;} }
-    }
-  }
+  for (let i=0;i<sel.options.length;i++) { if (sel.options[i].value===genre){sel.selectedIndex=i;return;} }
 }
 function onGenreChange() {
   const g = document.getElementById('inputGenre').value;
