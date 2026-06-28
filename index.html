@@ -128,8 +128,10 @@ header {
 .spot-stars { color: #ffc107; font-size: 11px; margin-top: 2px; }
 .spot-comment { font-size: 11px; color: #555; margin-top: 3px; line-height: 1.5; font-style: italic; }
 .spot-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; margin-top: 4px; color: #fff; }
-.spot-del { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #dbdbdb; font-size: 15px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.spot-card-actions { position: absolute; top: 8px; right: 6px; display: flex; gap: 2px; }
+.spot-del, .spot-edit { background: none; border: none; color: #dbdbdb; font-size: 14px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
 .spot-del:hover { color: #dc2743; }
+.spot-edit:hover { color: #0095f6; }
 .empty-state { padding: 32px 14px; text-align: center; }
 .empty-state .big { font-size: 36px; margin-bottom: 10px; }
 .empty-state p { font-size: 12px; line-height: 1.8; color: #8e8e8e; }
@@ -189,6 +191,11 @@ header {
 #map-hint { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.96); color: #8e8e8e; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 500; box-shadow: 0 2px 12px rgba(0,0,0,0.12); pointer-events: none; white-space: nowrap; border: 1px solid #dbdbdb; }
 #poi-loading { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(255,255,255,0.96); border-radius: 12px; padding: 14px 22px; font-size: 13px; font-weight: 600; color: #8e8e8e; z-index: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.12); pointer-events: none; }
 
+/* ── Toast（alertの代わりの軽い通知） ── */
+#fwyToast { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%) translateY(16px); background: rgba(30,30,30,0.94); color: #fff; padding: 10px 18px; border-radius: 22px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 4000; max-width: 86vw; text-align: center; box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+#fwyToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.rating-word { font-size: 11px; font-weight: 700; color: #f5a623; margin-left: 4px; }
+
 /* ── Modal ── */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
@@ -198,6 +205,7 @@ header {
 .modal-title { font-size: 16px; font-weight: 800; }
 .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #8e8e8e; line-height: 1; }
 .modal-body { padding: 18px 20px; max-height: 68vh; overflow-y: auto; }
+.modal-subtitle { font-size: 12.5px; color: #888; margin: -6px 0 14px; line-height: 1.5; }
 .form-row { margin-bottom: 16px; }
 .form-label { font-size: 11px; font-weight: 700; color: #8e8e8e; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.4px; }
 .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid #dbdbdb; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; background: #fafafa; }
@@ -300,6 +308,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .result-info { flex: 1; min-width: 0; }
 .result-name { font-size: 13px; font-weight: 700; }
 .result-meta { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
+.price-unknown { font-style: italic; color: #b0b0b0; }
 .result-stars { color: #ffc107; font-size: 11px; margin-top: 2px; }
 .result-dist { font-size: 11px; color: #27ae60; font-weight: 700; margin-top: 2px; }
 .result-by { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; margin-top: 4px; color: #fff; }
@@ -343,6 +352,12 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .prr-stars { color: #ffc107; font-size: 12px; margin-top: 2px; }
 .post-caption { padding: 0 14px 8px; font-size: 14px; line-height: 1.6; color: #262626; }
 .post-caption .ht { color: #0095f6; font-weight: 600; cursor: pointer; }
+.caption-edit-area { width: 100%; box-sizing: border-box; border: 1.5px solid #dbdbdb; border-radius: 8px; padding: 8px 10px; font-size: 14px; font-family: inherit; resize: vertical; outline: none; }
+.caption-edit-area:focus { border-color: #0095f6; }
+.caption-edit-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.btn-cancel-sm, .btn-save-sm { border: none; border-radius: 14px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }
+.btn-cancel-sm { background: #efefef; color: #262626; }
+.btn-save-sm { background: #0095f6; color: #fff; }
 .post-actions { display: flex; align-items: center; gap: 16px; padding: 4px 14px 6px; }
 .act-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; color: #262626; font-size: 13px; font-weight: 700; padding: 4px 0; }
 .act-btn .ic { font-size: 20px; }
@@ -405,6 +420,98 @@ select.form-input { background: #fafafa; cursor: pointer; }
 }
 .login-gate-btn:hover { background: #f7f7f7; }
 .login-gate-note { font-size: 12px; margin-top: 14px; }
+
+/* ── ADMIN PANEL（フレンド承認） ── */
+.admin-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f0f0f0; gap: 10px; }
+.admin-row-info { min-width: 0; }
+.admin-row-name { font-size: 13.5px; font-weight: 600; color: #333; }
+.admin-row-email { font-size: 12px; color: #888; word-break: break-all; }
+.admin-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.admin-empty { font-size: 12.5px; color: #aaa; padding: 10px 0; }
+.admin-tag-you { font-size: 11px; color: #dc2743; background: #ffeef0; padding: 3px 8px; border-radius: 10px; font-weight: 600; }
+
+/* ── NOTIFICATIONS（アプリ内お知らせ） ── */
+.notif-wrap { position: relative; }
+.notif-bell-btn { position: relative; background: none; border: none; font-size: 19px; cursor: pointer; padding: 6px; line-height: 1; }
+.notif-badge { position: absolute; top: 0; right: 0; min-width: 16px; height: 16px; background: #dc2743; color: #fff; border-radius: 8px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+.notif-dropdown { position: absolute; top: 38px; right: 0; width: 280px; max-height: 360px; overflow-y: auto; background: #fff; border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.15); display: none; z-index: 500; }
+.notif-dropdown.open { display: block; }
+.notif-dropdown-title { font-size: 13px; font-weight: 700; padding: 12px 14px 8px; color: #333; }
+.notif-item { padding: 10px 14px; border-top: 1px solid #f2f2f2; cursor: pointer; }
+.notif-item:hover { background: #fafafa; }
+.notif-item-text { font-size: 12.5px; color: #333; line-height: 1.4; }
+.notif-item-time { font-size: 11px; color: #999; margin-top: 3px; }
+.notif-empty { padding: 18px 14px; font-size: 12.5px; color: #aaa; text-align: center; }
+
+/* ── 詳細フィールド（営業時間・タグなど） ── */
+.extra-fields-toggle { font-size: 12.5px; color: #dc2743; font-weight: 600; cursor: pointer; user-select: none; }
+.weekday-picker { display: flex; gap: 5px; margin-top: 10px; }
+.weekday-chip { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #f2f2f2; font-size: 12px; color: #666; cursor: pointer; user-select: none; }
+.weekday-chip.active { background: #dc2743; color: #fff; font-weight: 700; }
+.feature-chip-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.feature-chip { padding: 6px 10px; border-radius: 14px; background: #f2f2f2; font-size: 12px; color: #666; cursor: pointer; user-select: none; }
+.feature-chip.active { background: #ffeef0; color: #dc2743; font-weight: 600; border: 1px solid #dc2743; }
+.feature-chip-sm { display: inline-block; padding: 2px 7px; border-radius: 10px; background: #f2f2f2; font-size: 10.5px; color: #777; margin: 2px 3px 0 0; }
+.gm-popup-hours { font-size: 11.5px; color: #666; margin-top: 4px; }
+.open-now-tag { color: #2e9e3f; font-weight: 700; }
+.closed-now-tag { color: #999; font-weight: 700; }
+.gm-popup-chips { margin-top: 4px; }
+.gm-popup-revisit { font-size: 11.5px; color: #dc2743; margin-top: 4px; font-weight: 600; }
+.gm-popup-allergy { font-size: 11px; color: #b97a00; margin-top: 4px; }
+.gm-popup-extra { font-size: 11.5px; color: #777; margin-top: 2px; }
+.gm-popup-reserve { display: block; margin-top: 6px; font-size: 12px; color: #1a73e8; text-decoration: none; }
+
+/* ── ダークモード ── */
+.dark-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+.dark-toggle-label { font-size: 13.5px; font-weight: 600; color: #262626; }
+.dark-switch { position: relative; width: 44px; height: 24px; border-radius: 12px; background: #dbdbdb; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.dark-switch.on { background: #dc2743; }
+.dark-switch-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.dark-switch.on .dark-switch-knob { transform: translateX(20px); }
+
+body.dark { background: #121212; color: #e8e8e8; }
+body.dark header,
+body.dark .sidebar,
+body.dark .modal,
+body.dark .bottom-nav,
+body.dark .search-tabs,
+body.dark .filter-panel,
+body.dark .tl-header,
+body.dark .post-card,
+body.dark .notif-dropdown,
+body.dark .result-card,
+body.dark .account-search-box,
+body.dark .acc-card,
+body.dark .friend-card,
+body.dark .spot-card,
+body.dark .profile-panel,
+body.dark .admin-row,
+body.dark .login-gate-card,
+body.dark .modal-overlay .modal,
+body.dark .gm-popup {
+  background: #1e1e1e; color: #e8e8e8; border-color: #333 !important;
+}
+body.dark .sidebar-tabs, body.dark .s-tab.active { border-color: #333; color: #e8e8e8; }
+body.dark .s-tab { color: #999; }
+body.dark .modal-subtitle, body.dark .spot-meta, body.dark .gm-popup-genre,
+body.dark .gm-popup-hours, body.dark .gm-popup-extra, body.dark .admin-row-email,
+body.dark .feature-chip-sm { color: #aaa; }
+body.dark .stories-row, body.dark .sidebar-tabs, body.dark .friend-card,
+body.dark .result-card, body.dark .acc-card, body.dark .account-search-box,
+body.dark .post-card { border-color: #2e2e2e; }
+body.dark input, body.dark select, body.dark textarea {
+  background: #2a2a2a; color: #e8e8e8; border-color: #3a3a3a !important;
+}
+body.dark .btn-cancel, body.dark .chip, body.dark .mode-btn, body.dark .loc-btn,
+body.dark .tb-btn, body.dark .tl-fbtn, body.dark .price-chip,
+body.dark .weekday-chip, body.dark .feature-chip {
+  background: #2a2a2a; color: #e8e8e8; border-color: #3a3a3a;
+}
+body.dark .weekday-chip.active, body.dark .feature-chip.active { background: #dc2743; color: #fff; border-color: #dc2743; }
+body.dark .feature-chip-sm { background: #2a2a2a; }
+body.dark .extra-fields-toggle { color: #6db8ff; }
+body.dark .sidebar-body::-webkit-scrollbar-thumb { background: #3a3a3a; }
+body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background: rgba(0,0,0,0.7); }
 </style>
 </head>
 <body>
@@ -419,16 +526,35 @@ select.form-input { background: #fafafa; cursor: pointer; }
   </div>
 </div>
 
+<!-- ══════════════ 承認待ち画面（管理者の承認リストに未登録） ══════════════ -->
+<div class="login-gate-overlay" id="pendingApprovalOverlay" style="display:none;">
+  <div class="login-gate-card">
+    <div class="login-gate-logo">Food with you</div>
+    <p class="login-gate-desc">現在、参加申請中です。<br>管理者が承認するまでお待ちください。<br>承認されたら、もう一度ログインしてください。</p>
+    <p class="login-gate-note" style="color:#888;">登録メールアドレス：<br><span id="pendingApprovalEmail" style="font-weight:600;color:#444;"></span></p>
+    <button class="login-gate-btn" style="margin-top:14px;color:#dc2743;" onclick="signOutOfApp()">ログアウト</button>
+  </div>
+</div>
+
 <header>
   <div class="logo">Food with you</div>
   <div class="header-right">
+    <div class="notif-wrap">
+      <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifDropdown()" title="お知らせ">
+        🔔<span class="notif-badge" id="notifBadge" style="display:none;"></span>
+      </button>
+      <div class="notif-dropdown" id="notifDropdown">
+        <div class="notif-dropdown-title">お知らせ</div>
+        <div id="notifList"></div>
+      </div>
+    </div>
     <div class="my-profile" onclick="openProfile('0')">
       <div class="ig-ring" style="width:34px;height:34px;">
         <div class="ig-ring-inner" style="width:100%;height:100%;font-size:13px;">り</div>
       </div>
       <div class="my-name">りょう</div>
     </div>
-    <button class="add-btn" onclick="startAddSpot()">＋ 追加</button>
+    <button class="add-btn" onclick="startAddSpot()" title="お店をマップに登録します（登録すると自動でタイムラインにも投稿されます）">＋ お店を登録</button>
   </div>
 </header>
 
@@ -491,7 +617,6 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <div class="chip" data-genre="焼肉・ホルモン" onclick="toggleGenreChip('焼肉・ホルモン')">🔥 焼肉</div>
         <div class="chip" data-genre="韓国料理" onclick="toggleGenreChip('韓国料理')">🌶️ 韓国</div>
         <div class="chip" data-genre="アジア・エスニック料理" onclick="toggleGenreChip('アジア・エスニック料理')">🍛 エスニック</div>
-        <div class="chip" data-genre="カラオケ・パーティ" onclick="toggleGenreChip('カラオケ・パーティ')">🎤 カラオケ</div>
         <div class="chip" data-genre="バー・カクテル" onclick="toggleGenreChip('バー・カクテル')">🍸 バー</div>
         <div class="chip" data-genre="ラーメン" onclick="toggleGenreChip('ラーメン')">🍜 ラーメン</div>
         <div class="chip" data-genre="カフェ・スイーツ" onclick="toggleGenreChip('カフェ・スイーツ')">☕ カフェ</div>
@@ -499,7 +624,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <div class="filter-row">
         <span class="f-label">価格帯</span>
         <div class="min-wrap" style="flex:1;">
-          <input type="range" id="priceMaxRange" min="1" max="9" step="1" value="9" style="width:200px;" oninput="onPriceRangeChange()"/>
+          <input type="range" id="priceMaxRange" min="1" max="4" step="1" value="4" style="width:200px;" oninput="onPriceRangeChange()"/>
           <span class="min-label" id="priceMaxLabel" style="min-width:90px;">指定なし</span>
         </div>
       </div>
@@ -508,6 +633,8 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <div class="chip" data-rating="3" onclick="toggleRatingChip(3)">★3以上</div>
         <div class="chip" data-rating="4" onclick="toggleRatingChip(4)">★4以上</div>
         <div class="chip" data-rating="5" onclick="toggleRatingChip(5)">★5のみ</div>
+        <div class="chip" id="openNowChip" onclick="toggleOpenNowFilter()">🕐 営業中のみ</div>
+        <div class="chip" style="border-color:#dc2743;color:#dc2743;" onclick="resetAllFilters()">🔄 絞り込みを解除</div>
       </div>
       <div class="filter-row">
         <span class="f-label">駅・距離</span>
@@ -530,6 +657,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
     </div>
     <div class="search-toolbar">
       <span class="sr-count" id="searchResultCount">0件のお店</span>
+      <div class="tb-btn" id="googleFetchBtn" onclick="fetchGooglePlacesInView()" style="display:none;">🔍 この範囲でGoogle検索</div>
       <div class="tb-btn" id="viewListBtn" onclick="setSearchView('list')">📋 リスト</div>
       <div class="tb-btn active" id="viewMapBtn" onclick="setSearchView('map')">🗺 マップ</div>
     </div>
@@ -552,9 +680,8 @@ select.form-input { background: #fafafa; cursor: pointer; }
 <div class="app-page" id="page-timeline">
   <div class="tl-header">
     <div class="tl-title">タイムライン</div>
-    <button class="tl-fbtn" id="tlComposerToggle" onclick="openTimelineComposer()">投稿</button>
-    <div class="tl-fbtn on" id="tlFilterFollowing" onclick="setTimelineFilter('following')">フォロー中</div>
-    <div class="tl-fbtn" id="tlFilterAll" onclick="setTimelineFilter('all')">すべて</div>
+    <div class="tl-fbtn" id="tlHashtagChip" style="display:none;color:#dc2743;border-color:#dc2743;" onclick="clearHashtagFilter()"></div>
+    <button class="tl-fbtn" id="tlComposerToggle" onclick="openTimelineComposer()" title="登録済みのお店、またはGoogleマップのお店について感想を投稿します">📝 投稿する</button>
   </div>
   <div class="tl-feed" id="tlFeed"></div>
 </div>
@@ -583,6 +710,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
+      <div class="modal-subtitle" id="addSpotModalSubtitle">登録すると自動でタイムラインにも投稿されます</div>
       <div id="step1">
         <div class="form-row">
           <label class="form-label">お店を検索</label>
@@ -598,7 +726,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
             <option>居酒屋</option><option>ダイニングバー・バル</option><option>創作料理</option>
             <option>和食</option><option>洋食</option><option>イタリアン・フレンチ</option>
             <option>中華</option><option>焼肉・ホルモン</option><option>韓国料理</option>
-            <option>アジア・エスニック料理</option><option>カラオケ・パーティ</option><option>バー・カクテル</option>
+            <option>アジア・エスニック料理</option><option>バー・カクテル</option>
             <option>ラーメン</option><option>カフェ・スイーツ</option><option>その他</option>
           </select>
           <div class="genre-preview">
@@ -621,6 +749,56 @@ select.form-input { background: #fafafa; cursor: pointer; }
           <label class="form-label">コメント</label>
           <textarea class="form-input" id="inputComment" placeholder="おすすめポイントを書いてみよう！"></textarea>
         </div>
+
+        <div class="form-row">
+          <span class="extra-fields-toggle" id="extraFieldsToggle" onclick="toggleExtraFields()">＋ 営業時間・タグなどの詳細を追加（任意）</span>
+        </div>
+        <div id="extraFieldsSection" style="display:none;">
+          <div class="form-row">
+            <label class="form-label">営業時間（任意）</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="time" class="form-input" id="inputHoursOpen" style="flex:1;"/>
+              <span style="color:#999;">〜</span>
+              <input type="time" class="form-input" id="inputHoursClose" style="flex:1;"/>
+            </div>
+            <div class="weekday-picker" id="closedDaysPicker">
+              ${WEEKDAYS.map(d=>`<span class="weekday-chip" data-day="${d}" onclick="toggleChipEl(this)">${d}</span>`).join('')}
+            </div>
+            <div class="search-hint">定休日をタップして選択（複数選択可）</div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">こだわりタグ（任意・複数選択可）</label>
+            <div class="feature-chip-picker" id="featureChipPicker">
+              ${FEATURE_TAGS.map(f=>`<span class="feature-chip" data-tag="${f}" onclick="toggleChipEl(this)">${f}</span>`).join('')}
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">また行きたい度（任意）</label>
+            <select class="form-input" id="inputRevisitNote">
+              <option value="">未選択</option>
+              ${REVISIT_OPTIONS.map(r=>`<option value="${r}">${r}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">アレルギー表示（任意・複数選択可）</label>
+            <div class="feature-chip-picker" id="allergyChipPicker">
+              ${ALLERGY_TAGS.map(a=>`<span class="feature-chip" data-tag="${a}" onclick="toggleChipEl(this)">${a}</span>`).join('')}
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">誰と行った？（任意）</label>
+            <input class="form-input" id="inputCompanions" placeholder="例：友達と、家族と"/>
+          </div>
+          <div class="form-row">
+            <label class="form-label">食べたもの（任意）</label>
+            <input class="form-input" id="inputDishes" placeholder="例：カルボナーラ、ティラミス"/>
+          </div>
+          <div class="form-row">
+            <label class="form-label">予約・クーポンURL（任意）</label>
+            <input class="form-input" id="inputReservationUrl" placeholder="https://..."/>
+          </div>
+        </div>
+
         <button class="btn-back" onclick="resetSearch()">← 別のお店を検索する</button>
       </div>
     </div>
@@ -639,6 +817,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
       <button class="modal-close" onclick="closeTimelineComposer()">✕</button>
     </div>
     <div class="modal-body">
+      <div class="modal-subtitle">登録済みのお店、またはGoogleマップのお店について感想を投稿します（マップへの新規登録はしません）</div>
       <div id="post-step1">
         <div class="form-row">
           <label class="form-label">お店を検索</label>
@@ -658,7 +837,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
             <option>居酒屋</option><option>ダイニングバー・バル</option><option>創作料理</option>
             <option>和食</option><option>洋食</option><option>イタリアン・フレンチ</option>
             <option>中華</option><option>焼肉・ホルモン</option><option>韓国料理</option>
-            <option>アジア・エスニック料理</option><option>カラオケ・パーティ</option><option>バー・カクテル</option>
+            <option>アジア・エスニック料理</option><option>バー・カクテル</option>
             <option>ラーメン</option><option>カフェ・スイーツ</option><option>その他</option>
           </select>
           <div class="genre-preview">
@@ -669,7 +848,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <div class="form-row">
           <label class="form-label">価格帯</label>
           <div class="min-wrap" style="margin-top:4px;">
-            <input type="range" id="postPriceRange" min="1" max="9" step="1" value="3" style="width:140px;" oninput="onPostPriceRangeChange()"/>
+            <input type="range" id="postPriceRange" min="1" max="4" step="1" value="2" style="width:140px;" oninput="onPostPriceRangeChange()"/>
             <span class="min-label" id="postPriceLabel" style="min-width:90px;">3000円以下</span>
           </div>
         </div>
@@ -724,13 +903,52 @@ select.form-input { background: #fafafa; cursor: pointer; }
         <label class="form-label">タグ（カンマ区切り）</label>
         <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
       </div>
+      <div class="form-row dark-toggle-row">
+        <div class="dark-toggle-label">🌙 ダークモード</div>
+        <div class="dark-switch" id="darkModeSwitch" onclick="toggleDarkMode()"><div class="dark-switch-knob"></div></div>
+      </div>
+      <div class="form-row">
+        <button class="btn-cancel" style="width:100%;" onclick="exportMyDataJSON()">⬇️ 自分のデータをバックアップ（JSON）</button>
+      </div>
     </div>
     <div class="modal-footer" style="justify-content: space-between;">
-      <button class="btn-cancel" onclick="signOutOfApp()" style="color:#dc2743;">ログアウト</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-cancel" onclick="signOutOfApp()" style="color:#dc2743;">ログアウト</button>
+        <button class="btn-cancel" id="adminPanelEntryBtn" style="display:none;" onclick="openAdminPanelFromProfile()">🔑 承認管理</button>
+      </div>
       <div style="display:flex;gap:8px;">
         <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
         <button class="btn-submit" onclick="saveProfile()">保存する</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 管理者パネル（フレンド承認の管理） ══════════════ -->
+<div class="modal-overlay" id="adminPanelOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔑 メンバー承認の管理</div>
+      <button class="modal-close" onclick="closeAdminPanel()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-subtitle">ここで承認したメールアドレスの人だけがFood with youに参加できます。</div>
+
+      <div class="section-label" style="margin-bottom:6px;">⏳ 承認待ちのリクエスト</div>
+      <div id="adminJoinRequestsList"></div>
+
+      <div class="section-label" style="margin:18px 0 6px;">✅ 承認済みメンバー</div>
+      <div id="adminAllowlistList"></div>
+
+      <div class="section-label" style="margin:18px 0 6px;">＋ メールアドレスを直接追加</div>
+      <div class="form-row" style="display:flex;gap:8px;">
+        <input class="form-input" id="adminAddEmailInput" placeholder="friend@example.com" style="flex:1;"/>
+        <button class="btn-submit" style="width:auto;padding:0 16px;" onclick="addAllowlistEmailUI()">追加</button>
+      </div>
+
+      <div class="section-label" style="margin:22px 0 6px;">⚠️ 初回セットアップ</div>
+      <div class="modal-subtitle" style="margin-bottom:10px;">この承認機能を初めて使う場合、すでにアプリを使っている既存の友達が締め出されないように、最初に一度だけ下のボタンを押してください。2回目以降は押す必要はありません。</div>
+      <button class="btn-cancel" style="width:100%;color:#dc2743;" onclick="runBulkApprove()">既存ユーザーを一括承認する</button>
     </div>
   </div>
 </div>
@@ -765,21 +983,38 @@ select.form-input { background: #fafafa; cursor: pointer; }
 </div>
 
 <script>
+// 保存済みのダークモード設定を即時反映（画面の白フラッシュを防ぐため最初に実行）
+if (localStorage.getItem('fwy_dark_mode') === '1') { document.body.classList.add('dark'); }
 // ═══════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════
 const GENRE_ICONS = {
   '居酒屋':'🍶','ダイニングバー・バル':'🍷','創作料理':'🍳','和食':'🍣','洋食':'🍴',
   'イタリアン・フレンチ':'🍝','中華':'🥟','焼肉・ホルモン':'🔥','韓国料理':'🌶️',
-  'アジア・エスニック料理':'🍛','カラオケ・パーティ':'🎤','バー・カクテル':'🍸',
+  'アジア・エスニック料理':'🍛','バー・カクテル':'🍸',
   'ラーメン':'🍜','カフェ・スイーツ':'☕','その他':'📍',
 };
 const RATING_WORDS = ['','いまいち','ふつう','おいしい','とてもおいしい','最高！'];
-const PRICE_LEVELS = ['1000円以下','2000円以下','3000円以下','5000円以下','7000円以下','10000円以下','15000円以下','20000円以下','20000円以上'];
-function priceLevelNum(spot) { const i = PRICE_LEVELS.indexOf(priceOf(spot)); return i >= 0 ? i+1 : 3; }
+// 価格帯：9段階→4段階に簡略化（②-1）。既存データの古い表記（例:'3000円以下'）はpriceLevelNum側でフォールバックする
+const PRICE_LEVELS = ['2000円以下','5000円以下','10000円以下','10000円以上'];
+const OLD_PRICE_TO_NEW = {
+  '1000円以下':'2000円以下','2000円以下':'2000円以下','3000円以下':'5000円以下','5000円以下':'5000円以下',
+  '7000円以下':'10000円以下','10000円以下':'10000円以下','15000円以下':'10000円以上','20000円以下':'10000円以上','20000円以上':'10000円以上',
+};
+function normalizePriceLabel(label) {
+  if (PRICE_LEVELS.includes(label)) return label;
+  return OLD_PRICE_TO_NEW[label] || null;
+}
+function priceLevelNum(spot) { const i = PRICE_LEVELS.indexOf(normalizePriceLabel(priceOf(spot))); return i >= 0 ? i+1 : 2; }
 const PRICE_BY_SPOT = {};
 const TRAVEL_SPEED_M_PER_MIN = { walk:80, bike:230, train:300, car:380 };
 const MODE_LABEL = { walk:'🚶 徒歩', bike:'🚲 自転車', train:'🚃 電車', car:'🚗 車' };
+// お店の特徴タグ（駐車場・喫煙・テイクアウト・季節限定・室内屋外・シーン）（①-15,18,19,21,27,16 まとめて実装）
+const FEATURE_TAGS = ['🅿️ 駐車場あり','🚭 禁煙','🚬 喫煙可','🥡 テイクアウト可','🛵 デリバリー可','🍂 季節限定メニューあり','🏠 室内中心','🌳 屋外席あり','🎉 記念日向き','💑 デート向き','👯 女子会向き','🧑 一人向き','👥 大人数向き'];
+const REVISIT_OPTIONS = ['また行きたい！','また行ってもいいかな','もう行かないかな'];
+const WEEKDAYS = ['月','火','水','木','金','土','日'];
+const ALLERGY_TAGS = ['卵','乳','小麦','えび','かに','そば','落花生','くるみ'];
+const ADMIN_EMAIL = 'ryo.otk22@gmail.com'; // フレンド承認リストを管理できる人
 
 // ═══════════════════════════════════════
 // USERS
@@ -834,7 +1069,7 @@ async function onProfilePhotoSelected(event, which) {
     document.getElementById(previewId).innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
     if (which === 'edit') editPhotoDataUrl = dataUrl; else onboardPhotoDataUrl = dataUrl;
   } catch (err) {
-    alert('画像の読み込みに失敗しました。別の画像でお試しください。');
+    toast('画像の読み込みに失敗しました。別の画像でお試しください。');
   }
 }
 
@@ -858,11 +1093,12 @@ let INITIAL_POSTS = [];  // 自分以外のユーザーの投稿
 // STATE
 // ═══════════════════════════════════════
 let myPosts = [];
-let timelineFilter = 'following';
+let timelineHashtagFilter = null; // ③-2：ハッシュタグ絞り込みを実際に機能させる
 let searchTab = 'shop';
 let searchView = 'map';
 let selectedGenres = new Set();      // 空 = すべて
-let maxPriceFilter = 9;              // 9(20000円以上) = 絞り込みなし
+let maxPriceFilter = 4;              // 4(10000円以上) = 絞り込みなし
+let openNowFilterOn = false;         // 営業時間での絞り込み（②-2/①-15）
 let minRatingFilter = 0;
 let searchScope = 'all';             // 'all' = マップ上の全登録店, 'following' = フォロー中の人のみ
 let distOrigin = null;               // {lat,lng,label}
@@ -923,8 +1159,8 @@ let currentRating = 0;
 function getUserById(id) { return id === '0' ? MY_USER : FRIENDS.find(f => f.id === id); }
 function getAllSpots()    { return [...SAMPLE_SPOTS, ...mySpots]; }
 function iconOf(genre)   { return GENRE_ICONS[genre] || '📍'; }
-function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) : ''; }
-function priceOf(spot)   { return spot.price || PRICE_BY_SPOT[spot.id] || '3000円以下'; }
+function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) + `<span class="rating-word">${RATING_WORDS[n]}</span>` : ''; }
+function priceOf(spot)   { return spot.price || PRICE_BY_SPOT[spot.id] || (spot.source==='google' ? '価格帯不明' : '5000円以下'); }
 function extractHashtags(text) { const m = text.match(/#[^\s#]+/g); return m ? m.map(h=>h.slice(1)) : []; }
 function linkifyCaption(text) {
   return (text||'').replace(/#([^\s#]+)/g, '<span class="ht" onclick="searchByHashtag(\'$1\')">#$1</span>');
@@ -954,6 +1190,16 @@ function mapVisibleSpots() {
 function genId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 function toLocalId(uid) { return uid === MY_USER.uid ? '0' : uid; }
 function toRealId(id)   { return id === '0' ? MY_USER.uid : id; }
+
+// alert()の代わりに使う軽い通知（画面下部に数秒間表示して自動で消える）
+function toast(msg) {
+  let t = document.getElementById('fwyToast');
+  if (!t) { t = document.createElement('div'); t.id = 'fwyToast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._fwyTimer);
+  t._fwyTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
 
 // ═══════════════════════════════════════
 // FIRESTORE データ連携
@@ -1003,58 +1249,101 @@ async function persistFollowState() {
   });
 }
 
-async function loadUsersFromFirestore() {
-  const { db, collection, getDocs } = window.FWY_FB;
-  const snap = await getDocs(collection(db, 'users'));
-  const list = [];
-  snap.forEach(docSnap => {
-    if (docSnap.id === MY_USER.uid) return;
-    const data = docSnap.data();
-    list.push({
-      id: docSnap.id, name: data.name || '名無し', label: data.label || (data.name||'？').charAt(0),
-      color: pickColorForUid(docSnap.id), photoURL: data.photoURL || null,
-      desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
-      following: MY_USER.followingUids.includes(docSnap.id),
-      showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
-    });
+// ═══════════════════════════════════════
+// データの自動更新（リアルタイム同期）
+// 一度読み込んだら終わりではなく、Firestore側でデータが変わるたびに自動で反映する。
+// 各load〜From Firestore()は「初回読み込みが終わったら”だけ”待ち（Promiseが解決）」、
+// それ以降の変更はonRemoteDataChanged()経由でこっそり再描画する。
+// ═══════════════════════════════════════
+let unsubUsers = null, unsubSpots = null, unsubPosts = null;
+let remoteSyncReady = false;
+
+function loadUsersFromFirestore() {
+  return new Promise((resolve) => {
+    const { db, collection, onSnapshot } = window.FWY_FB;
+    if (unsubUsers) unsubUsers();
+    let first = true;
+    unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
+      const list = [];
+      snap.forEach(docSnap => {
+        if (docSnap.id === MY_USER.uid) return;
+        const data = docSnap.data();
+        list.push({
+          id: docSnap.id, name: data.name || '名無し', label: data.label || (data.name||'？').charAt(0),
+          color: pickColorForUid(docSnap.id), photoURL: data.photoURL || null,
+          desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
+          following: MY_USER.followingUids.includes(docSnap.id),
+          showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
+        });
+      });
+      FRIENDS = list;
+      if (first) { first = false; resolve(); } else { onRemoteDataChanged(); }
+    }, (err) => { console.error('users onSnapshot error:', err); if (first) { first = false; resolve(); } });
   });
-  FRIENDS = list;
 }
 
-async function loadSpotsFromFirestore() {
-  const { db, collection, getDocs } = window.FWY_FB;
-  const snap = await getDocs(collection(db, 'spots'));
-  const others = [], mine = [];
-  snap.forEach(docSnap => {
-    const data = docSnap.data();
-    const spot = { ...data, id: docSnap.id, userId: toLocalId(data.ownerUid) };
-    if (spot.userId === '0') mine.push(spot); else others.push(spot);
+function loadSpotsFromFirestore() {
+  return new Promise((resolve) => {
+    const { db, collection, onSnapshot } = window.FWY_FB;
+    if (unsubSpots) unsubSpots();
+    let first = true;
+    unsubSpots = onSnapshot(collection(db, 'spots'), (snap) => {
+      const others = [], mine = [];
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const spot = { ...data, id: docSnap.id, userId: toLocalId(data.ownerUid) };
+        if (spot.userId === '0') mine.push(spot); else others.push(spot);
+      });
+      SAMPLE_SPOTS = others;
+      mySpots = mine;
+      if (first) { first = false; resolve(); } else { onRemoteDataChanged(); }
+    }, (err) => { console.error('spots onSnapshot error:', err); if (first) { first = false; resolve(); } });
   });
-  SAMPLE_SPOTS = others;
-  mySpots = mine;
 }
 
-async function loadPostsFromFirestore() {
-  const { db, collection, getDocs } = window.FWY_FB;
-  const snap = await getDocs(collection(db, 'posts'));
-  const others = [], mine = [];
-  snap.forEach(docSnap => {
-    const data = docSnap.data();
-    const post = {
-      ...data, id: docSnap.id, userId: toLocalId(data.ownerUid),
-      likes: (data.likes||[]).map(toLocalId),
-      comments: (data.comments||[]).map(c => ({ ...c, userId: toLocalId(c.userId), likes: (c.likes||[]).map(toLocalId) })),
-    };
-    if (post.userId === '0') mine.push(post); else others.push(post);
+function loadPostsFromFirestore() {
+  return new Promise((resolve) => {
+    const { db, collection, onSnapshot } = window.FWY_FB;
+    if (unsubPosts) unsubPosts();
+    let first = true;
+    unsubPosts = onSnapshot(collection(db, 'posts'), (snap) => {
+      const others = [], mine = [];
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const post = {
+          ...data, id: docSnap.id, userId: toLocalId(data.ownerUid),
+          likes: (data.likes||[]).map(toLocalId),
+          comments: (data.comments||[]).map(c => ({ ...c, userId: toLocalId(c.userId), likes: (c.likes||[]).map(toLocalId) })),
+        };
+        if (post.userId === '0') mine.push(post); else others.push(post);
+      });
+      INITIAL_POSTS = others;
+      myPosts = mine;
+      if (first) { first = false; resolve(); } else { onRemoteDataChanged(); }
+    }, (err) => { console.error('posts onSnapshot error:', err); if (first) { first = false; resolve(); } });
   });
-  INITIAL_POSTS = others;
-  myPosts = mine;
 }
 
 async function loadAllData() {
-  await loadUsersFromFirestore();
-  await loadSpotsFromFirestore();
-  await loadPostsFromFirestore();
+  await Promise.all([loadUsersFromFirestore(), loadSpotsFromFirestore(), loadPostsFromFirestore()]);
+  remoteSyncReady = true;
+}
+
+// 他の人の操作でデータが変わったときに、いま見ている画面だけを安全に再描画する。
+// （キャプション編集中など入力中のものを誤って消さないよう、編集中は再描画をスキップする）
+function onRemoteDataChanged() {
+  if (!remoteSyncReady) return; // 初回読み込みが終わるまでは何もしない
+  renderMarkers();
+  renderSidebar();
+  renderStories();
+  const editingCaption = document.querySelector('.caption-edit-area');
+  if (currentPage === 'timeline' && !editingCaption) {
+    renderTimeline();
+  }
+  if (typeof openProfileId !== 'undefined' && openProfileId) {
+    renderProfilePanel(openProfileId);
+  }
+  refreshNotificationBadge();
 }
 
 async function createSpotInFirestore(spot) {
@@ -1066,6 +1355,11 @@ async function deleteSpotInFirestore(id) {
   const { db, doc, deleteDoc } = window.FWY_FB;
   await deleteDoc(doc(db, 'spots', id));
 }
+async function updateSpotInFirestore(spot) {
+  const { db, doc, updateDoc } = window.FWY_FB;
+  const { id, userId, ...rest } = spot;
+  await updateDoc(doc(db, 'spots', id), { ...rest });
+}
 async function createPostInFirestore(post) {
   const { db, doc, setDoc } = window.FWY_FB;
   const { id, userId, likes, comments, ...rest } = post;
@@ -1074,6 +1368,14 @@ async function createPostInFirestore(post) {
     likes: (likes||[]).map(toRealId),
     comments: (comments||[]).map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId) })),
   });
+}
+async function deletePostInFirestore(id) {
+  const { db, doc, deleteDoc } = window.FWY_FB;
+  await deleteDoc(doc(db, 'posts', id));
+}
+async function updatePostFieldsInFirestore(postId, fields) {
+  const { db, doc, updateDoc } = window.FWY_FB;
+  await updateDoc(doc(db, 'posts', postId), fields);
 }
 async function updatePostLikesInFirestore(postId, likesLocalArr) {
   const { db, doc, updateDoc } = window.FWY_FB;
@@ -1085,6 +1387,221 @@ async function updatePostCommentsInFirestore(postId, commentsLocalArr) {
     comments: commentsLocalArr.map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId) })),
   });
 }
+
+// ═══════════════════════════════════════
+// フレンド承認リスト（allowlist）
+// ═══════════════════════════════════════
+// allowlistコレクション：ドキュメントID＝メールアドレス。存在すれば承認済み。
+// joinRequestsコレクション：ドキュメントID＝uid。未承認の人が初回ログインしたときに記録される「申請中」リスト。
+function isAdminUser() {
+  return !!MY_USER.email && MY_USER.email === ADMIN_EMAIL;
+}
+async function isEmailAllowed(email) {
+  if (!email) return false;
+  if (email === ADMIN_EMAIL) return true;
+  const { db, doc, getDoc } = window.FWY_FB;
+  const snap = await getDoc(doc(db, 'allowlist', email));
+  return snap.exists();
+}
+async function addEmailToAllowlist(email) {
+  const { db, doc, setDoc } = window.FWY_FB;
+  await setDoc(doc(db, 'allowlist', email), { addedAt: new Date().toISOString() });
+}
+async function removeEmailFromAllowlist(email) {
+  const { db, doc, deleteDoc } = window.FWY_FB;
+  await deleteDoc(doc(db, 'allowlist', email));
+}
+async function loadAllowlistEmails() {
+  const { db, collection, getDocs } = window.FWY_FB;
+  const snap = await getDocs(collection(db, 'allowlist'));
+  const list = [];
+  snap.forEach(d => list.push(d.id));
+  return list;
+}
+async function recordJoinRequest(uid, email, name) {
+  const { db, doc, setDoc } = window.FWY_FB;
+  await setDoc(doc(db, 'joinRequests', uid), {
+    email: email || '', name: name || '', requestedAt: new Date().toISOString(),
+  });
+}
+async function loadJoinRequests() {
+  const { db, collection, getDocs } = window.FWY_FB;
+  const snap = await getDocs(collection(db, 'joinRequests'));
+  const list = [];
+  snap.forEach(d => list.push({ uid: d.id, ...d.data() }));
+  return list;
+}
+async function deleteJoinRequest(uid) {
+  const { db, doc, deleteDoc } = window.FWY_FB;
+  await deleteDoc(doc(db, 'joinRequests', uid));
+}
+async function approveJoinRequest(uid, email) {
+  await addEmailToAllowlist(email);
+  await deleteJoinRequest(uid);
+}
+// 移行用：すでにFirestoreの「users」に登録済みの既存ユーザー全員を、承認リストに一括登録する。
+// このallowlist機能を初めて公開するタイミングで管理者が一度だけ実行する想定（既存の友達が締め出されないようにするため）。
+async function bulkApproveExistingUsers() {
+  const { db, collection, getDocs } = window.FWY_FB;
+  const snap = await getDocs(collection(db, 'users'));
+  let count = 0;
+  for (const d of snap.docs) {
+    const email = d.data().email;
+    if (email) { await addEmailToAllowlist(email); count++; }
+  }
+  return count;
+}
+
+// ── 管理者パネルUI ──
+function openAdminPanelFromProfile() {
+  closeEditProfileModal();
+  openAdminPanel();
+}
+async function openAdminPanel() {
+  document.getElementById('adminPanelOverlay').classList.add('open');
+  await refreshAdminPanel();
+}
+function closeAdminPanel() {
+  document.getElementById('adminPanelOverlay').classList.remove('open');
+}
+async function refreshAdminPanel() {
+  const [requests, emails] = await Promise.all([loadJoinRequests(), loadAllowlistEmails()]);
+  const reqListEl = document.getElementById('adminJoinRequestsList');
+  reqListEl.innerHTML = requests.length ? requests.map(r => `
+    <div class="admin-row">
+      <div class="admin-row-info">
+        <div class="admin-row-name">${r.name || '(名前未設定)'}</div>
+        <div class="admin-row-email">${r.email || ''}</div>
+      </div>
+      <div class="admin-row-actions">
+        <button class="btn-save-sm" onclick="approveJoinRequestUI('${r.uid}','${r.email}')">承認</button>
+        <button class="btn-cancel-sm" onclick="rejectJoinRequestUI('${r.uid}')">拒否</button>
+      </div>
+    </div>`).join('') : '<div class="admin-empty">承認待ちのリクエストはありません</div>';
+
+  const allowListEl = document.getElementById('adminAllowlistList');
+  allowListEl.innerHTML = emails.length ? emails.map(email => `
+    <div class="admin-row">
+      <div class="admin-row-info"><div class="admin-row-email">${email}</div></div>
+      <div class="admin-row-actions">
+        ${email === ADMIN_EMAIL ? '<span class="admin-tag-you">管理者</span>' : `<button class="btn-cancel-sm" onclick="removeAllowlistUI('${email}')">削除</button>`}
+      </div>
+    </div>`).join('') : '<div class="admin-empty">承認済みのメンバーはいません</div>';
+}
+async function approveJoinRequestUI(uid, email) {
+  await approveJoinRequest(uid, email);
+  toast(`${email} を承認しました`);
+  await refreshAdminPanel();
+}
+async function rejectJoinRequestUI(uid) {
+  if (!confirm('この申請を拒否しますか？')) return;
+  await deleteJoinRequest(uid);
+  toast('申請を削除しました');
+  await refreshAdminPanel();
+}
+async function removeAllowlistUI(email) {
+  if (!confirm(`${email} の承認を取り消しますか？\nこのメールアドレスの人は次回ログインからアプリに入れなくなります。`)) return;
+  await removeEmailFromAllowlist(email);
+  toast('承認を取り消しました');
+  await refreshAdminPanel();
+}
+async function addAllowlistEmailUI() {
+  const input = document.getElementById('adminAddEmailInput');
+  const email = (input.value || '').trim();
+  if (!email) return;
+  await addEmailToAllowlist(email);
+  input.value = '';
+  toast(`${email} を承認リストに追加しました`);
+  await refreshAdminPanel();
+}
+async function runBulkApprove() {
+  if (!confirm('現在Firestoreの「users」に登録されている既存ユーザー全員を、承認リストに一括登録します。\n（この機能を初めて使うときに一度だけ実行してください）\n\nよろしいですか？')) return;
+  const count = await bulkApproveExistingUsers();
+  toast(`${count}人を承認リストに追加しました`);
+  await refreshAdminPanel();
+}
+
+// ═══════════════════════════════════════
+// アプリ内通知（お知らせ）
+// スマホへのプッシュ通知ではなく、アプリを開いているときだけ見られるお知らせ。
+// 「最後に見た時刻」をlocalStorageに保存しておき、それより新しい投稿・コメントを件数バッジで知らせる。
+// ═══════════════════════════════════════
+const NOTIF_LAST_SEEN_KEY = 'fwy_notif_last_seen';
+function getNotifLastSeen() {
+  let v = localStorage.getItem(NOTIF_LAST_SEEN_KEY);
+  if (!v) {
+    // 初めてこの機能を使うときに、これまでの投稿を全部「未読」扱いにしないよう現在時刻を基準にする
+    v = new Date().toISOString();
+    localStorage.setItem(NOTIF_LAST_SEEN_KEY, v);
+  }
+  return v;
+}
+function setNotifLastSeenNow() {
+  localStorage.setItem(NOTIF_LAST_SEEN_KEY, new Date().toISOString());
+}
+function collectNotifications() {
+  const lastSeen = getNotifLastSeen();
+  const items = [];
+  (INITIAL_POSTS || []).forEach(p => {
+    if (p.createdAt && p.createdAt > lastSeen) {
+      const user = getUserById(p.userId);
+      items.push({
+        time: p.createdAt,
+        text: `${user ? user.name : '友達'}さんが「${p.restaurantName}」を投稿しました`,
+        action: 'post',
+      });
+    }
+  });
+  (myPosts || []).forEach(p => {
+    (p.comments || []).forEach(c => {
+      if (c.userId !== '0' && c.createdAt && c.createdAt > lastSeen) {
+        const user = getUserById(c.userId);
+        items.push({
+          time: c.createdAt,
+          text: `${user ? user.name : '誰か'}さんが「${p.restaurantName}」にコメントしました`,
+          action: 'post',
+        });
+      }
+    });
+  });
+  items.sort((a, b) => b.time.localeCompare(a.time));
+  return items;
+}
+function refreshNotificationBadge() {
+  const badge = document.getElementById('notifBadge');
+  if (!badge) return;
+  const count = collectNotifications().length;
+  if (count > 0) { badge.textContent = count > 9 ? '9+' : String(count); badge.style.display = 'flex'; }
+  else { badge.style.display = 'none'; }
+}
+function toggleNotifDropdown() {
+  const dd = document.getElementById('notifDropdown');
+  if (!dd) return;
+  const opening = !dd.classList.contains('open');
+  if (opening) { renderNotifDropdown(); dd.classList.add('open'); }
+  else { dd.classList.remove('open'); }
+}
+function closeNotifDropdown() {
+  const dd = document.getElementById('notifDropdown');
+  if (dd) dd.classList.remove('open');
+}
+function renderNotifDropdown() {
+  const items = collectNotifications();
+  const list = document.getElementById('notifList');
+  list.innerHTML = items.length ? items.map(it => `
+    <div class="notif-item" onclick="goPage('timeline');closeNotifDropdown();">
+      <div class="notif-item-text">${it.text}</div>
+      <div class="notif-item-time">${timeAgo(it.time)}</div>
+    </div>`).join('') : '<div class="notif-empty">新しいお知らせはありません</div>';
+  // ドロップダウンを開いたら既読にする（次に新しい投稿・コメントが来たら、また件数バッジが出る）
+  setNotifLastSeenNow();
+  refreshNotificationBadge();
+}
+// ベル・ドロップダウンの外側をタップしたら閉じる
+document.addEventListener('click', function(e) {
+  const wrap = document.querySelector('.notif-wrap');
+  if (wrap && !wrap.contains(e.target)) closeNotifDropdown();
+});
 
 // ═══════════════════════════════════════
 // ログインゲート（Firebase認証との連携）
@@ -1120,6 +1637,8 @@ window.onFirebaseAuthChange = function(user) {
   } else {
     appStarted = false;
     if (overlay) overlay.style.display = 'flex';
+    const pendingOverlay = document.getElementById('pendingApprovalOverlay');
+    if (pendingOverlay) pendingOverlay.style.display = 'none';
   }
 };
 
@@ -1127,6 +1646,7 @@ window.onFirebaseAuthChange = function(user) {
 // MAP
 // ═══════════════════════════════════════
 function startApp() {
+  history.replaceState({ fwyPage: 'map', fwyProfile: null }, '', '#map'); // 戻るボタン対応：最初の履歴エントリを初期化
   const initial = defaultMapCenter();
   map = new google.maps.Map(document.getElementById('map'), {
     center: initial.center, zoom: initial.zoom,
@@ -1152,7 +1672,7 @@ function startApp() {
       { placeId: e.placeId, fields: ['name','geometry','formatted_address','address_components','types'] },
       (place, status) => {
         document.getElementById('poi-loading').style.display = 'none';
-        if (status !== google.maps.places.PlacesServiceStatus.OK || !place) { alert('取得できませんでした。'); return; }
+        if (status !== google.maps.places.PlacesServiceStatus.OK || !place) { toast('取得できませんでした。'); return; }
         showMapAddPopup(place);
       }
     );
@@ -1160,12 +1680,21 @@ function startApp() {
 
   initAutocomplete();
   (async () => {
+    const allowed = await isEmailAllowed(MY_USER.email);
+    if (!allowed) {
+      await recordJoinRequest(MY_USER.uid, MY_USER.email, MY_USER.name);
+      const emailEl = document.getElementById('pendingApprovalEmail');
+      if (emailEl) emailEl.textContent = MY_USER.email || '';
+      document.getElementById('pendingApprovalOverlay').style.display = 'flex';
+      return; // 承認されるまで他のユーザーのデータは読み込まない
+    }
     const exists = await upsertMyUserDoc();
     if (exists) {
       await loadAllData();
       renderMarkers();
       renderStories();
       renderSidebar();
+      refreshNotificationBadge();
     } else {
       openOnboardingModal();
     }
@@ -1187,14 +1716,50 @@ function openEditProfileModal() {
   document.getElementById('editProfileTags').value = (MY_USER.tags||[]).join(', ');
   editPhotoDataUrl = null;
   document.getElementById('editProfilePhotoPreview').innerHTML = avatarInner(MY_USER);
+  const adminBtn = document.getElementById('adminPanelEntryBtn');
+  if (adminBtn) adminBtn.style.display = isAdminUser() ? 'inline-block' : 'none';
+  document.getElementById('darkModeSwitch').classList.toggle('on', isDarkModeOn());
   document.getElementById('editProfileModalOverlay').classList.add('open');
 }
 function closeEditProfileModal() {
   document.getElementById('editProfileModalOverlay').classList.remove('open');
 }
+
+// ── ダークモード ──
+const DARK_MODE_KEY = 'fwy_dark_mode';
+function isDarkModeOn() { return localStorage.getItem(DARK_MODE_KEY) === '1'; }
+function applyDarkModePreference() {
+  document.body.classList.toggle('dark', isDarkModeOn());
+}
+function toggleDarkMode() {
+  const next = !isDarkModeOn();
+  localStorage.setItem(DARK_MODE_KEY, next ? '1' : '0');
+  applyDarkModePreference();
+  document.getElementById('darkModeSwitch').classList.toggle('on', next);
+}
+
+// ── 自分のデータをJSONでバックアップ ──
+function exportMyDataJSON() {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    user: MY_USER,
+    spots: mySpots,
+    posts: myPosts,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `food-with-you_backup_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('バックアップファイルをダウンロードしました');
+}
 async function saveProfile() {
   const name = document.getElementById('editProfileName').value.trim();
-  if (!name) { alert('名前を入力してください'); return; }
+  if (!name) { toast('名前を入力してください'); return; }
   MY_USER.name  = name;
   MY_USER.label = name.charAt(0);
   MY_USER.bio   = document.getElementById('editProfileBio').value.trim();
@@ -1222,7 +1787,7 @@ function openOnboardingModal() {
 }
 async function finishOnboarding() {
   const name = document.getElementById('onboardName').value.trim();
-  if (!name) { alert('名前を入力してください'); return; }
+  if (!name) { toast('名前を入力してください'); return; }
   MY_USER.name  = name;
   MY_USER.label = name.charAt(0);
   MY_USER.bio   = document.getElementById('onboardBio').value.trim();
@@ -1233,12 +1798,16 @@ async function finishOnboarding() {
   renderMarkers();
   renderStories();
   renderSidebar();
+  refreshNotificationBadge();
 }
 
 // ═══════════════════════════════════════
 // PAGE NAVIGATION
 // ═══════════════════════════════════════
+let currentPage = 'map';
+let isPoppingState = false; // popstate処理中フラグ（処理中は新たにhistoryへpushしない）
 function goPage(page) {
+  currentPage = page;
   document.querySelectorAll('.app-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -1247,7 +1816,20 @@ function goPage(page) {
   if (page === 'map' && map) setTimeout(()=>{ google.maps.event.trigger(map,'resize'); applySharedViewTo(map); }, 80);
   if (page === 'search') { initSearchPage(); }
   if (page === 'timeline') { renderTimeline(); }
+  if (!isPoppingState) history.pushState({ fwyPage: page, fwyProfile: null }, '', '#'+page);
 }
+// ブラウザの「戻る」ボタンでアプリ内のページ・プロフィール表示を正しく戻す
+window.addEventListener('popstate', (e) => {
+  isPoppingState = true;
+  const state = e.state || { fwyPage: 'map', fwyProfile: null };
+  if (!state.fwyProfile && openProfileId !== null) {
+    closeProfile();
+  } else if (state.fwyProfile && state.fwyProfile !== openProfileId) {
+    openProfile(state.fwyProfile);
+  }
+  if (state.fwyPage && state.fwyPage !== currentPage) goPage(state.fwyPage);
+  isPoppingState = false;
+});
 
 // ═══════════════════════════════════════
 // タイムライン内の投稿コンポーザー（開閉）
@@ -1275,7 +1857,7 @@ function initPostPage() {
     });
     postPlaceAutocomplete.addListener('place_changed', () => {
       const place = postPlaceAutocomplete.getPlace();
-      if (!place.geometry?.location) { alert('お店が見つかりませんでした。'); return; }
+      if (!place.geometry?.location) { toast('お店が見つかりませんでした。'); return; }
       openPostStep2WithPlace(place);
     });
   }
@@ -1319,8 +1901,7 @@ function openPostStep2WithPlace(place) {
   document.getElementById('postHashtagPreview').innerHTML = '';
   document.getElementById('postSelectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
-    <div class="pn">${postPendingName}</div>
-    <div class="pa">${postPendingAddr}</div>`;
+    <div class="pn">${postPendingName}</div>`;
   document.getElementById('post-step1').style.display = 'none';
   document.getElementById('post-step2').style.display = 'block';
 }
@@ -1347,8 +1928,7 @@ function selectExistingSpot(spotId) {
   document.getElementById('postHashtagPreview').innerHTML = '';
   document.getElementById('postSelectedPlaceCard').innerHTML = `
     <div class="pc">📍 登録済みのお店</div>
-    <div class="pn">${postPendingName}</div>
-    <div class="pa">${postPendingAddr}</div>`;
+    <div class="pn">${postPendingName}</div>`;
   document.getElementById('post-step1').style.display = 'none';
   document.getElementById('post-step2').style.display = 'block';
 }
@@ -1381,7 +1961,7 @@ function onPostCaptionInput() {
   document.getElementById('postHashtagPreview').innerHTML = tags.map(t=>`<span class="ht-tag">#${t}</span>`).join('');
 }
 async function submitPost() {
-  if (!postPendingLat || !postPendingName) { alert('お店を選択してください'); return; }
+  if (!postPendingLat || !postPendingName) { toast('お店を選択してください'); return; }
   const genre = document.getElementById('postGenre').value;
   const caption = document.getElementById('postCaption').value.trim();
   let spotId, area;
@@ -1446,7 +2026,8 @@ function initSearchPage() {
     if (sharedMapView) applySharedViewTo(searchMap);
     showMyLocationOnMap(searchMap);
     googlePlacesService = new google.maps.places.PlacesService(searchMap);
-    searchMap.addListener('idle', () => scheduleGooglePlacesFetch());
+    // ②-2（指示済み）：地図移動のたびに自動でGoogle検索すると無駄なAPI呼び出しが発生するため、
+    // ボタンを押したときだけ検索する方式に変更（fetchGooglePlacesButtonクリック時のみfetchGooglePlacesInViewを呼ぶ）
     const distInput = document.getElementById('distOriginInput');
     distOriginAutocomplete = new google.maps.places.Autocomplete(distInput, { fields:['name','geometry'], componentRestrictions:{country:'jp'} });
     distOriginAutocomplete.addListener('place_changed', () => {
@@ -1468,8 +2049,9 @@ function initSearchPage() {
 function setSearchScope(s) {
   searchScope = s;
   document.querySelectorAll('[data-scope]').forEach(c => c.classList.toggle('on', c.dataset.scope===s));
-  if (s === 'all') { scheduleGooglePlacesFetch(true); }
-  else { googlePlaceResults = []; }
+  const btn = document.getElementById('googleFetchBtn');
+  if (s === 'all') { if (btn) btn.style.display = 'inline-block'; fetchGooglePlacesInView(); }
+  else { googlePlaceResults = []; if (btn) btn.style.display = 'none'; }
   renderSearchResults();
 }
 
@@ -1510,19 +2092,18 @@ function toGooglePseudoSpot(place) {
 // Googleの店舗種別（types）と店名から、アプリの15ジャンルを推定する共通ロジック
 // マップページの追加モーダル（autoSelectGenre）と検索ページのGoogle合流結果（guessGenre）の両方で使う
 const GENRE_GUESS_RULES = [
-  {genre:'ラーメン',              keys:['ramen','noodle'],                                   nameKeys:['ラーメン','らーめん','拉麺']},
-  {genre:'和食',                  keys:['sushi','japanese_restaurant','seafood'],            nameKeys:['寿司','すし','和食','割烹','料亭','天ぷら','てんぷら','蕎麦','そば','うどん','懐石','定食']},
-  {genre:'焼肉・ホルモン',         keys:['bbq','yakitori','yakiniku','barbecue'],             nameKeys:['焼肉','やきにく','ホルモン','焼き鳥','やきとり']},
-  {genre:'カフェ・スイーツ',       keys:['cafe','bakery','dessert','coffee','ice_cream','donut','bagel'], nameKeys:['カフェ','喫茶','スイーツ','ケーキ','パン屋','タルト','クレープ']},
-  {genre:'イタリアン・フレンチ',   keys:['italian','pizza','french'],                          nameKeys:['イタリアン','イタリア','フレンチ','フランス料理','ピザ','パスタ','トラットリア','ビストロ']},
-  {genre:'中華',                  keys:['chinese','dim_sum'],                                 nameKeys:['中華','中国料理','餃子','麻婆','飲茶']},
-  {genre:'韓国料理',              keys:['korean'],                                            nameKeys:['韓国','コリアン','サムギョプサル','タッカルビ','ダッカルビ']},
-  {genre:'アジア・エスニック料理', keys:['thai','vietnamese','indian','asian','middle_eastern','indonesian'], nameKeys:['タイ料理','ベトナム','インド料理','エスニック','カレー','フォー']},
-  {genre:'カラオケ・パーティ',     keys:['karaoke'],                                           nameKeys:['カラオケ','宴会']},
-  {genre:'バー・カクテル',         keys:['bar','pub','wine_bar','night_club'],                 nameKeys:['バー','カクテル','ワインバー','パブ']},
-  {genre:'居酒屋',                keys:['izakaya'],                                           nameKeys:['居酒屋','酒場']},
+  {genre:'ラーメン',              keys:['ramen','noodle'],                                   nameKeys:['ラーメン','らーめん','拉麺','つけ麺']},
+  {genre:'和食',                  keys:['sushi','japanese_restaurant','seafood'],            nameKeys:['寿司','すし','和食','割烹','料亭','天ぷら','てんぷら','蕎麦','そば','うどん','懐石','定食','丼','とんかつ','とん家']},
+  {genre:'焼肉・ホルモン',         keys:['bbq','yakitori','yakiniku','barbecue'],             nameKeys:['焼肉','やきにく','ホルモン','焼き鳥','やきとり','カルビ','牛タン']},
+  {genre:'カフェ・スイーツ',       keys:['cafe','bakery','dessert','coffee','ice_cream','donut','bagel'], nameKeys:['カフェ','喫茶','スイーツ','ケーキ','パン屋','タルト','クレープ','タピオカ','紅茶']},
+  {genre:'イタリアン・フレンチ',   keys:['italian','pizza','french'],                          nameKeys:['イタリアン','イタリア','フレンチ','フランス料理','ピザ','パスタ','トラットリア','ビストロ','bistro']},
+  {genre:'中華',                  keys:['chinese','dim_sum'],                                 nameKeys:['中華','中国料理','餃子','麻婆','飲茶','チャーハン','担々麺']},
+  {genre:'韓国料理',              keys:['korean'],                                            nameKeys:['韓国','コリアン','サムギョプサル','タッカルビ','ダッカルビ','チーズダック']},
+  {genre:'アジア・エスニック料理', keys:['thai','vietnamese','indian','asian','middle_eastern','indonesian'], nameKeys:['タイ料理','ベトナム','インド料理','エスニック','カレー','フォー','ケバブ','生春巻き']},
+  {genre:'バー・カクテル',         keys:['bar','pub','wine_bar','night_club'],                 nameKeys:['バー','カクテル','ワインバー','パブ','ラウンジ']},
+  {genre:'居酒屋',                keys:['izakaya'],                                           nameKeys:['居酒屋','酒場','立ち飲み']},
   {genre:'ダイニングバー・バル',   keys:['bar_and_grill'],                                     nameKeys:['ダイニングバー','バル']},
-  {genre:'洋食',                  keys:['steak_house','hamburger','american_restaurant'],     nameKeys:['洋食','ハンバーグ','ステーキ','オムライス']},
+  {genre:'洋食',                  keys:['steak_house','hamburger','american_restaurant'],     nameKeys:['洋食','ハンバーグ','ステーキ','オムライス','ビーフ','グラタン','ドリア']},
   {genre:'創作料理',              keys:[],                                                    nameKeys:['創作料理','創作']},
 ];
 function guessGenre(types, name) {
@@ -1534,7 +2115,7 @@ function guessGenre(types, name) {
 }
 function googlePriceLevelToOurs(level) {
   // Googleの価格帯(0〜4)をアプリの価格帯表記に概算でマッピング（不明な場合はnull＝価格帯フィルタの対象外）
-  const table = { 0:'1000円以下', 1:'2000円以下', 2:'5000円以下', 3:'10000円以下', 4:'20000円以上' };
+  const table = { 0:'2000円以下', 1:'2000円以下', 2:'5000円以下', 3:'10000円以下', 4:'10000円以上' };
   return (level != null && table[level]) ? table[level] : null;
 }
 function toggleGenreChip(g) {
@@ -1550,7 +2131,25 @@ function toggleGenreChip(g) {
 }
 function onPriceRangeChange() {
   maxPriceFilter = parseInt(document.getElementById('priceMaxRange').value);
-  document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 9 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1];
+  document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 4 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1];
+  renderSearchResults();
+}
+function toggleOpenNowFilter() {
+  openNowFilterOn = !openNowFilterOn;
+  document.getElementById('openNowChip').classList.toggle('on', openNowFilterOn);
+  renderSearchResults();
+}
+function resetAllFilters() {
+  selectedGenres.clear();
+  maxPriceFilter = 4;
+  minRatingFilter = 0;
+  openNowFilterOn = false;
+  clearDistanceFilter();
+  document.querySelectorAll('[data-genre]').forEach(c => c.classList.toggle('on', c.dataset.genre==='all'));
+  document.querySelectorAll('[data-rating]').forEach(c => c.classList.remove('on'));
+  document.getElementById('priceMaxRange').value = 4;
+  document.getElementById('priceMaxLabel').textContent = '指定なし';
+  document.getElementById('openNowChip').classList.remove('on');
   renderSearchResults();
 }
 function toggleRatingChip(r) {
@@ -1569,7 +2168,7 @@ function onMinutesChange() {
   if (distanceFilterOn) renderSearchResults();
 }
 function useCurrentLocation() {
-  if (!navigator.geolocation) { alert('現在地を取得できません。'); return; }
+  if (!navigator.geolocation) { toast('現在地を取得できません。'); return; }
   navigator.geolocation.getCurrentPosition((pos) => {
     distOrigin = { lat: pos.coords.latitude, lng: pos.coords.longitude, label: '現在地' };
     cachedMyLocation = { lat: distOrigin.lat, lng: distOrigin.lng };
@@ -1580,7 +2179,7 @@ function useCurrentLocation() {
     searchMap.panTo(cachedMyLocation);
     searchMap.setZoom(15);
     renderSearchResults();
-  }, () => alert('現在地を取得できませんでした。位置情報の利用を許可してください。'));
+  }, () => toast('現在地を取得できませんでした。位置情報の利用を許可してください。'));
 }
 function clearDistanceFilter() {
   distOrigin = null; distanceFilterOn = false;
@@ -1613,12 +2212,33 @@ function getFilteredSpots() {
   }
   if (selectedGenres.size > 0) spots = spots.filter(s => selectedGenres.has(s.genre));
   // Googleのお店は価格帯が不明な場合があるため、不明なものは価格帯フィルタの対象外とする（概算のため）
-  if (maxPriceFilter < 9) spots = spots.filter(s => (s.source==='google' && !s.price) ? true : priceLevelNum(s) <= maxPriceFilter);
+  if (maxPriceFilter < 4) spots = spots.filter(s => (s.source==='google' && !s.price) ? true : priceLevelNum(s) <= maxPriceFilter);
   if (minRatingFilter > 0) spots = spots.filter(s => (s.rating||0) >= minRatingFilter);
   if (distanceFilterOn && distOrigin) {
     spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
   }
+  if (openNowFilterOn) spots = spots.filter(s => isOpenNow(s) !== false); // 不明な場合は除外しない
   return spots;
+}
+// 営業時間（hours）データから「今営業中か」を判定する（①-15／営業時間フィルタ用）。データがない場合はnull（不明）
+function isOpenNow(spot) {
+  const h = spot.hours;
+  if (!h || !h.open || !h.close) return null;
+  const now = new Date();
+  const dayLabel = WEEKDAYS[(now.getDay()+6)%7]; // 日曜=0→「日」に合わせる
+  if ((h.closedDays||[]).includes(dayLabel)) return false;
+  const cur = now.getHours()*60+now.getMinutes();
+  const [oh,om] = h.open.split(':').map(Number);
+  const [ch,cm] = h.close.split(':').map(Number);
+  const openMin = oh*60+om, closeMin = ch*60+cm;
+  if (closeMin <= openMin) return cur >= openMin || cur <= closeMin; // 深夜営業（日付をまたぐ）
+  return cur >= openMin && cur <= closeMin;
+}
+function hoursLabel(spot) {
+  const h = spot.hours;
+  if (!h || !h.open || !h.close) return '';
+  const closed = (h.closedDays||[]).length ? `（定休日:${h.closedDays.join('・')}）` : '';
+  return `${h.open}〜${h.close}${closed}`;
 }
 // 距離フィルタが有効なとき、地図上に「ここまでが範囲内」の円を表示する
 function updateDistRadiusCircle() {
@@ -1629,9 +2249,9 @@ function updateDistRadiusCircle() {
     center: { lat: distOrigin.lat, lng: distOrigin.lng },
     radius,
     map: searchMap,
-    strokeColor: '#0095f6', strokeOpacity: 0.6, strokeWeight: 1.5,
-    fillColor: '#0095f6', fillOpacity: 0.08,
-    clickable: false,
+    strokeColor: '#0095f6', strokeOpacity: 0.85, strokeWeight: 2,
+    fillColor: '#0095f6', fillOpacity: 0.05,
+    clickable: false, zIndex: 1,
   });
 }
 function renderSearchResults() {
@@ -1668,7 +2288,7 @@ function renderSearchResults() {
         <div class="result-icon">${iconOf(spot.genre)}</div>
         <div class="result-info">
           <div class="result-name">${spot.name}</div>
-          <div class="result-meta">${spot.genre}${spot.area?' · '+spot.area:''}${spot.price?' · '+spot.price+'（概算）':''}</div>
+          <div class="result-meta">${spot.genre}${spot.area?' · '+spot.area:''} · ${spot.price?spot.price+'（概算）':'<span class="price-unknown">価格帯不明</span>'}</div>
           ${spot.googleRating?`<div class="result-stars">★${spot.googleRating}（Google評価）</div>`:''}
           ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
           <div class="result-by" style="background:#4285F4;">🌐 Googleマップ（未登録）</div>
@@ -1694,7 +2314,7 @@ function googlePlaceInfoHTML(spot) {
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
     <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}${spot.googleRating?' · ★'+spot.googleRating:''}</div>
-    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addGooglePlaceAsSpot('${spot.id}')">＋追加</button>
+    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addGooglePlaceAsSpot('${spot.id}')">＋ お店を登録</button>
   </div>`;
 }
 function addGooglePlaceAsSpot(id) {
@@ -1727,6 +2347,11 @@ function renderAccountResults() {
   const q = (document.getElementById('accountSearchInput').value||'').trim().toLowerCase();
   let list = FRIENDS;
   if (q) list = list.filter(f => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q) || (f.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  // フォロー中を先頭に、その後は名前順で並べる
+  list = list.slice().sort((a,b) => {
+    if (!!a.following !== !!b.following) return a.following ? -1 : 1;
+    return a.name.localeCompare(b.name, 'ja');
+  });
   const box = document.getElementById('accountResults');
   if (list.length===0) { box.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>該当するアカウントが見つかりませんでした</p></div>`; return; }
   box.innerHTML = list.map(f => `
@@ -1741,24 +2366,28 @@ function renderAccountResults() {
     </div>`).join('');
 }
 function searchByHashtag(tag) {
+  timelineHashtagFilter = tag;
   goPage('timeline');
-  setTimeout(()=>alert('#'+tag+' のハッシュタグ検索結果を表示します（タイムラインに同じタグの投稿が表示されています）'), 50);
+  setTimeout(() => {
+    renderTimeline();
+    const chip = document.getElementById('tlHashtagChip');
+    chip.textContent = '#' + tag + ' ✕';
+    chip.style.display = 'inline-block';
+  }, 50);
 }
 
 // ═══════════════════════════════════════
 // TIMELINE PAGE
 // ═══════════════════════════════════════
-function setTimelineFilter(f) {
-  timelineFilter = f;
-  document.getElementById('tlFilterFollowing').classList.toggle('on', f==='following');
-  document.getElementById('tlFilterAll').classList.toggle('on', f==='all');
+function clearHashtagFilter() {
+  timelineHashtagFilter = null;
+  document.getElementById('tlHashtagChip').style.display = 'none';
   renderTimeline();
 }
 function renderTimeline() {
   let posts = getAllPosts();
-  if (timelineFilter === 'following') {
-    const followingIds = new Set(['0', ...FRIENDS.filter(f=>f.following).map(f=>f.id)]);
-    posts = posts.filter(p => followingIds.has(p.userId));
+  if (timelineHashtagFilter) {
+    posts = posts.filter(p => extractHashtags(p.caption||'').includes(timelineHashtagFilter));
   }
   const feed = document.getElementById('tlFeed');
   if (posts.length === 0) {
@@ -1790,10 +2419,13 @@ function postCardHTML(p) {
       </div>
       ${spot.rating?`<div class="prr-stars">${starsHTML(spot.rating)}</div>`:''}
     </div>
-    <div class="post-caption">${linkifyCaption(p.caption)}</div>
+    <div class="post-caption" id="caption-${p.id}">${linkifyCaption(p.caption)}</div>
     <div class="post-actions">
       <button class="act-btn ${liked?'liked':''}" onclick="toggleLikePost('${p.id}')"><span class="ic">${liked?'❤️':'🤍'}</span>${p.likes.length}</button>
       <button class="act-btn" onclick="toggleComments('${p.id}')"><span class="ic">💬</span>${p.comments.length}</button>
+      ${p.userId==='0'?`
+      <button class="act-btn" style="margin-left:auto;" onclick="togglePostEdit('${p.id}')"><span class="ic">✏️</span></button>
+      <button class="act-btn" onclick="deletePost('${p.id}')"><span class="ic">🗑</span></button>`:''}
     </div>
     <div class="post-comments" id="comments-${p.id}" style="display:none;">
       ${commentsHTML(p.id, p.comments)}
@@ -1827,6 +2459,43 @@ function commentsHTML(postId, comments) {
 function toggleComments(postId) {
   const el = document.getElementById('comments-'+postId);
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+// 自分の投稿の削除・キャプション編集
+function deletePost(id) {
+  if (!confirm('この投稿を削除しますか？')) return;
+  myPosts = myPosts.filter(p=>p.id!==id);
+  deletePostInFirestore(id);
+  renderTimeline();
+  if (openProfileId === '0') renderProfilePanel('0');
+  toast('投稿を削除しました');
+}
+function togglePostEdit(postId) {
+  const p = getAllPosts().find(p=>p.id===postId);
+  if (!p) return;
+  const capEl = document.getElementById('caption-'+postId);
+  if (!capEl) return;
+  capEl.innerHTML = `
+    <textarea id="captionEdit-${postId}" class="caption-edit-area" rows="3" placeholder="キャプションを入力...">${p.caption||''}</textarea>
+    <div class="caption-edit-actions">
+      <button class="btn-cancel-sm" onclick="cancelPostEdit('${postId}')">キャンセル</button>
+      <button class="btn-save-sm" onclick="savePostEdit('${postId}')">保存する</button>
+    </div>`;
+  document.getElementById('captionEdit-'+postId).focus();
+}
+function cancelPostEdit(postId) {
+  renderTimeline();
+  if (openProfileId === '0') renderProfilePanel('0');
+}
+async function savePostEdit(postId) {
+  const p = getAllPosts().find(p=>p.id===postId);
+  if (!p) return;
+  const input = document.getElementById('captionEdit-'+postId);
+  const newCaption = input ? input.value.trim() : p.caption;
+  p.caption = newCaption;
+  await updatePostFieldsInFirestore(postId, { caption: newCaption });
+  renderTimeline();
+  if (openProfileId === '0') renderProfilePanel('0');
+  toast('投稿を更新しました');
 }
 function toggleLikePost(postId) {
   const p = getAllPosts().find(p=>p.id===postId);
@@ -1912,6 +2581,34 @@ function googleMapsLinkFor(spot) {
   const q = encodeURIComponent(spot.name + (spot.addr ? ' ' + spot.addr : ''));
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
+// 営業時間・タグなど「詳細」項目をポップアップ用HTMLにまとめる
+function extraInfoHTML(spot) {
+  let html = '';
+  if (spot.hours && spot.hours.open && spot.hours.close) {
+    const open = isOpenNow(spot);
+    const tag = open === true ? `<span class="open-now-tag">営業中</span>` : open === false ? `<span class="closed-now-tag">営業時間外</span>` : '';
+    html += `<div class="gm-popup-hours">🕐 ${hoursLabel(spot)} ${tag}</div>`;
+  }
+  if ((spot.features||[]).length) {
+    html += `<div class="gm-popup-chips">${spot.features.map(f=>`<span class="feature-chip-sm">${f}</span>`).join('')}</div>`;
+  }
+  if (spot.revisitNote) {
+    html += `<div class="gm-popup-revisit">🔁 ${spot.revisitNote}</div>`;
+  }
+  if ((spot.allergies||[]).length) {
+    html += `<div class="gm-popup-allergy">⚠️ アレルギー対応: ${spot.allergies.join('・')}</div>`;
+  }
+  if (spot.companions) {
+    html += `<div class="gm-popup-extra">👥 ${spot.companions}</div>`;
+  }
+  if (spot.dishes) {
+    html += `<div class="gm-popup-extra">🍽 ${spot.dishes}</div>`;
+  }
+  if (spot.reservationUrl) {
+    html += `<a class="gm-popup-reserve" href="${spot.reservationUrl}" target="_blank" rel="noopener">📅 予約はこちら</a>`;
+  }
+  return html;
+}
 function infoHTML(spot, user) {
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
@@ -1919,6 +2616,7 @@ function infoHTML(spot, user) {
     <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}</div>
     ${spot.rating?`<div class="gm-popup-stars">${starsHTML(spot.rating)}</div>`:''}
     ${spot.comment?`<div class="gm-popup-comment">「${spot.comment}」</div>`:''}
+    ${extraInfoHTML(spot)}
     <div class="gm-popup-footer">
       <div class="gm-popup-av" style="background:${user.color};">${avatarInner(user)}</div>
       <div class="gm-popup-by">by</div>
@@ -1978,6 +2676,7 @@ function openProfile(userId) {
   renderProfilePanel(userId);
   fitToVisible();
   document.getElementById('profilePanel').classList.add('open');
+  if (!isPoppingState) history.pushState({ fwyPage: currentPage, fwyProfile: userId }, '', '#profile');
 }
 
 function closeProfile() {
@@ -2137,9 +2836,13 @@ function spotCardHTML(spot, user, canDel) {
         <div class="spot-meta">${spot.genre}${spot.area?' · '+spot.area:''}</div>
         ${spot.rating?`<div class="spot-stars">${starsHTML(spot.rating)}</div>`:''}
         ${spot.comment?`<div class="spot-comment">「${spot.comment.substring(0,40)}…」</div>`:''}
+        ${(()=>{ const open=isOpenNow(spot); return open===true?`<span class="open-now-tag">営業中</span>`:open===false?`<span class="closed-now-tag">営業時間外</span>`:''; })()}
         <div class="spot-tag" style="background:${user.color};">${lbl} ${user.name}</div>
       </div>
-      ${canDel?`<button class="spot-del" onclick="event.stopPropagation();deleteSpot('${spot.id}')">✕</button>`:''}
+      ${canDel?`<div class="spot-card-actions">
+        <button class="spot-edit" onclick="event.stopPropagation();editSpot('${spot.id}')">✏️</button>
+        <button class="spot-del" onclick="event.stopPropagation();deleteSpot('${spot.id}')">✕</button>
+      </div>`:''}
     </div>`;
 }
 
@@ -2211,7 +2914,7 @@ function initAutocomplete() {
   autocomplete.bindTo('bounds', map);
   autocomplete.addListener('place_changed', () => {
     const place = autocomplete.getPlace();
-    if (!place.geometry?.location) { alert('お店が見つかりませんでした。'); return; }
+    if (!place.geometry?.location) { toast('お店が見つかりませんでした。'); return; }
     openModalWithPlace(place);
   });
 }
@@ -2223,7 +2926,7 @@ function showMapAddPopup(place) {
   infoWindow.setContent(`<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(guessGenre(place.types||[], place.name||''))}</div>
     <div class="gm-popup-title">${place.name}</div>
-    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addPendingPlaceFromMap()">＋追加</button>
+    <button class="btn-submit" style="margin-top:6px;width:100%;" onclick="addPendingPlaceFromMap()">＋ お店を登録</button>
   </div>`);
   infoWindow.setPosition(place.geometry.location);
   infoWindow.open(map);
@@ -2249,8 +2952,7 @@ function openModalWithPlace(place) {
   onGenreChange(); updateStarUI(0);
   document.getElementById('selectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
-    <div class="pn">${pendingName}</div>
-    <div class="pa">${pendingAddr}</div>`;
+    <div class="pn">${pendingName}</div>`;
   document.getElementById('step1').style.display = 'none';
   document.getElementById('step2').style.display = 'block';
   document.getElementById('btnSubmit').disabled = false;
@@ -2278,17 +2980,102 @@ function updateStarUI(v) {
   document.querySelectorAll('#starInput .si').forEach(s=>s.classList.toggle('filled', parseInt(s.dataset.v)<=v));
   document.getElementById('ratingLabel').textContent = v>0 ? RATING_WORDS[v] : 'タップして評価';
 }
+let editingSpotId = null;
+// ── 詳細フィールド（営業時間・タグなど。すべて任意項目） ──
+function toggleExtraFields() {
+  const sec = document.getElementById('extraFieldsSection');
+  sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+}
+function toggleChipEl(el) { el.classList.toggle('active'); }
+function getActiveChips(containerId) {
+  return Array.from(document.querySelectorAll('#'+containerId+' .weekday-chip.active, #'+containerId+' .feature-chip.active')).map(el => el.dataset.day || el.dataset.tag);
+}
+function setActiveChips(containerId, values) {
+  document.querySelectorAll('#'+containerId+' .weekday-chip, #'+containerId+' .feature-chip').forEach(el => {
+    const v = el.dataset.day || el.dataset.tag;
+    el.classList.toggle('active', (values||[]).includes(v));
+  });
+}
+function resetExtraFields() {
+  document.getElementById('inputHoursOpen').value = '';
+  document.getElementById('inputHoursClose').value = '';
+  setActiveChips('closedDaysPicker', []);
+  setActiveChips('featureChipPicker', []);
+  setActiveChips('allergyChipPicker', []);
+  document.getElementById('inputRevisitNote').value = '';
+  document.getElementById('inputCompanions').value = '';
+  document.getElementById('inputDishes').value = '';
+  document.getElementById('inputReservationUrl').value = '';
+  document.getElementById('extraFieldsSection').style.display = 'none';
+}
+function fillExtraFields(spot) {
+  document.getElementById('inputHoursOpen').value = (spot.hours && spot.hours.open) || '';
+  document.getElementById('inputHoursClose').value = (spot.hours && spot.hours.close) || '';
+  setActiveChips('closedDaysPicker', spot.hours && spot.hours.closedDays);
+  setActiveChips('featureChipPicker', spot.features);
+  setActiveChips('allergyChipPicker', spot.allergies);
+  document.getElementById('inputRevisitNote').value = spot.revisitNote || '';
+  document.getElementById('inputCompanions').value = spot.companions || '';
+  document.getElementById('inputDishes').value = spot.dishes || '';
+  document.getElementById('inputReservationUrl').value = spot.reservationUrl || '';
+  const hasAny = (spot.hours && (spot.hours.open || spot.hours.close || (spot.hours.closedDays||[]).length)) ||
+    (spot.features && spot.features.length) || (spot.allergies && spot.allergies.length) ||
+    spot.revisitNote || spot.companions || spot.dishes || spot.reservationUrl;
+  document.getElementById('extraFieldsSection').style.display = hasAny ? 'block' : 'none';
+}
+function collectExtraFieldsIntoSpot(spot) {
+  const open = document.getElementById('inputHoursOpen').value;
+  const close = document.getElementById('inputHoursClose').value;
+  const closedDays = getActiveChips('closedDaysPicker');
+  spot.hours = (open || close || closedDays.length) ? { open, close, closedDays } : null;
+  spot.features = getActiveChips('featureChipPicker');
+  spot.allergies = getActiveChips('allergyChipPicker');
+  spot.revisitNote = document.getElementById('inputRevisitNote').value || '';
+  spot.companions = document.getElementById('inputCompanions').value.trim();
+  spot.dishes = document.getElementById('inputDishes').value.trim();
+  spot.reservationUrl = document.getElementById('inputReservationUrl').value.trim();
+}
+
 function startAddSpot() {
+  editingSpotId = null;
   pendingLat=null; pendingLng=null; pendingName=null; pendingAddr=null; pendingArea=null; currentRating=0;
   document.getElementById('inputSearch').value='';
   document.getElementById('inputComment').value='';
   document.getElementById('inputGenre').selectedIndex=0;
   document.getElementById('btnSubmit').disabled=true;
+  document.getElementById('btnSubmit').textContent='保存する';
+  document.getElementById('addSpotModalSubtitle').textContent='登録すると自動でタイムラインにも投稿されます';
   document.getElementById('step1').style.display='block';
   document.getElementById('step2').style.display='none';
   document.getElementById('modalOverlay').classList.add('open');
+  resetExtraFields();
   onGenreChange(); updateStarUI(0);
   setTimeout(()=>document.getElementById('inputSearch').focus(), 100);
+}
+// 自分のスポットを編集する（add-spotモーダルを編集モードで再利用）
+function editSpot(id) {
+  const spot = mySpots.find(s=>s.id===id);
+  if (!spot) return;
+  editingSpotId = id;
+  pendingLat = spot.lat; pendingLng = spot.lng; pendingName = spot.name;
+  pendingAddr = spot.addr || ''; pendingArea = spot.area || '';
+  currentRating = spot.rating || 0;
+  document.getElementById('inputComment').value = spot.comment || '';
+  const sel = document.getElementById('inputGenre');
+  const idx = Array.from(sel.options).findIndex(o=>o.value===spot.genre);
+  sel.selectedIndex = idx >= 0 ? idx : 0;
+  onGenreChange();
+  updateStarUI(currentRating);
+  document.getElementById('selectedPlaceCard').innerHTML = `
+    <div class="pc">✏️ スポットを編集中</div>
+    <div class="pn">${spot.name}</div>`;
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('btnSubmit').disabled = false;
+  document.getElementById('btnSubmit').textContent = '更新する';
+  document.getElementById('addSpotModalSubtitle').textContent = 'お店の情報を編集します';
+  document.getElementById('modalOverlay').classList.add('open');
+  fillExtraFields(spot);
 }
 function resetSearch() {
   document.getElementById('step1').style.display='block';
@@ -2300,14 +3087,33 @@ function resetSearch() {
 }
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 async function submitSpot() {
-  if (!pendingLat||!pendingName) { alert('お店を選択してください'); return; }
+  if (!pendingLat||!pendingName) { toast('お店を選択してください'); return; }
   const genre = document.getElementById('inputGenre').value;
+  if (editingSpotId) {
+    const spot = mySpots.find(s=>s.id===editingSpotId);
+    if (!spot) { editingSpotId=null; closeModal(); return; }
+    spot.name = pendingName; spot.genre = genre;
+    spot.comment = document.getElementById('inputComment').value.trim();
+    spot.area = pendingArea||''; spot.addr = pendingAddr||'';
+    spot.lat = pendingLat; spot.lng = pendingLng; spot.rating = currentRating||null;
+    collectExtraFieldsIntoSpot(spot);
+    await updateSpotInFirestore(spot);
+    editingSpotId = null;
+    document.getElementById('btnSubmit').textContent = '保存する';
+    closeModal();
+    renderMarkers(); renderSidebar();
+    if (openProfileId === '0') renderProfilePanel('0');
+    if (highlightedSpotId === spot.id) focusSpot(spot.id);
+    toast('スポットを更新しました');
+    return;
+  }
   const spot  = {
     id: genId('s'), userId: '0', name:pendingName, genre,
     comment: document.getElementById('inputComment').value.trim(),
     area: pendingArea||'', addr: pendingAddr||'',
     lat: pendingLat, lng: pendingLng, rating: currentRating||null,
   };
+  collectExtraFieldsIntoSpot(spot);
   mySpots.push(spot);
   await createSpotInFirestore(spot);
   // タイムラインにも投稿として追加
@@ -2326,8 +3132,25 @@ async function submitSpot() {
   infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker);
   switchTab('myspots');
 }
-document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
-document.getElementById('timelineComposerOverlay').addEventListener('click',function(e){if(e.target===this)closeTimelineComposer();});
+// 入力中の内容がある状態で外側タップした場合は確認してから閉じる（誤操作で入力が消えるのを防ぐ）
+function addSpotModalHasInput() {
+  const comment = document.getElementById('inputComment')?.value.trim();
+  return !!(comment || pendingLat || currentRating);
+}
+function postComposerHasInput() {
+  const caption = document.getElementById('postCaption')?.value.trim();
+  return !!(caption || postPendingLat || postCurrentRating);
+}
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if (e.target !== this) return;
+  if (addSpotModalHasInput() && !confirm('入力中の内容が消えます。閉じてもよいですか？')) return;
+  closeModal();
+});
+document.getElementById('timelineComposerOverlay').addEventListener('click',function(e){
+  if (e.target !== this) return;
+  if (postComposerHasInput() && !confirm('入力中の内容が消えます。閉じてもよいですか？')) return;
+  closeTimelineComposer();
+});
 </script>
 
 <!-- ══════════════ FIREBASE（ログイン機能） ══════════════ -->
@@ -2335,7 +3158,7 @@ document.getElementById('timelineComposerOverlay').addEventListener('click',func
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, collection }
+  import { getFirestore, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, collection, onSnapshot }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -2356,7 +3179,7 @@ document.getElementById('timelineComposerOverlay').addEventListener('click',func
   // 他のscript（非module）からも使えるようにwindowに公開
   window.FWY_FB = {
     app: fbApp, auth: fbAuth, db: fbDb,
-    doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, collection,
+    doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, collection, onSnapshot,
   };
 
   window.signInWithGoogle = function () {
