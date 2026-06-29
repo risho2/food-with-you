@@ -168,6 +168,7 @@ header {
 .profile-bio { font-size: 12px; color: #555; margin-top: 4px; line-height: 1.6; }
 .profile-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
 .profile-tag { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #fafafa; border: 1px solid #efefef; color: #555; }
+.profile-allergy-line { font-size: 11px; color: #b97a00; margin-top: 4px; }
 .profile-stats-card { padding: 12px 14px 16px; background: #fff; }
 .stat-block-title { font-size: 12px; font-weight: 700; color: #262626; margin-bottom: 8px; }
 .stat-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
@@ -200,6 +201,37 @@ body.dark .stat-bar-track { background: #333; }
 .profile-panel-body { overflow-y: auto; flex: 1; }
 .profile-panel-body::-webkit-scrollbar { width: 4px; }
 .profile-panel-body::-webkit-scrollbar-thumb { background: #dbdbdb; border-radius: 2px; }
+
+/* ── プロフィールのタブ切替（🏷ジャンル別／❤️いいね順／📋今の表示） ── */
+.profile-tabbar { display: flex; border-bottom: 1px solid #efefef; background: #fff; position: sticky; top: 0; z-index: 5; }
+.profile-tab-btn { flex: 1; padding: 11px 4px; text-align: center; font-size: 12px; font-weight: 700; color: #8e8e8e; background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; }
+.profile-tab-btn.active { color: #262626; border-bottom-color: #262626; }
+body.dark .profile-tabbar { background: #1e1e1e; border-bottom-color: #333; }
+body.dark .profile-tab-btn { color: #888; }
+body.dark .profile-tab-btn.active { color: #f1f1f1; border-bottom-color: #f1f1f1; }
+
+/* ── インスタ風グリッド（ジャンル別／いいね順タブの表示に使用） ── */
+.profile-grid-section { padding: 2px 0 6px; }
+.profile-grid-section-title { font-size: 12px; font-weight: 700; color: #262626; padding: 10px 14px 6px; }
+.profile-ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 0 3px; }
+.profile-ig-cell {
+  position: relative; aspect-ratio: 1/1; background: #fafafa; border: 1px solid #efefef;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; overflow: hidden; text-align: center; padding: 4px;
+}
+.profile-ig-cell:hover { background: #f3f3f3; }
+.profile-ig-cell-emoji { font-size: 26px; }
+.profile-ig-cell-name {
+  font-size: 10px; font-weight: 700; color: #262626; margin-top: 3px; line-height: 1.2;
+  overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.profile-ig-cell-badge {
+  position: absolute; top: 3px; right: 4px; font-size: 10px; font-weight: 700; color: #fff;
+  background: rgba(0,0,0,0.55); padding: 1px 5px; border-radius: 8px;
+}
+body.dark .profile-ig-cell { background: #1e1e1e; border-color: #333; }
+body.dark .profile-ig-cell:hover { background: #262626; }
+body.dark .profile-ig-cell-name, body.dark .profile-grid-section-title { color: #f1f1f1; }
 
 /* ── Map ── */
 .map-wrap { position: relative; flex: 1; overflow: hidden; }
@@ -263,6 +295,23 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .avatar-edit-btn-label { font-size: 12px; font-weight: 700; color: #dc2743; cursor: pointer; }
 .avatar-edit-input { display: none; }
 
+/* ── 写真の位置・ズーム調整（インスタ風クロップ） ── */
+.crop-viewport {
+  position: relative; width: 280px; height: 280px; max-width: 100%;
+  margin: 0 auto; overflow: hidden; border-radius: 8px; background: #000; touch-action: none;
+}
+.crop-viewport img {
+  position: absolute; left: 0; top: 0; transform-origin: top left;
+  user-select: none; -webkit-user-drag: none; cursor: grab;
+}
+.crop-viewport img:active { cursor: grabbing; }
+.crop-circle-mask {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+  border-radius: 50%; margin: 6px;
+}
+body.dark .crop-viewport { background: #111; }
+
 /* ── InfoWindow ── */
 .gm-popup { font-family: -apple-system, 'Hiragino Sans', sans-serif; width: 220px; }
 .gm-popup-icon { font-size: 26px; margin-bottom: 5px; }
@@ -316,6 +365,8 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .search-run-btn:active { background: #0077c8; }
 .account-search-box { display: flex; gap: 8px; }
 .account-search-box .search-run-btn { width: auto; padding: 10px 18px; flex-shrink: 0; }
+.result-add-btn { width: auto; padding: 6px 12px; border: none; border-radius: 8px; background: #0095f6; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.result-add-btn:active { background: #0077c8; }
 .search-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #efefef; flex-shrink: 0; }
 .sr-count { font-size: 12px; color: #8e8e8e; font-weight: 600; flex: 1; }
 .tb-btn { padding: 5px 12px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; color: #262626; white-space: nowrap; }
@@ -536,7 +587,7 @@ body.dark .sidebar-tabs, body.dark .s-tab.active { border-color: #333; color: #e
 body.dark .s-tab { color: #999; }
 body.dark .modal-subtitle, body.dark .spot-meta, body.dark .gm-popup-genre,
 body.dark .gm-popup-hours, body.dark .gm-popup-extra, body.dark .admin-row-email,
-body.dark .feature-chip-sm, body.dark .post-companions { color: #aaa; }
+body.dark .feature-chip-sm, body.dark .post-companions, body.dark .profile-allergy-line { color: #d9a23b; }
 body.dark .stories-row, body.dark .sidebar-tabs, body.dark .friend-card,
 body.dark .result-card, body.dark .acc-card, body.dark .account-search-box,
 body.dark .post-card { border-color: #2e2e2e; }
@@ -807,24 +858,6 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         </div>
         <div id="extraFieldsSection" style="display:none;">
           <div class="form-row">
-            <label class="form-label">営業時間（任意）</label>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <input type="time" class="form-input" id="inputHoursOpen" style="flex:1;"/>
-              <span style="color:#999;">〜</span>
-              <input type="time" class="form-input" id="inputHoursClose" style="flex:1;"/>
-            </div>
-            <div class="weekday-picker" id="closedDaysPicker">
-              <span class="weekday-chip" data-day="月" onclick="toggleChipEl(this)">月</span>
-              <span class="weekday-chip" data-day="火" onclick="toggleChipEl(this)">火</span>
-              <span class="weekday-chip" data-day="水" onclick="toggleChipEl(this)">水</span>
-              <span class="weekday-chip" data-day="木" onclick="toggleChipEl(this)">木</span>
-              <span class="weekday-chip" data-day="金" onclick="toggleChipEl(this)">金</span>
-              <span class="weekday-chip" data-day="土" onclick="toggleChipEl(this)">土</span>
-              <span class="weekday-chip" data-day="日" onclick="toggleChipEl(this)">日</span>
-            </div>
-            <div class="search-hint">定休日をタップして選択（複数選択可）</div>
-          </div>
-          <div class="form-row">
             <label class="form-label">こだわりタグ（任意・複数選択可）</label>
             <div class="feature-chip-picker" id="featureChipPicker">
               <span class="feature-chip" data-tag="🅿️ 駐車場あり" onclick="toggleChipEl(this)">🅿️ 駐車場あり</span>
@@ -850,19 +883,6 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
               <option value="また行ってもいいかな">また行ってもいいかな</option>
               <option value="もう行かないかな">もう行かないかな</option>
             </select>
-          </div>
-          <div class="form-row">
-            <label class="form-label">アレルギー表示（任意・複数選択可）</label>
-            <div class="feature-chip-picker" id="allergyChipPicker">
-              <span class="feature-chip" data-tag="卵" onclick="toggleChipEl(this)">卵</span>
-              <span class="feature-chip" data-tag="乳" onclick="toggleChipEl(this)">乳</span>
-              <span class="feature-chip" data-tag="小麦" onclick="toggleChipEl(this)">小麦</span>
-              <span class="feature-chip" data-tag="えび" onclick="toggleChipEl(this)">えび</span>
-              <span class="feature-chip" data-tag="かに" onclick="toggleChipEl(this)">かに</span>
-              <span class="feature-chip" data-tag="そば" onclick="toggleChipEl(this)">そば</span>
-              <span class="feature-chip" data-tag="落花生" onclick="toggleChipEl(this)">落花生</span>
-              <span class="feature-chip" data-tag="くるみ" onclick="toggleChipEl(this)">くるみ</span>
-            </div>
           </div>
           <div class="form-row">
             <label class="form-label">誰と行った？（任意）</label>
@@ -987,10 +1007,27 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
       </div>
       <div class="form-row">
+        <label class="form-label">アレルギー（任意・複数選択可）</label>
+        <div class="feature-chip-picker" id="editAllergyPicker">
+          <span class="feature-chip" data-tag="卵" onclick="toggleChipEl(this)">卵</span>
+          <span class="feature-chip" data-tag="乳" onclick="toggleChipEl(this)">乳</span>
+          <span class="feature-chip" data-tag="小麦" onclick="toggleChipEl(this)">小麦</span>
+          <span class="feature-chip" data-tag="えび" onclick="toggleChipEl(this)">えび</span>
+          <span class="feature-chip" data-tag="かに" onclick="toggleChipEl(this)">かに</span>
+          <span class="feature-chip" data-tag="そば" onclick="toggleChipEl(this)">そば</span>
+          <span class="feature-chip" data-tag="落花生" onclick="toggleChipEl(this)">落花生</span>
+          <span class="feature-chip" data-tag="くるみ" onclick="toggleChipEl(this)">くるみ</span>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">嫌いな食べ物（任意）</label>
+        <input class="form-input" id="editDislikedFoods" placeholder="例：パクチー、納豆"/>
+      </div>
+      <div class="form-row">
         <label class="form-label">今の空き状況（任意）</label>
         <div class="modal-subtitle" id="availabilityStatusPreview" style="margin-bottom:8px;">設定なし</div>
         <button class="btn-cancel" style="width:100%;margin-bottom:8px;" onclick="setQuickAvailability('tonight')">🌙 今夜空いてる</button>
-        <div class="search-hint" style="margin-bottom:4px;">または曜日・時間帯を選んで設定：</div>
+        <div class="search-hint" style="margin-bottom:4px;">または曜日・時間帯を選んで設定（どちらも複数選択可）：</div>
         <div class="weekday-picker" id="availWeekdayPicker">
           <span class="weekday-chip" data-day="月" onclick="selectAvailDay(this)">月</span>
           <span class="weekday-chip" data-day="火" onclick="selectAvailDay(this)">火</span>
@@ -1100,6 +1137,28 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
   </div>
 </div>
 
+<!-- ══════════════ 写真の位置・ズーム調整モーダル（インスタ風） ══════════════ -->
+<div class="modal-overlay" id="photoCropModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📷 写真の位置を調整</div>
+      <button class="modal-close" onclick="cancelPhotoCrop()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-subtitle" style="margin-bottom:10px;">ドラッグして位置を、スライダーで拡大・縮小して、プロフィール写真に使う部分を選んでください。</div>
+      <div class="crop-viewport" id="cropViewport">
+        <img id="cropImg" draggable="false"/>
+        <div class="crop-circle-mask"></div>
+      </div>
+      <input type="range" id="cropZoomRange" min="100" max="300" value="100" step="1" style="width:100%;margin-top:14px;" oninput="onCropZoomChange()"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" style="flex:1;" onclick="cancelPhotoCrop()">キャンセル</button>
+      <button class="btn-submit" style="flex:1;" onclick="confirmPhotoCrop()">この位置で保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // 保存済みのダークモード設定を即時反映（画面の白フラッシュを防ぐため最初に実行）
 if (localStorage.getItem('fwy_dark_mode') === '1') { document.body.classList.add('dark'); }
@@ -1179,17 +1238,142 @@ function resizeImageToDataURL(file, maxSize = 240, quality = 0.85) {
 let editPhotoDataUrl = null;
 let onboardPhotoDataUrl = null;
 
-async function onProfilePhotoSelected(event, which) {
+// 写真の位置・ズーム調整モーダル（インスタ風クロップ）の状態
+let cropWhich = null;          // 'edit' | 'onboard'
+let cropNaturalW = 0, cropNaturalH = 0;
+let cropViewportSize = 280;    // 実際に表示されているビューポートのサイズ（px）
+let cropCoverScale = 1;        // 画像がビューポートをちょうど覆う倍率
+let cropZoom = 1;              // ユーザーがスライダーで指定した追加ズーム（1〜3）
+let cropOffsetX = 0, cropOffsetY = 0;
+let cropDragging = false, cropDragStartX = 0, cropDragStartY = 0, cropStartOffsetX = 0, cropStartOffsetY = 0;
+
+// 写真を選択したら、まずクロップモーダルを開いて位置・ズームを決めてもらう
+function onProfilePhotoSelected(event, which) {
   const file = event.target.files[0];
   if (!file) return;
-  try {
-    const dataUrl = await resizeImageToDataURL(file);
-    const previewId = which === 'edit' ? 'editProfilePhotoPreview' : 'onboardPhotoPreview';
-    document.getElementById(previewId).innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-    if (which === 'edit') editPhotoDataUrl = dataUrl; else onboardPhotoDataUrl = dataUrl;
-  } catch (err) {
+  openPhotoCropModal(file, which).catch(() => {
     toast('画像の読み込みに失敗しました。別の画像でお試しください。');
-  }
+  });
+  event.target.value = '';
+}
+
+function openPhotoCropModal(file, which) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        cropWhich = which;
+        cropNaturalW = img.width;
+        cropNaturalH = img.height;
+        const viewport = document.getElementById('cropViewport');
+        document.getElementById('cropImg').src = e.target.result;
+        document.getElementById('photoCropModalOverlay').classList.add('open');
+        // モーダルが表示されてからサイズを測る（display:none中は0になるため）
+        cropViewportSize = viewport.clientWidth || 280;
+        cropCoverScale = cropViewportSize / Math.min(cropNaturalW, cropNaturalH);
+        cropZoom = 1;
+        document.getElementById('cropZoomRange').value = 100;
+        centerCropImage();
+        updateCropTransform();
+        resolve();
+      };
+      img.onerror = () => reject(new Error('画像の読み込みに失敗しました'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('ファイルの読み込みに失敗しました'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function centerCropImage() {
+  const dw = cropNaturalW * cropCoverScale * cropZoom;
+  const dh = cropNaturalH * cropCoverScale * cropZoom;
+  cropOffsetX = (cropViewportSize - dw) / 2;
+  cropOffsetY = (cropViewportSize - dh) / 2;
+  clampCropOffsets();
+}
+
+// 画像が常にビューポート（円形マスク）を覆うように、ドラッグ・ズーム後の位置を制限する
+function clampCropOffsets() {
+  const dw = cropNaturalW * cropCoverScale * cropZoom;
+  const dh = cropNaturalH * cropCoverScale * cropZoom;
+  cropOffsetX = Math.min(0, Math.max(cropViewportSize - dw, cropOffsetX));
+  cropOffsetY = Math.min(0, Math.max(cropViewportSize - dh, cropOffsetY));
+}
+
+function updateCropTransform() {
+  const dw = cropNaturalW * cropCoverScale * cropZoom;
+  const dh = cropNaturalH * cropCoverScale * cropZoom;
+  const cropImg = document.getElementById('cropImg');
+  cropImg.style.width = dw + 'px';
+  cropImg.style.height = dh + 'px';
+  cropImg.style.left = cropOffsetX + 'px';
+  cropImg.style.top = cropOffsetY + 'px';
+}
+
+// スライダーでズーム変更：ビューポート中心を基準に拡大・縮小する
+function onCropZoomChange() {
+  const newZoom = parseFloat(document.getElementById('cropZoomRange').value) / 100;
+  const dwOld = cropNaturalW * cropCoverScale * cropZoom;
+  const dhOld = cropNaturalH * cropCoverScale * cropZoom;
+  const c = cropViewportSize / 2;
+  const relX = (c - cropOffsetX) / dwOld;
+  const relY = (c - cropOffsetY) / dhOld;
+  cropZoom = newZoom;
+  const dwNew = cropNaturalW * cropCoverScale * cropZoom;
+  const dhNew = cropNaturalH * cropCoverScale * cropZoom;
+  cropOffsetX = c - relX * dwNew;
+  cropOffsetY = c - relY * dhNew;
+  clampCropOffsets();
+  updateCropTransform();
+}
+
+// ドラッグで位置調整（マウス・タッチ共通：Pointer Events）
+(function setupCropDrag() {
+  const img = document.getElementById('cropImg');
+  if (!img) return;
+  img.addEventListener('pointerdown', (e) => {
+    cropDragging = true;
+    cropDragStartX = e.clientX; cropDragStartY = e.clientY;
+    cropStartOffsetX = cropOffsetX; cropStartOffsetY = cropOffsetY;
+    img.setPointerCapture(e.pointerId);
+  });
+  img.addEventListener('pointermove', (e) => {
+    if (!cropDragging) return;
+    cropOffsetX = cropStartOffsetX + (e.clientX - cropDragStartX);
+    cropOffsetY = cropStartOffsetY + (e.clientY - cropDragStartY);
+    clampCropOffsets();
+    updateCropTransform();
+  });
+  const endDrag = () => { cropDragging = false; };
+  img.addEventListener('pointerup', endDrag);
+  img.addEventListener('pointercancel', endDrag);
+})();
+
+// 「この位置で保存」：選んだ部分だけを正方形に切り出して、既存のresizeImageToDataURLと同じ形式（base64 JPEG）にする
+function confirmPhotoCrop() {
+  const outSize = 320;
+  const canvas = document.createElement('canvas');
+  canvas.width = outSize; canvas.height = outSize;
+  const ctx = canvas.getContext('2d');
+  const effScale = cropCoverScale * cropZoom;
+  const sSize = cropViewportSize / effScale;
+  const sx = -cropOffsetX / effScale;
+  const sy = -cropOffsetY / effScale;
+  const cropImg = document.getElementById('cropImg');
+  ctx.drawImage(cropImg, sx, sy, sSize, sSize, 0, 0, outSize, outSize);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  const previewId = cropWhich === 'edit' ? 'editProfilePhotoPreview' : 'onboardPhotoPreview';
+  document.getElementById(previewId).innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  if (cropWhich === 'edit') editPhotoDataUrl = dataUrl; else onboardPhotoDataUrl = dataUrl;
+  document.getElementById('photoCropModalOverlay').classList.remove('open');
+  cropWhich = null;
+}
+
+function cancelPhotoCrop() {
+  document.getElementById('photoCropModalOverlay').classList.remove('open');
+  cropWhich = null;
 }
 
 const MY_USER = {
@@ -1197,6 +1381,7 @@ const MY_USER = {
   bio: '東京グルメを開拓中。おいしいお店を地図に残しています。',
   tags: ['和食','カフェ','ラーメン'],
   uid: null, email: null, photoURL: null,
+  allergies: [], dislikedFoods: '',
   followingUids: [], mapVisibleUids: [], availability: null,
 };
 // 友達は実際にGoogleログインしたユーザー。Firestoreから読み込む（loadUsersFromFirestore）
@@ -1266,6 +1451,7 @@ let map, infoWindow, placesService, autocomplete;
 let gmMarkers = {}, highlightedSpotId = null, activeTab = 'friends';
 let openProfileId = null;   // プロフィールパネルに表示中のユーザーID
 let mapFilterId   = null;   // 地図フィルタ中のユーザーID
+let profileActiveTab = 'current';  // プロフィールページのタブ：'genre'(ジャンル別) / 'likes'(いいね順) / 'current'(今の表示)
 
 let mySpots = [];
 
@@ -1361,6 +1547,8 @@ async function upsertMyUserDoc() {
   MY_USER.bio   = data.bio   || MY_USER.bio;
   MY_USER.tags  = data.tags  || MY_USER.tags;
   MY_USER.photoURL = data.photoURL || MY_USER.photoURL;
+  MY_USER.allergies = data.allergies || [];
+  MY_USER.dislikedFoods = data.dislikedFoods || '';
   MY_USER.followingUids  = data.followingUids  || [];
   MY_USER.mapVisibleUids = data.mapVisibleUids || [];
   MY_USER.availability   = data.availability   || null;
@@ -1374,6 +1562,7 @@ async function createMyUserDoc() {
   await setDoc(doc(db, 'users', MY_USER.uid), {
     name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags,
     email: MY_USER.email, photoURL: MY_USER.photoURL,
+    allergies: MY_USER.allergies || [], dislikedFoods: MY_USER.dislikedFoods || '',
     followingUids: [], mapVisibleUids: [],
     createdAt: new Date().toISOString(),
   });
@@ -1384,6 +1573,7 @@ async function persistMyProfile() {
   const { db, doc, updateDoc } = window.FWY_FB;
   await updateDoc(doc(db, 'users', MY_USER.uid), {
     name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags, photoURL: MY_USER.photoURL,
+    allergies: MY_USER.allergies || [], dislikedFoods: MY_USER.dislikedFoods || '',
   });
 }
 
@@ -1397,7 +1587,6 @@ async function persistFollowState() {
 // ═══════════════════════════════════════
 // 空き状況ステータス（「今夜空いてる」など軽い予定共有）
 // ═══════════════════════════════════════
-let pendingAvailDay = null, pendingAvailSlot = null;
 const WD_JS_INDEX = { '月':1, '火':2, '水':3, '木':4, '金':5, '土':6, '日':0 };
 function isAvailabilityActive(user) {
   return !!(user && user.availability && user.availability.expiresAt && new Date(user.availability.expiresAt) > new Date());
@@ -1414,20 +1603,16 @@ function nextDateForWeekday(dayChar) {
   d.setDate(now.getDate() + diff);
   return d;
 }
-function selectAvailDay(el) {
-  document.querySelectorAll('#availWeekdayPicker .weekday-chip').forEach(c=>c.classList.toggle('active', c===el));
-  pendingAvailDay = el.dataset.day;
-}
-function selectAvailSlot(el) {
-  document.querySelectorAll('#availSlotPicker .feature-chip').forEach(c=>c.classList.toggle('active', c===el));
-  pendingAvailSlot = el.dataset.slot;
-}
+// 曜日・時間帯はどちらも複数選択できる（タップでON/OFFを切り替え）
+function selectAvailDay(el) { el.classList.toggle('active'); }
+function selectAvailSlot(el) { el.classList.toggle('active'); }
+function getActiveAvailDays()  { return Array.from(document.querySelectorAll('#availWeekdayPicker .weekday-chip.active')).map(el=>el.dataset.day); }
+function getActiveAvailSlots() { return Array.from(document.querySelectorAll('#availSlotPicker .feature-chip.active')).map(el=>el.dataset.slot); }
 function updateAvailabilityPreviewUI() {
   const el = document.getElementById('availabilityStatusPreview');
   el.textContent = isAvailabilityActive(MY_USER) ? `現在の設定：${MY_USER.availability.text}` : '設定なし';
   document.querySelectorAll('#availWeekdayPicker .weekday-chip').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('#availSlotPicker .feature-chip').forEach(c=>c.classList.remove('active'));
-  pendingAvailDay = null; pendingAvailSlot = null;
 }
 async function persistAvailability() {
   const { db, doc, updateDoc } = window.FWY_FB;
@@ -1443,9 +1628,13 @@ async function setQuickAvailability(kind) {
   toast('空き状況を設定しました');
 }
 async function applyWeekdayAvailability() {
-  if (!pendingAvailDay || !pendingAvailSlot) { toast('曜日と時間帯を選んでください'); return; }
-  const d = nextDateForWeekday(pendingAvailDay);
-  MY_USER.availability = { text: `今週${pendingAvailDay} ${pendingAvailSlot}空いてます`, expiresAt: endOfDate(d).toISOString() };
+  const SLOT_ORDER = ['朝','昼','夜'];
+  const days  = getActiveAvailDays().sort((a,b)=>WEEKDAYS.indexOf(a)-WEEKDAYS.indexOf(b));
+  const slots = getActiveAvailSlots().sort((a,b)=>SLOT_ORDER.indexOf(a)-SLOT_ORDER.indexOf(b));
+  if (!days.length || !slots.length) { toast('曜日と時間帯を選んでください（複数選択できます）'); return; }
+  // 選んだ曜日のうち一番先の日付を期限にする（その日が終わるまでバッジを表示し続ける）
+  const farthest = days.map(nextDateForWeekday).sort((a,b)=>b-a)[0];
+  MY_USER.availability = { text: `今週${days.join('・')} ${slots.join('/')}空いてます`, expiresAt: endOfDate(farthest).toISOString() };
   await persistAvailability();
   updateAvailabilityPreviewUI();
   renderProfilePanel('0'); renderSidebar();
@@ -1482,6 +1671,7 @@ function loadUsersFromFirestore() {
           id: docSnap.id, name: data.name || '名無し', label: data.label || (data.name||'？').charAt(0),
           color: pickColorForUid(docSnap.id), photoURL: data.photoURL || null,
           desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
+          allergies: data.allergies || [], dislikedFoods: data.dislikedFoods || '',
           following: MY_USER.followingUids.includes(docSnap.id),
           showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
           followingUids: data.followingUids || [],
@@ -1932,6 +2122,8 @@ function openEditProfileModal() {
   document.getElementById('editProfileName').value = MY_USER.name;
   document.getElementById('editProfileBio').value = MY_USER.bio || '';
   document.getElementById('editProfileTags').value = (MY_USER.tags||[]).join(', ');
+  setActiveChips('editAllergyPicker', MY_USER.allergies);
+  document.getElementById('editDislikedFoods').value = MY_USER.dislikedFoods || '';
   editPhotoDataUrl = null;
   document.getElementById('editProfilePhotoPreview').innerHTML = avatarInner(MY_USER);
   const adminBtn = document.getElementById('adminPanelEntryBtn');
@@ -1983,6 +2175,8 @@ async function saveProfile() {
   MY_USER.label = name.charAt(0);
   MY_USER.bio   = document.getElementById('editProfileBio').value.trim();
   MY_USER.tags  = document.getElementById('editProfileTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  MY_USER.allergies = getActiveChips('editAllergyPicker');
+  MY_USER.dislikedFoods = document.getElementById('editDislikedFoods').value.trim();
   if (editPhotoDataUrl) MY_USER.photoURL = editPhotoDataUrl;
   await persistMyProfile();
   refreshHeaderIdentity();
@@ -2478,12 +2672,32 @@ function updateDistRadiusCircle() {
 }
 // 「検索する」ボタン：絞り込み条件は選んだ時点で既に自動反映されているが、
 // 「いつ検索されたか」が分かりやすいよう、明示的なボタンで再描画＋通知する。
+// お店検索では、入力された駅名・地域名を地図の中心に移動させる（候補を選ばずEnter/ボタンで検索した場合にも対応）。
+let geocoderInstance = null;
 function runManualSearch(kind) {
   if (kind === 'account') {
     renderAccountResults();
-  } else {
-    renderSearchResults();
+    toast('検索しました');
+    return;
   }
+  const text = (document.getElementById('distOriginInput').value || '').trim();
+  if (text && text !== '📍 現在地') {
+    if (!geocoderInstance) geocoderInstance = new google.maps.Geocoder();
+    geocoderInstance.geocode({ address: text, componentRestrictions: { country: 'jp' } }, (results, status) => {
+      if (status === 'OK' && results && results[0]) {
+        const loc = results[0].geometry.location;
+        distOrigin = { lat: loc.lat(), lng: loc.lng(), label: results[0].formatted_address || text };
+        distanceFilterOn = true;
+        document.getElementById('distClearBtn').style.display = 'inline-block';
+        searchMap.panTo({ lat: distOrigin.lat, lng: distOrigin.lng });
+        searchMap.setZoom(15);
+      }
+      renderSearchResults();
+      toast('検索しました');
+    });
+    return;
+  }
+  renderSearchResults();
   toast('検索しました');
 }
 function renderSearchResults() {
@@ -2524,11 +2738,14 @@ function renderSearchResults() {
           ${spot.googleRating?`<div class="result-stars">★${spot.googleRating}（Google評価）</div>`:''}
           ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
           <div class="result-by" style="background:#4285F4;">🌐 Googleマップ（未登録）</div>
+          <button class="result-add-btn" style="margin-top:6px;" onclick="event.stopPropagation();addGooglePlaceAsSpot('${spot.id}')">＋ 投稿・登録する</button>
         </div>
       </div>`;
     }
     const user = getUserById(spot.userId);
     const lbl = user.label;
+    const registerRowBtn = spot.userId !== '0'
+      ? `<button class="result-add-btn" style="margin-top:6px;" onclick="event.stopPropagation();registerExistingSpot('${spot.id}')">＋ 自分も登録・投稿する</button>` : '';
     return `<div class="result-card" onclick="focusSearchResult('${spot.id}')">
       <div class="result-icon">${iconOf(spot.genre)}</div>
       <div class="result-info">
@@ -2538,6 +2755,7 @@ function renderSearchResults() {
         ${spot.rating?`<div class="result-stars">${starsHTML(spot.rating)}</div>`:''}
         ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
         <div class="result-by" style="background:${user.color};cursor:pointer;" onclick="event.stopPropagation();openProfile('${user.id}');goPage('map');">${lbl} ${user.name}</div>
+        ${registerRowBtn}
       </div>
     </div>`;
   }).join('');
@@ -2561,6 +2779,32 @@ function addGooglePlaceAsSpot(id) {
     address_components: null,
     types: place.types || [],
   });
+}
+// 検索結果で見つけた「他の人がすでに登録した店」を、自分の行った店／気になる店として登録する
+// （Googleのお店の「＋お店を登録」と同じ仕組みで、別の自分のスポットとして新規作成される。投稿するかは行った／気になるトグルで決まる）
+function registerExistingSpot(spotId) {
+  const spot = getAllSpots().find(s=>s.id===spotId);
+  if (!spot) return;
+  closeProfile();
+  editingSpotId = null;
+  pendingLat = spot.lat; pendingLng = spot.lng; pendingName = spot.name;
+  pendingAddr = ''; pendingArea = spot.area || '';
+  currentRating = 0; currentVisitStatus = 'visited';
+  document.getElementById('inputComment').value = '';
+  const sel = document.getElementById('inputGenre');
+  const idx = Array.from(sel.options).findIndex(o=>o.value===spot.genre);
+  sel.selectedIndex = idx >= 0 ? idx : 0;
+  resetExtraFields();
+  onGenreChange(); updateStarUI(0); updateVisitStatusUI();
+  const owner = getUserById(spot.userId);
+  document.getElementById('selectedPlaceCard').innerHTML = `
+    <div class="pc">📍 ${owner ? owner.name+'さんが登録した店' : '登録済みのお店'}</div>
+    <div class="pn">${pendingName}</div>`;
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('btnSubmit').disabled = false;
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('inputComment').focus(), 150);
 }
 function focusSearchResult(spotId) {
   const spot = getAllSpots().find(s=>s.id===spotId) || googlePlaceResults.find(s=>s.id===spotId);
@@ -2919,6 +3163,8 @@ function extraInfoHTML(spot) {
   return html;
 }
 function infoHTML(spot, user) {
+  const registerBtn = spot.userId !== '0'
+    ? `<button class="btn-submit" style="margin-top:6px;width:100%;" onclick="registerExistingSpot('${spot.id}')">＋ 自分も登録・投稿する</button>` : '';
   return `<div class="gm-popup">
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
@@ -2932,6 +3178,7 @@ function infoHTML(spot, user) {
       <div class="gm-popup-by">by</div>
       <div class="gm-popup-author" style="color:${user.color};cursor:pointer;" onclick="openProfile('${user.id}');goPage('map');">${user.name}</div>
     </div>
+    ${registerBtn}
     <a class="gm-popup-maplink" href="${googleMapsLinkFor(spot)}" target="_blank" rel="noopener">🗺 Googleマップで開く</a>
   </div>`;
 }
@@ -2979,6 +3226,7 @@ function renderStories() {
 // ═══════════════════════════════════════
 function openProfile(userId) {
   openProfileId = userId;
+  profileActiveTab = 'current';   // プロフィールを開き直すたびに「今の表示」タブから始める
   // 地図をそのユーザーにフィルタ
   mapFilterId = userId;
   renderMarkers();
@@ -3023,6 +3271,10 @@ function renderProfilePanel(userId) {
     </button>` : '';
 
   const tagsHTML = (user.tags||[]).map(t=>`<span class="profile-tag">${t}</span>`).join('');
+  const allergyHTML = (user.allergies||[]).length
+    ? `<div class="profile-allergy-line">⚠️ アレルギー: ${user.allergies.join('・')}</div>` : '';
+  const dislikedHTML = user.dislikedFoods
+    ? `<div class="profile-allergy-line">🙅 苦手な食べ物: ${user.dislikedFoods}</div>` : '';
 
   const editBtn = isMe ? `
     <button class="profile-edit-btn" onclick="openEditProfileModal()">✏️ プロフィールを編集</button>` : '';
@@ -3051,10 +3303,11 @@ function renderProfilePanel(userId) {
     ${availabilityBadgeHTML(user)}
     <div class="profile-bio">${user.bio||''}</div>
     <div class="profile-tags">${tagsHTML}</div>
+    ${allergyHTML}${dislikedHTML}
     <div class="profile-actions">${followBtn}${mapBtn}${editBtn}</div>
   `;
 
-  // Spot list
+  // Spot list（タブ切替：🏷ジャンル別／❤️いいね順／📋今の表示）
   const body = document.getElementById('profilePanelBody');
   const posts = getAllPosts().filter(p => p.userId === userId).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   const postsHTML = posts.length ? `
@@ -3062,21 +3315,86 @@ function renderProfilePanel(userId) {
     ${posts.map(p => profilePostCardHTML(p)).join('')}
   ` : '';
 
+  const tabBarHTML = `
+    <div class="profile-tabbar">
+      <button class="profile-tab-btn ${profileActiveTab==='genre'?'active':''}" onclick="setProfileTab('genre')">🏷 ジャンル別</button>
+      <button class="profile-tab-btn ${profileActiveTab==='likes'?'active':''}" onclick="setProfileTab('likes')">❤️ いいね順</button>
+      <button class="profile-tab-btn ${profileActiveTab==='current'?'active':''}" onclick="setProfileTab('current')">📋 今の表示</button>
+    </div>
+  `;
+
   if (spots.length === 0 && posts.length === 0) {
-    body.innerHTML = `<div class="empty-state"><div class="big">📍</div><p>まだスポットがありません</p></div>`;
+    body.innerHTML = tabBarHTML + `<div class="empty-state"><div class="big">📍</div><p>まだスポットがありません</p></div>`;
     return;
   }
-  const visitedSpots = spots.filter(s=>s.visitStatus!=='want');
-  const wantSpots     = spots.filter(s=>s.visitStatus==='want');
-  const visitedHTML = visitedSpots.length ? `
-    <div class="section-head"><div class="section-label">✅ ${user.name}の行った店 (${visitedSpots.length})</div></div>
-    ${visitedSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
-  ` : '';
-  const wantHTML = wantSpots.length ? `
-    <div class="section-head"><div class="section-label">📌 ${user.name}の気になる店 (${wantSpots.length})</div></div>
-    ${wantSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
-  ` : '';
-  body.innerHTML = profileStatsHTML(user, spots) + postsHTML + visitedHTML + wantHTML;
+
+  let contentHTML;
+  if (profileActiveTab === 'genre') {
+    contentHTML = profileGenreGridHTML(spots);
+  } else if (profileActiveTab === 'likes') {
+    contentHTML = profileLikesGridHTML(posts);
+  } else {
+    // 今の表示：これまでと同じ内容（統計＋投稿＋行った店＋気になる店）
+    const visitedSpots = spots.filter(s=>s.visitStatus!=='want');
+    const wantSpots     = spots.filter(s=>s.visitStatus==='want');
+    const visitedHTML = visitedSpots.length ? `
+      <div class="section-head"><div class="section-label">✅ ${user.name}の行った店 (${visitedSpots.length})</div></div>
+      ${visitedSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+    ` : '';
+    const wantHTML = wantSpots.length ? `
+      <div class="section-head"><div class="section-label">📌 ${user.name}の気になる店 (${wantSpots.length})</div></div>
+      ${wantSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+    ` : '';
+    contentHTML = profileStatsHTML(user, spots) + postsHTML + visitedHTML + wantHTML;
+  }
+  body.innerHTML = tabBarHTML + contentHTML;
+}
+
+// タブ切替ボタンが押されたとき：タブを覚えてプロフィールパネルを再描画
+function setProfileTab(tab) {
+  profileActiveTab = tab;
+  if (openProfileId !== null) renderProfilePanel(openProfileId);
+}
+
+// 🏷ジャンル別タブ：登録したスポットをジャンルごとにグループ化し、インスタ風のグリッドで表示
+function profileGenreGridHTML(spots) {
+  if (!spots.length) return `<div class="empty-state"><div class="big">🏷</div><p>まだ登録したお店がありません</p></div>`;
+  const byGenre = {};
+  spots.forEach(s => { const g = s.genre || 'その他'; (byGenre[g] = byGenre[g] || []).push(s); });
+  const genres = Object.keys(byGenre).sort((a,b) => byGenre[b].length - byGenre[a].length);
+  return genres.map(g => `
+    <div class="profile-grid-section">
+      <div class="profile-grid-section-title">${iconOf(g)} ${g}（${byGenre[g].length}）</div>
+      <div class="profile-ig-grid">
+        ${byGenre[g].map(s => `
+          <div class="profile-ig-cell" onclick="goPage('map'); setTimeout(()=>focusSpot('${s.id}'),100);">
+            ${s.visitStatus === 'want' ? `<span class="profile-ig-cell-badge">📌</span>` : (s.rating ? `<span class="profile-ig-cell-badge">★${s.rating}</span>` : '')}
+            <div class="profile-ig-cell-emoji">${iconOf(s.genre)}</div>
+            <div class="profile-ig-cell-name">${s.name}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ❤️いいね順タブ：投稿をいいね数の多い順に並べ、インスタ風のグリッドで表示
+function profileLikesGridHTML(posts) {
+  if (!posts.length) return `<div class="empty-state"><div class="big">❤️</div><p>まだ投稿がありません</p></div>`;
+  const sorted = [...posts].sort((a,b) => (b.likes||[]).length - (a.likes||[]).length || new Date(b.createdAt) - new Date(a.createdAt));
+  return `
+    <div class="profile-grid-section">
+      <div class="profile-ig-grid">
+        ${sorted.map(p => `
+          <div class="profile-ig-cell" onclick="goPage('timeline'); setTimeout(()=>focusFromTimeline('${p.spotId}'),100);">
+            <span class="profile-ig-cell-badge">❤️ ${(p.likes||[]).length}</span>
+            <div class="profile-ig-cell-emoji">${iconOf(p.genre)}</div>
+            <div class="profile-ig-cell-name">${p.restaurantName}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
 }
 
 // 登録した店のジャンル・エリアのかたよりを見せて「もっと登録したくなる」モチベ作りに繋げる統計セクション
@@ -3409,11 +3727,7 @@ function setActiveChips(containerId, values) {
   });
 }
 function resetExtraFields() {
-  document.getElementById('inputHoursOpen').value = '';
-  document.getElementById('inputHoursClose').value = '';
-  setActiveChips('closedDaysPicker', []);
   setActiveChips('featureChipPicker', []);
-  setActiveChips('allergyChipPicker', []);
   document.getElementById('inputRevisitNote').value = '';
   document.getElementById('inputCompanions').value = '';
   document.getElementById('inputDishes').value = '';
@@ -3421,31 +3735,24 @@ function resetExtraFields() {
   document.getElementById('extraFieldsSection').style.display = 'none';
 }
 function fillExtraFields(spot) {
-  document.getElementById('inputHoursOpen').value = (spot.hours && spot.hours.open) || '';
-  document.getElementById('inputHoursClose').value = (spot.hours && spot.hours.close) || '';
-  setActiveChips('closedDaysPicker', spot.hours && spot.hours.closedDays);
   setActiveChips('featureChipPicker', spot.features);
-  setActiveChips('allergyChipPicker', spot.allergies);
   document.getElementById('inputRevisitNote').value = spot.revisitNote || '';
   document.getElementById('inputCompanions').value = spot.companions || '';
   document.getElementById('inputDishes').value = spot.dishes || '';
   document.getElementById('inputReservationUrl').value = spot.reservationUrl || '';
+  // 営業時間・定休日・アレルギー表記は廃止済みだが、古いデータが残っている場合は表示だけは保持する
   const hasAny = (spot.hours && (spot.hours.open || spot.hours.close || (spot.hours.closedDays||[]).length)) ||
     (spot.features && spot.features.length) || (spot.allergies && spot.allergies.length) ||
     spot.revisitNote || spot.companions || spot.dishes || spot.reservationUrl;
   document.getElementById('extraFieldsSection').style.display = hasAny ? 'block' : 'none';
 }
 function collectExtraFieldsIntoSpot(spot) {
-  const open = document.getElementById('inputHoursOpen').value;
-  const close = document.getElementById('inputHoursClose').value;
-  const closedDays = getActiveChips('closedDaysPicker');
-  spot.hours = (open || close || closedDays.length) ? { open, close, closedDays } : null;
   spot.features = getActiveChips('featureChipPicker');
-  spot.allergies = getActiveChips('allergyChipPicker');
   spot.revisitNote = document.getElementById('inputRevisitNote').value || '';
   spot.companions = document.getElementById('inputCompanions').value.trim();
   spot.dishes = document.getElementById('inputDishes').value.trim();
   spot.reservationUrl = document.getElementById('inputReservationUrl').value.trim();
+  // 営業時間・定休日・アレルギー表記の入力欄は廃止。既存データがあれば保持し、新規入力はしない。
 }
 
 function startAddSpot() {
