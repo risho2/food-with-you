@@ -132,6 +132,10 @@ header {
 .spot-del, .spot-edit { background: none; border: none; color: #dbdbdb; font-size: 14px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
 .spot-del:hover { color: #dc2743; }
 .spot-edit:hover { color: #0095f6; }
+.want-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; margin-top: 4px; margin-right: 4px; color: #fff; background: #ff9800; }
+.visit-mark-btn { background: none; border: 1px solid #ff9800; color: #ff9800; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; cursor: pointer; margin-top: 5px; }
+.visit-mark-btn:hover { background: #ff9800; color: #fff; }
+.avail-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 9px; font-size: 10.5px; font-weight: 700; margin-top: 4px; color: #2e7d32; background: #e8f5e9; }
 .empty-state { padding: 32px 14px; text-align: center; }
 .empty-state .big { font-size: 36px; margin-bottom: 10px; }
 .empty-state p { font-size: 12px; line-height: 1.8; color: #8e8e8e; }
@@ -164,6 +168,18 @@ header {
 .profile-bio { font-size: 12px; color: #555; margin-top: 4px; line-height: 1.6; }
 .profile-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
 .profile-tag { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #fafafa; border: 1px solid #efefef; color: #555; }
+.profile-stats-card { padding: 12px 14px 16px; background: #fff; }
+.stat-block-title { font-size: 12px; font-weight: 700; color: #262626; margin-bottom: 8px; }
+.stat-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.stat-bar-label { font-size: 12px; color: #555; width: 110px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stat-bar-track { flex: 1; height: 8px; border-radius: 5px; background: #efefef; overflow: hidden; }
+.stat-bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg,#dc2743,#fd8d3c); }
+.stat-bar-fill.area { background: linear-gradient(90deg,#0095f6,#4dc8ff); }
+.stat-bar-count { font-size: 12px; font-weight: 700; color: #262626; width: 22px; text-align: right; flex-shrink: 0; }
+body.dark .profile-stats-card { background: #1e1e1e; }
+body.dark .stat-block-title { color: #e8e8e8; }
+body.dark .stat-bar-label, body.dark .stat-bar-count { color: #ccc; }
+body.dark .stat-bar-track { background: #333; }
 .profile-actions { display: flex; gap: 8px; margin-top: 12px; }
 .profile-follow-btn {
   flex: 1; padding: 8px; border-radius: 8px; border: none; cursor: pointer;
@@ -220,6 +236,10 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .star-input .si.filled { color: #ffc107; }
 .star-input .si:hover { transform: scale(1.15); }
 .rating-label { font-size: 12px; color: #8e8e8e; margin-top: 5px; }
+.visit-status-toggle { display: flex; gap: 8px; }
+.vs-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 13px; font-weight: 700; cursor: pointer; color: #555; text-align: center; transition: all 0.15s; }
+.vs-btn.active.visited { border-color: #2e7d32; background: #e8f5e9; color: #2e7d32; }
+.vs-btn.active.want { border-color: #ff9800; background: #fff3e0; color: #ff9800; }
 .selected-place { background: #f0fff4; border: 1.5px solid #2ecc71; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; }
 .selected-place .pc { font-size: 11px; color: #27ae60; font-weight: 700; margin-bottom: 3px; }
 .selected-place .pn { font-size: 14px; font-weight: 700; color: #1a7a43; }
@@ -291,6 +311,11 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .min-label { font-size: 12px; font-weight: 700; min-width: 38px; }
 .loc-btn { padding: 6px 10px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .dist-clear-btn { padding: 5px 10px; border-radius: 8px; border: 1.5px solid #dc2743; background: #fff0f3; color: #dc2743; font-size: 12px; font-weight: 700; cursor: pointer; display: none; }
+.search-run-row { display: flex; justify-content: center; padding-top: 4px; }
+.search-run-btn { width: 100%; padding: 11px 0; border: none; border-radius: 10px; background: #0095f6; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+.search-run-btn:active { background: #0077c8; }
+.account-search-box { display: flex; gap: 8px; }
+.account-search-box .search-run-btn { width: auto; padding: 10px 18px; flex-shrink: 0; }
 .search-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #efefef; flex-shrink: 0; }
 .sr-count { font-size: 12px; color: #8e8e8e; font-weight: 600; flex: 1; }
 .tb-btn { padding: 5px 12px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; color: #262626; white-space: nowrap; }
@@ -351,6 +376,7 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .prr-meta { font-size: 11px; color: #8e8e8e; margin-top: 1px; }
 .prr-stars { color: #ffc107; font-size: 12px; margin-top: 2px; }
 .post-caption { padding: 0 14px 8px; font-size: 14px; line-height: 1.6; color: #262626; }
+.post-companions { padding: 0 14px 8px; font-size: 12px; color: #8e8e8e; }
 .post-caption .ht { color: #0095f6; font-weight: 600; cursor: pointer; }
 .caption-edit-area { width: 100%; box-sizing: border-box; border: 1.5px solid #dbdbdb; border-radius: 8px; padding: 8px 10px; font-size: 14px; font-family: inherit; resize: vertical; outline: none; }
 .caption-edit-area:focus { border-color: #0095f6; }
@@ -373,6 +399,21 @@ select.form-input { background: #fafafa; cursor: pointer; }
 .cm-meta span { font-size: 11px; color: #8e8e8e; }
 .cm-like-btn { background: none; border: none; cursor: pointer; font-size: 11px; color: #8e8e8e; font-weight: 700; display: flex; align-items: center; gap: 3px; }
 .cm-like-btn.on { color: #ed4956; }
+.reaction-wrap { position: relative; display: inline-flex; }
+.reaction-picker-popup { position: absolute; bottom: 100%; left: 0; margin-bottom: 6px; background: #fff; border-radius: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.18); padding: 6px 10px; display: none; gap: 6px; z-index: 60; white-space: nowrap; }
+.reaction-picker-popup.open { display: flex; }
+.reaction-picker-popup span { font-size: 20px; cursor: pointer; line-height: 1; transition: transform .1s; }
+.reaction-picker-popup span:hover { transform: scale(1.25); }
+.reaction-badges { display: flex; gap: 6px; flex-wrap: wrap; padding: 2px 14px 6px; }
+.reaction-badge { background: #f0f0f0; border-radius: 12px; padding: 2px 8px; font-size: 12px; font-weight: 600; display: inline-flex; gap: 4px; align-items: center; cursor: pointer; color: #262626; }
+.reaction-badge.mine { background: #e7f3ff; box-shadow: inset 0 0 0 1px #0095f6; color: #0095f6; }
+.cm-reaction-wrap { position: relative; display: inline-flex; }
+.cm-reaction-btn { background: none; border: none; cursor: pointer; font-size: 12px; color: #8e8e8e; }
+.cm-reaction-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.cm-reaction-badges .reaction-badge { font-size: 11px; padding: 1px 6px; }
+body.dark .reaction-picker-popup { background: #262626; box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+body.dark .reaction-badge { background: #333; color: #ddd; }
+body.dark .reaction-badge.mine { background: #1a3a52; color: #4db5ff; }
 .add-comment-row { display: flex; gap: 8px; align-items: center; border-top: 1px solid #efefef; padding-top: 8px; margin-top: 4px; }
 .ac-av-me { width: 26px; height: 26px; border-radius: 50%; background: #dc2743; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
 .ac-input { flex: 1; border: none; outline: none; font-size: 13px; font-family: inherit; background: transparent; }
@@ -495,7 +536,7 @@ body.dark .sidebar-tabs, body.dark .s-tab.active { border-color: #333; color: #e
 body.dark .s-tab { color: #999; }
 body.dark .modal-subtitle, body.dark .spot-meta, body.dark .gm-popup-genre,
 body.dark .gm-popup-hours, body.dark .gm-popup-extra, body.dark .admin-row-email,
-body.dark .feature-chip-sm { color: #aaa; }
+body.dark .feature-chip-sm, body.dark .post-companions { color: #aaa; }
 body.dark .stories-row, body.dark .sidebar-tabs, body.dark .friend-card,
 body.dark .result-card, body.dark .acc-card, body.dark .account-search-box,
 body.dark .post-card { border-color: #2e2e2e; }
@@ -654,6 +695,9 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
           <button class="dist-clear-btn" id="distClearBtn" onclick="clearDistanceFilter()">✕ 解除</button>
         </div>
       </div>
+      <div class="search-run-row">
+        <button class="search-run-btn" onclick="runManualSearch('shop')">🔍 検索する</button>
+      </div>
     </div>
     <div class="search-toolbar">
       <span class="sr-count" id="searchResultCount">0件のお店</span>
@@ -670,7 +714,8 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
   <!-- Account search -->
   <div class="search-body" id="search-account">
     <div class="account-search-box">
-      <input id="accountSearchInput" placeholder="名前・タグで検索（例：ラーメン、カフェ）" oninput="renderAccountResults()"/>
+      <input id="accountSearchInput" placeholder="名前・タグで検索（例：ラーメン、カフェ）" oninput="renderAccountResults()" onkeydown="if(event.key==='Enter')runManualSearch('account')"/>
+      <button class="search-run-btn" onclick="runManualSearch('account')">🔍 検索する</button>
     </div>
     <div class="account-results" id="accountResults"></div>
   </div>
@@ -721,6 +766,13 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
       <div id="step2" style="display:none;">
         <div class="selected-place" id="selectedPlaceCard"></div>
         <div class="form-row">
+          <label class="form-label">ステータス</label>
+          <div class="visit-status-toggle" id="visitStatusToggle">
+            <div class="vs-btn visited" data-status="visited" onclick="setVisitStatus('visited')">✅ 行ってよかった</div>
+            <div class="vs-btn want" data-status="want" onclick="setVisitStatus('want')">📌 行きたい</div>
+          </div>
+        </div>
+        <div class="form-row" id="genreFormRow">
           <label class="form-label">ジャンル</label>
           <select class="form-input" id="inputGenre" onchange="onGenreChange()">
             <option>居酒屋</option><option>ダイニングバー・バル</option><option>創作料理</option>
@@ -734,7 +786,7 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
             <span class="genre-preview-text" id="genreText">居酒屋</span>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="ratingFormRow">
           <label class="form-label">評価</label>
           <div class="star-input" id="starInput">
             <span class="si" data-v="1" onclick="setRating(1)">★</span>
@@ -745,7 +797,7 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
           </div>
           <div class="rating-label" id="ratingLabel">タップして評価</div>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="commentFormRow">
           <label class="form-label">コメント</label>
           <textarea class="form-input" id="inputComment" placeholder="おすすめポイントを書いてみよう！"></textarea>
         </div>
@@ -762,27 +814,54 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
               <input type="time" class="form-input" id="inputHoursClose" style="flex:1;"/>
             </div>
             <div class="weekday-picker" id="closedDaysPicker">
-              ${WEEKDAYS.map(d=>`<span class="weekday-chip" data-day="${d}" onclick="toggleChipEl(this)">${d}</span>`).join('')}
+              <span class="weekday-chip" data-day="月" onclick="toggleChipEl(this)">月</span>
+              <span class="weekday-chip" data-day="火" onclick="toggleChipEl(this)">火</span>
+              <span class="weekday-chip" data-day="水" onclick="toggleChipEl(this)">水</span>
+              <span class="weekday-chip" data-day="木" onclick="toggleChipEl(this)">木</span>
+              <span class="weekday-chip" data-day="金" onclick="toggleChipEl(this)">金</span>
+              <span class="weekday-chip" data-day="土" onclick="toggleChipEl(this)">土</span>
+              <span class="weekday-chip" data-day="日" onclick="toggleChipEl(this)">日</span>
             </div>
             <div class="search-hint">定休日をタップして選択（複数選択可）</div>
           </div>
           <div class="form-row">
             <label class="form-label">こだわりタグ（任意・複数選択可）</label>
             <div class="feature-chip-picker" id="featureChipPicker">
-              ${FEATURE_TAGS.map(f=>`<span class="feature-chip" data-tag="${f}" onclick="toggleChipEl(this)">${f}</span>`).join('')}
+              <span class="feature-chip" data-tag="🅿️ 駐車場あり" onclick="toggleChipEl(this)">🅿️ 駐車場あり</span>
+              <span class="feature-chip" data-tag="🚭 禁煙" onclick="toggleChipEl(this)">🚭 禁煙</span>
+              <span class="feature-chip" data-tag="🚬 喫煙可" onclick="toggleChipEl(this)">🚬 喫煙可</span>
+              <span class="feature-chip" data-tag="🥡 テイクアウト可" onclick="toggleChipEl(this)">🥡 テイクアウト可</span>
+              <span class="feature-chip" data-tag="🛵 デリバリー可" onclick="toggleChipEl(this)">🛵 デリバリー可</span>
+              <span class="feature-chip" data-tag="🍂 季節限定メニューあり" onclick="toggleChipEl(this)">🍂 季節限定メニューあり</span>
+              <span class="feature-chip" data-tag="🏠 室内中心" onclick="toggleChipEl(this)">🏠 室内中心</span>
+              <span class="feature-chip" data-tag="🌳 屋外席あり" onclick="toggleChipEl(this)">🌳 屋外席あり</span>
+              <span class="feature-chip" data-tag="🎉 記念日向き" onclick="toggleChipEl(this)">🎉 記念日向き</span>
+              <span class="feature-chip" data-tag="💑 デート向き" onclick="toggleChipEl(this)">💑 デート向き</span>
+              <span class="feature-chip" data-tag="👯 女子会向き" onclick="toggleChipEl(this)">👯 女子会向き</span>
+              <span class="feature-chip" data-tag="🧑 一人向き" onclick="toggleChipEl(this)">🧑 一人向き</span>
+              <span class="feature-chip" data-tag="👥 大人数向き" onclick="toggleChipEl(this)">👥 大人数向き</span>
             </div>
           </div>
           <div class="form-row">
             <label class="form-label">また行きたい度（任意）</label>
             <select class="form-input" id="inputRevisitNote">
               <option value="">未選択</option>
-              ${REVISIT_OPTIONS.map(r=>`<option value="${r}">${r}</option>`).join('')}
+              <option value="また行きたい！">また行きたい！</option>
+              <option value="また行ってもいいかな">また行ってもいいかな</option>
+              <option value="もう行かないかな">もう行かないかな</option>
             </select>
           </div>
           <div class="form-row">
             <label class="form-label">アレルギー表示（任意・複数選択可）</label>
             <div class="feature-chip-picker" id="allergyChipPicker">
-              ${ALLERGY_TAGS.map(a=>`<span class="feature-chip" data-tag="${a}" onclick="toggleChipEl(this)">${a}</span>`).join('')}
+              <span class="feature-chip" data-tag="卵" onclick="toggleChipEl(this)">卵</span>
+              <span class="feature-chip" data-tag="乳" onclick="toggleChipEl(this)">乳</span>
+              <span class="feature-chip" data-tag="小麦" onclick="toggleChipEl(this)">小麦</span>
+              <span class="feature-chip" data-tag="えび" onclick="toggleChipEl(this)">えび</span>
+              <span class="feature-chip" data-tag="かに" onclick="toggleChipEl(this)">かに</span>
+              <span class="feature-chip" data-tag="そば" onclick="toggleChipEl(this)">そば</span>
+              <span class="feature-chip" data-tag="落花生" onclick="toggleChipEl(this)">落花生</span>
+              <span class="feature-chip" data-tag="くるみ" onclick="toggleChipEl(this)">くるみ</span>
             </div>
           </div>
           <div class="form-row">
@@ -869,6 +948,10 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
           <div class="search-hint">文中に #タグ を入れるとタイムラインで検索できるようになります</div>
           <div class="hashtag-preview" id="postHashtagPreview"></div>
         </div>
+        <div class="form-row">
+          <label class="form-label">誰と行った？（任意）</label>
+          <input class="form-input" id="postCompanions" placeholder="例：友達と、家族と"/>
+        </div>
         <button class="btn-back" onclick="resetPostSearch()">← 別のお店を検索する</button>
         <button class="post-submit-btn" id="postSubmitBtn" onclick="submitPost()">投稿する</button>
       </div>
@@ -902,6 +985,30 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
       <div class="form-row">
         <label class="form-label">タグ（カンマ区切り）</label>
         <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">今の空き状況（任意）</label>
+        <div class="modal-subtitle" id="availabilityStatusPreview" style="margin-bottom:8px;">設定なし</div>
+        <button class="btn-cancel" style="width:100%;margin-bottom:8px;" onclick="setQuickAvailability('tonight')">🌙 今夜空いてる</button>
+        <div class="search-hint" style="margin-bottom:4px;">または曜日・時間帯を選んで設定：</div>
+        <div class="weekday-picker" id="availWeekdayPicker">
+          <span class="weekday-chip" data-day="月" onclick="selectAvailDay(this)">月</span>
+          <span class="weekday-chip" data-day="火" onclick="selectAvailDay(this)">火</span>
+          <span class="weekday-chip" data-day="水" onclick="selectAvailDay(this)">水</span>
+          <span class="weekday-chip" data-day="木" onclick="selectAvailDay(this)">木</span>
+          <span class="weekday-chip" data-day="金" onclick="selectAvailDay(this)">金</span>
+          <span class="weekday-chip" data-day="土" onclick="selectAvailDay(this)">土</span>
+          <span class="weekday-chip" data-day="日" onclick="selectAvailDay(this)">日</span>
+        </div>
+        <div class="feature-chip-picker" id="availSlotPicker" style="margin-top:8px;">
+          <span class="feature-chip" data-slot="朝" onclick="selectAvailSlot(this)">朝</span>
+          <span class="feature-chip" data-slot="昼" onclick="selectAvailSlot(this)">昼</span>
+          <span class="feature-chip" data-slot="夜" onclick="selectAvailSlot(this)">夜</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn-submit" style="width:auto;flex:1;" onclick="applyWeekdayAvailability()">この空き状況を設定</button>
+          <button class="btn-cancel" style="width:auto;flex:1;" onclick="clearAvailability()">クリア</button>
+        </div>
       </div>
       <div class="form-row dark-toggle-row">
         <div class="dark-toggle-label">🌙 ダークモード</div>
@@ -950,6 +1057,17 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
       <div class="modal-subtitle" style="margin-bottom:10px;">この承認機能を初めて使う場合、すでにアプリを使っている既存の友達が締め出されないように、最初に一度だけ下のボタンを押してください。2回目以降は押す必要はありません。</div>
       <button class="btn-cancel" style="width:100%;color:#dc2743;" onclick="runBulkApprove()">既存ユーザーを一括承認する</button>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════ フォロー／フォロワー一覧 ══════════════ -->
+<div class="modal-overlay" id="followListModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="followListModalTitle">フォロー一覧</div>
+      <button class="modal-close" onclick="closeFollowListModal()">✕</button>
+    </div>
+    <div class="modal-body" id="followListModalBody"></div>
   </div>
 </div>
 
@@ -1014,6 +1132,7 @@ const FEATURE_TAGS = ['🅿️ 駐車場あり','🚭 禁煙','🚬 喫煙可','
 const REVISIT_OPTIONS = ['また行きたい！','また行ってもいいかな','もう行かないかな'];
 const WEEKDAYS = ['月','火','水','木','金','土','日'];
 const ALLERGY_TAGS = ['卵','乳','小麦','えび','かに','そば','落花生','くるみ'];
+const REACTION_EMOJIS = ['👍','❤️','😂','😮','😢','🙏']; // いいね以外のスタンプ・絵文字リアクション
 const ADMIN_EMAIL = 'ryo.otk22@gmail.com'; // フレンド承認リストを管理できる人
 
 // ═══════════════════════════════════════
@@ -1078,7 +1197,7 @@ const MY_USER = {
   bio: '東京グルメを開拓中。おいしいお店を地図に残しています。',
   tags: ['和食','カフェ','ラーメン'],
   uid: null, email: null, photoURL: null,
-  followingUids: [], mapVisibleUids: [],
+  followingUids: [], mapVisibleUids: [], availability: null,
 };
 // 友達は実際にGoogleログインしたユーザー。Firestoreから読み込む（loadUsersFromFirestore）
 let FRIENDS = [];
@@ -1152,11 +1271,25 @@ let mySpots = [];
 
 let pendingLat = null, pendingLng = null, pendingName = null, pendingAddr = null, pendingArea = null;
 let currentRating = 0;
+let currentVisitStatus = 'visited';
 
 // ═══════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════
 function getUserById(id) { return id === '0' ? MY_USER : FRIENDS.find(f => f.id === id); }
+// フォロー数・フォロワー数（誰のプロフィールでも見られるようにするためのヘルパー）
+function getFollowingIdsOf(userId) {
+  if (userId === '0') return MY_USER.followingUids || [];
+  const f = FRIENDS.find(f => f.id === userId);
+  return (f && f.followingUids) || [];
+}
+function getFollowerIdsOf(userId) {
+  const targetRealId = userId === '0' ? MY_USER.uid : userId;
+  const result = [];
+  if ((MY_USER.followingUids||[]).includes(targetRealId)) result.push('0');
+  FRIENDS.forEach(f => { if ((f.followingUids||[]).includes(targetRealId)) result.push(f.id); });
+  return result;
+}
 function getAllSpots()    { return [...SAMPLE_SPOTS, ...mySpots]; }
 function iconOf(genre)   { return GENRE_ICONS[genre] || '📍'; }
 function starsHTML(n)    { return n ? '★'.repeat(n) + '☆'.repeat(5-n) + `<span class="rating-word">${RATING_WORDS[n]}</span>` : ''; }
@@ -1190,6 +1323,17 @@ function mapVisibleSpots() {
 function genId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 function toLocalId(uid) { return uid === MY_USER.uid ? '0' : uid; }
 function toRealId(id)   { return id === '0' ? MY_USER.uid : id; }
+// リアクション（{emoji: [uid,...]}）のローカルID⇔本物UID変換
+function convertReactionsToLocal(reactionsObj) {
+  const out = {};
+  Object.keys(reactionsObj||{}).forEach(emoji => { out[emoji] = (reactionsObj[emoji]||[]).map(toLocalId); });
+  return out;
+}
+function convertReactionsToReal(reactionsObj) {
+  const out = {};
+  Object.keys(reactionsObj||{}).forEach(emoji => { out[emoji] = (reactionsObj[emoji]||[]).map(toRealId); });
+  return out;
+}
 
 // alert()の代わりに使う軽い通知（画面下部に数秒間表示して自動で消える）
 function toast(msg) {
@@ -1219,6 +1363,7 @@ async function upsertMyUserDoc() {
   MY_USER.photoURL = data.photoURL || MY_USER.photoURL;
   MY_USER.followingUids  = data.followingUids  || [];
   MY_USER.mapVisibleUids = data.mapVisibleUids || [];
+  MY_USER.availability   = data.availability   || null;
   refreshHeaderIdentity();
   return true;
 }
@@ -1250,6 +1395,71 @@ async function persistFollowState() {
 }
 
 // ═══════════════════════════════════════
+// 空き状況ステータス（「今夜空いてる」など軽い予定共有）
+// ═══════════════════════════════════════
+let pendingAvailDay = null, pendingAvailSlot = null;
+const WD_JS_INDEX = { '月':1, '火':2, '水':3, '木':4, '金':5, '土':6, '日':0 };
+function isAvailabilityActive(user) {
+  return !!(user && user.availability && user.availability.expiresAt && new Date(user.availability.expiresAt) > new Date());
+}
+function availabilityBadgeHTML(user) {
+  return isAvailabilityActive(user) ? `<div class="avail-badge">🟢 ${user.availability.text}</div>` : '';
+}
+function endOfDate(d) { const e = new Date(d); e.setHours(23,59,59,999); return e; }
+function nextDateForWeekday(dayChar) {
+  const targetJsDay = WD_JS_INDEX[dayChar];
+  const now = new Date();
+  const diff = (targetJsDay - now.getDay() + 7) % 7;
+  const d = new Date(now);
+  d.setDate(now.getDate() + diff);
+  return d;
+}
+function selectAvailDay(el) {
+  document.querySelectorAll('#availWeekdayPicker .weekday-chip').forEach(c=>c.classList.toggle('active', c===el));
+  pendingAvailDay = el.dataset.day;
+}
+function selectAvailSlot(el) {
+  document.querySelectorAll('#availSlotPicker .feature-chip').forEach(c=>c.classList.toggle('active', c===el));
+  pendingAvailSlot = el.dataset.slot;
+}
+function updateAvailabilityPreviewUI() {
+  const el = document.getElementById('availabilityStatusPreview');
+  el.textContent = isAvailabilityActive(MY_USER) ? `現在の設定：${MY_USER.availability.text}` : '設定なし';
+  document.querySelectorAll('#availWeekdayPicker .weekday-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#availSlotPicker .feature-chip').forEach(c=>c.classList.remove('active'));
+  pendingAvailDay = null; pendingAvailSlot = null;
+}
+async function persistAvailability() {
+  const { db, doc, updateDoc } = window.FWY_FB;
+  await updateDoc(doc(db, 'users', MY_USER.uid), { availability: MY_USER.availability });
+}
+async function setQuickAvailability(kind) {
+  if (kind === 'tonight') {
+    MY_USER.availability = { text: '今夜空いてる', expiresAt: endOfDate(new Date()).toISOString() };
+  }
+  await persistAvailability();
+  updateAvailabilityPreviewUI();
+  renderProfilePanel('0'); renderSidebar();
+  toast('空き状況を設定しました');
+}
+async function applyWeekdayAvailability() {
+  if (!pendingAvailDay || !pendingAvailSlot) { toast('曜日と時間帯を選んでください'); return; }
+  const d = nextDateForWeekday(pendingAvailDay);
+  MY_USER.availability = { text: `今週${pendingAvailDay} ${pendingAvailSlot}空いてます`, expiresAt: endOfDate(d).toISOString() };
+  await persistAvailability();
+  updateAvailabilityPreviewUI();
+  renderProfilePanel('0'); renderSidebar();
+  toast('空き状況を設定しました');
+}
+async function clearAvailability() {
+  MY_USER.availability = null;
+  await persistAvailability();
+  updateAvailabilityPreviewUI();
+  renderProfilePanel('0'); renderSidebar();
+  toast('空き状況をクリアしました');
+}
+
+// ═══════════════════════════════════════
 // データの自動更新（リアルタイム同期）
 // 一度読み込んだら終わりではなく、Firestore側でデータが変わるたびに自動で反映する。
 // 各load〜From Firestore()は「初回読み込みが終わったら”だけ”待ち（Promiseが解決）」、
@@ -1274,6 +1484,8 @@ function loadUsersFromFirestore() {
           desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
           following: MY_USER.followingUids.includes(docSnap.id),
           showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
+          followingUids: data.followingUids || [],
+          availability: data.availability || null,
         });
       });
       FRIENDS = list;
@@ -1313,7 +1525,8 @@ function loadPostsFromFirestore() {
         const post = {
           ...data, id: docSnap.id, userId: toLocalId(data.ownerUid),
           likes: (data.likes||[]).map(toLocalId),
-          comments: (data.comments||[]).map(c => ({ ...c, userId: toLocalId(c.userId), likes: (c.likes||[]).map(toLocalId) })),
+          reactions: convertReactionsToLocal(data.reactions),
+          comments: (data.comments||[]).map(c => ({ ...c, userId: toLocalId(c.userId), likes: (c.likes||[]).map(toLocalId), reactions: convertReactionsToLocal(c.reactions) })),
         };
         if (post.userId === '0') mine.push(post); else others.push(post);
       });
@@ -1362,11 +1575,12 @@ async function updateSpotInFirestore(spot) {
 }
 async function createPostInFirestore(post) {
   const { db, doc, setDoc } = window.FWY_FB;
-  const { id, userId, likes, comments, ...rest } = post;
+  const { id, userId, likes, comments, reactions, ...rest } = post;
   await setDoc(doc(db, 'posts', id), {
     ...rest, ownerUid: toRealId(userId),
     likes: (likes||[]).map(toRealId),
-    comments: (comments||[]).map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId) })),
+    reactions: convertReactionsToReal(reactions),
+    comments: (comments||[]).map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId), reactions: convertReactionsToReal(c.reactions) })),
   });
 }
 async function deletePostInFirestore(id) {
@@ -1384,8 +1598,12 @@ async function updatePostLikesInFirestore(postId, likesLocalArr) {
 async function updatePostCommentsInFirestore(postId, commentsLocalArr) {
   const { db, doc, updateDoc } = window.FWY_FB;
   await updateDoc(doc(db, 'posts', postId), {
-    comments: commentsLocalArr.map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId) })),
+    comments: commentsLocalArr.map(c => ({ ...c, userId: toRealId(c.userId), likes: (c.likes||[]).map(toRealId), reactions: convertReactionsToReal(c.reactions) })),
   });
+}
+async function updatePostReactionsInFirestore(postId, reactionsLocalObj) {
+  const { db, doc, updateDoc } = window.FWY_FB;
+  await updateDoc(doc(db, 'posts', postId), { reactions: convertReactionsToReal(reactionsLocalObj) });
 }
 
 // ═══════════════════════════════════════
@@ -1719,6 +1937,7 @@ function openEditProfileModal() {
   const adminBtn = document.getElementById('adminPanelEntryBtn');
   if (adminBtn) adminBtn.style.display = isAdminUser() ? 'inline-block' : 'none';
   document.getElementById('darkModeSwitch').classList.toggle('on', isDarkModeOn());
+  updateAvailabilityPreviewUI();
   document.getElementById('editProfileModalOverlay').classList.add('open');
 }
 function closeEditProfileModal() {
@@ -1892,6 +2111,7 @@ function openPostStep2WithPlace(place) {
   }
   postCurrentRating = 0; postCurrentPrice = PRICE_LEVELS[2];
   document.getElementById('postCaption').value = '';
+  document.getElementById('postCompanions').value = '';
   document.getElementById('postGenre').selectedIndex = 0;
   autoSelectGenre(place.types||[], 'postGenre', place.name||'');
   onPostGenreChange();
@@ -1917,6 +2137,7 @@ function selectExistingSpot(spotId) {
   postCurrentRating = spot.rating || 0;
   postCurrentPrice = priceOf(spot);
   document.getElementById('postCaption').value = '';
+  document.getElementById('postCompanions').value = '';
   const genreSelect = document.getElementById('postGenre');
   const idx = Array.from(genreSelect.options).findIndex(o=>o.value===spot.genre);
   genreSelect.selectedIndex = idx >= 0 ? idx : 0;
@@ -1989,9 +2210,10 @@ async function submitPost() {
     renderSidebar();
   }
 
+  const companions = document.getElementById('postCompanions').value.trim();
   const post = {
     id: genId('p'), userId: '0', spotId, restaurantName: postPendingName,
-    genre, area, caption, createdAt: new Date().toISOString(), likes: [], comments: [],
+    genre, area, caption, companions, createdAt: new Date().toISOString(), likes: [], comments: [],
   };
   myPosts.push(post);
   await createPostInFirestore(post);
@@ -2254,6 +2476,16 @@ function updateDistRadiusCircle() {
     clickable: false, zIndex: 1,
   });
 }
+// 「検索する」ボタン：絞り込み条件は選んだ時点で既に自動反映されているが、
+// 「いつ検索されたか」が分かりやすいよう、明示的なボタンで再描画＋通知する。
+function runManualSearch(kind) {
+  if (kind === 'account') {
+    renderAccountResults();
+  } else {
+    renderSearchResults();
+  }
+  toast('検索しました');
+}
 function renderSearchResults() {
   updateDistRadiusCircle();
   const spots = getFilteredSpots();
@@ -2302,9 +2534,10 @@ function renderSearchResults() {
       <div class="result-info">
         <div class="result-name">${spot.name}</div>
         <div class="result-meta">${spot.genre}${spot.area?' · '+spot.area:''} · ${priceOf(spot)}</div>
+        ${spot.visitStatus==='want'?`<div class="want-badge">📌 行きたい</div>`:''}
         ${spot.rating?`<div class="result-stars">${starsHTML(spot.rating)}</div>`:''}
         ${mins!==null?`<div class="result-dist">${MODE_LABEL[distMode]} 約${mins}分（概算）</div>`:''}
-        <div class="result-by" style="background:${user.color};">${lbl} ${user.name}</div>
+        <div class="result-by" style="background:${user.color};cursor:pointer;" onclick="event.stopPropagation();openProfile('${user.id}');goPage('map');">${lbl} ${user.name}</div>
       </div>
     </div>`;
   }).join('');
@@ -2361,6 +2594,7 @@ function renderAccountResults() {
         <div class="acc-name">${f.name}</div>
         <div class="acc-desc">${f.desc}</div>
         <div class="acc-tags">${(f.tags||[]).map(t=>`<span class="acc-tag">${t}</span>`).join('')}</div>
+        ${availabilityBadgeHTML(f)}
       </div>
       <button class="follow-btn ${f.following?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${f.id}');renderAccountResults();">${f.following?'フォロー中':'フォロー'}</button>
     </div>`).join('');
@@ -2398,7 +2632,7 @@ function renderTimeline() {
 }
 function postCardHTML(p) {
   const user = getUserById(p.userId);
-  p.likes = p.likes || []; p.comments = p.comments || [];
+  p.likes = p.likes || []; p.comments = p.comments || []; p.reactions = p.reactions || {};
   const liked = p.likes.includes('0');
   const spot = getAllSpots().find(s=>s.id===p.spotId) || { genre:p.genre, rating:null };
   return `<div class="post-card" id="post-${p.id}">
@@ -2420,13 +2654,19 @@ function postCardHTML(p) {
       ${spot.rating?`<div class="prr-stars">${starsHTML(spot.rating)}</div>`:''}
     </div>
     <div class="post-caption" id="caption-${p.id}">${linkifyCaption(p.caption)}</div>
+    ${p.companions?`<div class="post-companions">👥 ${p.companions}</div>`:''}
     <div class="post-actions">
       <button class="act-btn ${liked?'liked':''}" onclick="toggleLikePost('${p.id}')"><span class="ic">${liked?'❤️':'🤍'}</span>${p.likes.length}</button>
+      <div class="reaction-wrap">
+        <button class="act-btn" onclick="event.stopPropagation();toggleReactionPicker('post-${p.id}')"><span class="ic">😊</span></button>
+        ${reactionPickerHTML('post', p.id)}
+      </div>
       <button class="act-btn" onclick="toggleComments('${p.id}')"><span class="ic">💬</span>${p.comments.length}</button>
       ${p.userId==='0'?`
       <button class="act-btn" style="margin-left:auto;" onclick="togglePostEdit('${p.id}')"><span class="ic">✏️</span></button>
       <button class="act-btn" onclick="deletePost('${p.id}')"><span class="ic">🗑</span></button>`:''}
     </div>
+    ${reactionBadgesHTML(p.reactions, 'post', p.id)}
     <div class="post-comments" id="comments-${p.id}" style="display:none;">
       ${commentsHTML(p.id, p.comments)}
       <div class="add-comment-row">
@@ -2443,15 +2683,21 @@ function commentsHTML(postId, comments) {
   return comments.map(c => {
     const u = getUserById(c.userId);
     if (!u) return '';
+    c.reactions = c.reactions || {};
     const cLiked = (c.likes||[]).includes('0');
     return `<div class="cm-item">
       <div class="cm-av" style="background:${u.color};">${avatarInner(u)}</div>
       <div class="cm-body">
-        <div class="cm-text-wrap"><span class="cm-name">${u.name}</span>${c.text}</div>
+        <div class="cm-text-wrap"><span class="cm-name" style="cursor:pointer;" onclick="openProfile('${u.id}');goPage('map');">${u.name}</span>${c.text}</div>
         <div class="cm-meta">
           <span>${timeAgo(c.createdAt)}</span>
           <button class="cm-like-btn ${cLiked?'on':''}" onclick="toggleLikeComment('${postId}','${c.id}')">${cLiked?'❤️':'🤍'} ${(c.likes||[]).length||''}</button>
+          <div class="cm-reaction-wrap">
+            <button class="cm-reaction-btn" onclick="event.stopPropagation();toggleReactionPicker('comment-${c.id}')">😊</button>
+            ${reactionPickerHTML('comment', postId, c.id)}
+          </div>
         </div>
+        ${reactionBadgesHTML(c.reactions, 'comment', postId, c.id)}
       </div>
     </div>`;
   }).join('');
@@ -2518,6 +2764,69 @@ function toggleLikeComment(postId, commentId) {
   renderTimeline();
   setTimeout(()=>{ const el=document.getElementById('comments-'+postId); if(el) el.style.display='block'; }, 0);
 }
+
+// ═══════════════════════════════════════
+// 絵文字・スタンプリアクション（いいね以外のリアクション。投稿・コメント両方対応）
+// ═══════════════════════════════════════
+// reactions の形：{ "👍": ["0","friend1"], "❤️": ["friend2"], ... }（キー＝絵文字、値＝押した人のローカルID配列）
+function reactionPickerHTML(kind, postId, commentId) {
+  const key = kind === 'post' ? `post-${postId}` : `comment-${commentId}`;
+  const onclickFor = (e) => kind === 'post'
+    ? `toggleReaction('${postId}','${e}')`
+    : `toggleCommentReaction('${postId}','${commentId}','${e}')`;
+  return `<div class="reaction-picker-popup" id="reactionPicker-${key}">
+    ${REACTION_EMOJIS.map(e => `<span onclick="event.stopPropagation();${onclickFor(e)};closeReactionPickers();">${e}</span>`).join('')}
+  </div>`;
+}
+function reactionBadgesHTML(reactions, kind, postId, commentId) {
+  reactions = reactions || {};
+  const emojis = Object.keys(reactions).filter(e => (reactions[e]||[]).length > 0);
+  if (!emojis.length) return '';
+  const wrapClass = kind === 'post' ? 'reaction-badges' : 'cm-reaction-badges';
+  return `<div class="${wrapClass}">` + emojis.map(e => {
+    const count = reactions[e].length;
+    const mine = reactions[e].includes('0');
+    const onclick = kind === 'post' ? `toggleReaction('${postId}','${e}')` : `toggleCommentReaction('${postId}','${commentId}','${e}')`;
+    return `<span class="reaction-badge ${mine?'mine':''}" onclick="${onclick}">${e} ${count}</span>`;
+  }).join('') + `</div>`;
+}
+function toggleReactionPicker(key) {
+  const el = document.getElementById('reactionPicker-'+key);
+  if (!el) return;
+  const isOpening = !el.classList.contains('open');
+  closeReactionPickers();
+  if (isOpening) el.classList.add('open');
+}
+function closeReactionPickers() {
+  document.querySelectorAll('.reaction-picker-popup.open').forEach(el => el.classList.remove('open'));
+}
+function toggleReaction(postId, emoji) {
+  const p = getAllPosts().find(p=>p.id===postId);
+  if (!p) return;
+  p.reactions = p.reactions || {};
+  p.reactions[emoji] = p.reactions[emoji] || [];
+  const i = p.reactions[emoji].indexOf('0');
+  if (i>=0) p.reactions[emoji].splice(i,1); else p.reactions[emoji].push('0');
+  updatePostReactionsInFirestore(postId, p.reactions);
+  renderTimeline();
+}
+function toggleCommentReaction(postId, commentId, emoji) {
+  const p = getAllPosts().find(p=>p.id===postId);
+  if (!p) return;
+  const c = (p.comments||[]).find(c=>c.id===commentId);
+  if (!c) return;
+  c.reactions = c.reactions || {};
+  c.reactions[emoji] = c.reactions[emoji] || [];
+  const i = c.reactions[emoji].indexOf('0');
+  if (i>=0) c.reactions[emoji].splice(i,1); else c.reactions[emoji].push('0');
+  updatePostCommentsInFirestore(postId, p.comments);
+  renderTimeline();
+  setTimeout(()=>{ const el=document.getElementById('comments-'+postId); if(el) el.style.display='block'; }, 0);
+}
+// リアクションピッカーの外側をタップしたら閉じる
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.reaction-wrap') && !e.target.closest('.cm-reaction-wrap')) closeReactionPickers();
+});
 function submitComment(postId) {
   const input = document.getElementById('commentInput-'+postId);
   const text = input.value.trim();
@@ -2525,7 +2834,7 @@ function submitComment(postId) {
   const p = getAllPosts().find(p=>p.id===postId);
   if (!p) return;
   p.comments = p.comments || [];
-  p.comments.push({ id:genId('c'), userId:'0', text, likes:[], createdAt:new Date().toISOString() });
+  p.comments.push({ id:genId('c'), userId:'0', text, likes:[], reactions:{}, createdAt:new Date().toISOString() });
   updatePostCommentsInFirestore(postId, p.comments);
   renderTimeline();
   setTimeout(()=>{ const el=document.getElementById('comments-'+postId); if(el) el.style.display='block'; }, 0);
@@ -2614,13 +2923,14 @@ function infoHTML(spot, user) {
     <div class="gm-popup-icon">${iconOf(spot.genre)}</div>
     <div class="gm-popup-title">${spot.name}</div>
     <div class="gm-popup-genre">${spot.genre}${spot.area?' · '+spot.area:''}</div>
+    ${spot.visitStatus==='want'?`<div class="want-badge">📌 行きたい</div>`:''}
     ${spot.rating?`<div class="gm-popup-stars">${starsHTML(spot.rating)}</div>`:''}
     ${spot.comment?`<div class="gm-popup-comment">「${spot.comment}」</div>`:''}
     ${extraInfoHTML(spot)}
     <div class="gm-popup-footer">
-      <div class="gm-popup-av" style="background:${user.color};">${avatarInner(user)}</div>
+      <div class="gm-popup-av" style="background:${user.color};cursor:pointer;" onclick="openProfile('${user.id}');goPage('map');">${avatarInner(user)}</div>
       <div class="gm-popup-by">by</div>
-      <div class="gm-popup-author" style="color:${user.color};">${user.name}</div>
+      <div class="gm-popup-author" style="color:${user.color};cursor:pointer;" onclick="openProfile('${user.id}');goPage('map');">${user.name}</div>
     </div>
     <a class="gm-popup-maplink" href="${googleMapsLinkFor(spot)}" target="_blank" rel="noopener">🗺 Googleマップで開く</a>
   </div>`;
@@ -2727,9 +3037,18 @@ function renderProfilePanel(userId) {
           <span class="profile-stat-val">${spots.length}</span>
           <span class="profile-stat-label">スポット</span>
         </div>
+        <div class="profile-stat" style="cursor:pointer;" onclick="openFollowListModal('${userId}','following')">
+          <span class="profile-stat-val">${getFollowingIdsOf(userId).length}</span>
+          <span class="profile-stat-label">フォロー</span>
+        </div>
+        <div class="profile-stat" style="cursor:pointer;" onclick="openFollowListModal('${userId}','followers')">
+          <span class="profile-stat-val">${getFollowerIdsOf(userId).length}</span>
+          <span class="profile-stat-label">フォロワー</span>
+        </div>
       </div>
     </div>
     <div class="profile-name">${user.name}</div>
+    ${availabilityBadgeHTML(user)}
     <div class="profile-bio">${user.bio||''}</div>
     <div class="profile-tags">${tagsHTML}</div>
     <div class="profile-actions">${followBtn}${mapBtn}${editBtn}</div>
@@ -2747,11 +3066,47 @@ function renderProfilePanel(userId) {
     body.innerHTML = `<div class="empty-state"><div class="big">📍</div><p>まだスポットがありません</p></div>`;
     return;
   }
-  const spotsHTML = spots.length ? `
-    <div class="section-head"><div class="section-label">📍 ${user.name}のスポット (${spots.length})</div></div>
-    ${spots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+  const visitedSpots = spots.filter(s=>s.visitStatus!=='want');
+  const wantSpots     = spots.filter(s=>s.visitStatus==='want');
+  const visitedHTML = visitedSpots.length ? `
+    <div class="section-head"><div class="section-label">✅ ${user.name}の行った店 (${visitedSpots.length})</div></div>
+    ${visitedSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
   ` : '';
-  body.innerHTML = postsHTML + spotsHTML;
+  const wantHTML = wantSpots.length ? `
+    <div class="section-head"><div class="section-label">📌 ${user.name}の気になる店 (${wantSpots.length})</div></div>
+    ${wantSpots.map(spot => spotCardHTML(spot, user, isMe)).join('')}
+  ` : '';
+  body.innerHTML = profileStatsHTML(user, spots) + postsHTML + visitedHTML + wantHTML;
+}
+
+// 登録した店のジャンル・エリアのかたよりを見せて「もっと登録したくなる」モチベ作りに繋げる統計セクション
+function profileStatsHTML(user, spots) {
+  if (!spots.length) return '';
+  const genreCounts = {}, areaCounts = {};
+  spots.forEach(s => {
+    const g = s.genre || 'その他';
+    genreCounts[g] = (genreCounts[g]||0) + 1;
+    const a = s.area || '未設定';
+    areaCounts[a] = (areaCounts[a]||0) + 1;
+  });
+  const topGenres = Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const topAreas  = Object.entries(areaCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxG = topGenres[0][1], maxA = topAreas[0][1];
+  const bar = (label, count, max, cls) => `
+    <div class="stat-bar-row">
+      <span class="stat-bar-label">${label}</span>
+      <div class="stat-bar-track"><div class="stat-bar-fill ${cls||''}" style="width:${Math.max(8, Math.round(count/max*100))}%;"></div></div>
+      <span class="stat-bar-count">${count}</span>
+    </div>`;
+  return `
+    <div class="section-head"><div class="section-label">📊 ${user.name}の登録傾向 (${spots.length}件)</div></div>
+    <div class="profile-stats-card">
+      <div class="stat-block-title">好きなジャンル TOP${topGenres.length}</div>
+      ${topGenres.map(([g,c]) => bar(`${iconOf(g)} ${g}`, c, maxG)).join('')}
+      <div class="stat-block-title" style="margin-top:14px;">登録が多いエリア TOP${topAreas.length}</div>
+      ${topAreas.map(([a,c]) => bar(`📍 ${a}`, c, maxA, 'area')).join('')}
+    </div>
+  `;
 }
 
 function profilePostCardHTML(p) {
@@ -2767,6 +3122,37 @@ function profilePostCardHTML(p) {
       <div class="ppc-meta">❤️ ${likeCount}　💬 ${cmCount}</div>
     </div>
   `;
+}
+
+// ═══════════════════════════════════════
+// フォロー／フォロワー一覧モーダル
+// ═══════════════════════════════════════
+function openFollowListModal(userId, mode) {
+  const user = getUserById(userId);
+  if (!user) return;
+  const ids = mode === 'following' ? getFollowingIdsOf(userId) : getFollowerIdsOf(userId);
+  const list = ids.map(id => getUserById(id)).filter(Boolean);
+  document.getElementById('followListModalTitle').textContent =
+    mode === 'following' ? `${user.name}のフォロー (${list.length})` : `${user.name}のフォロワー (${list.length})`;
+  const body = document.getElementById('followListModalBody');
+  if (list.length === 0) {
+    body.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>${mode==='following'?'まだ誰もフォローしていません':'まだフォロワーがいません'}</p></div>`;
+  } else {
+    body.innerHTML = list.map(u => `
+      <div class="acc-card" onclick="closeFollowListModal(); openProfile('${u.id}'); goPage('map');">
+        <div class="acc-ring ${u.isMe||u.following?'ig':'gray'}" style="background:${u.color};"><div class="acc-inner">${avatarInner(u)}</div></div>
+        <div class="acc-info">
+          <div class="acc-name">${u.name}</div>
+          <div class="acc-desc">${u.desc||u.bio||''}</div>
+          ${availabilityBadgeHTML(u)}
+        </div>
+        ${u.isMe ? '' : `<button class="follow-btn ${u.following?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}');openFollowListModal('${userId}','${mode}');">${u.following?'フォロー中':'フォロー'}</button>`}
+      </div>`).join('');
+  }
+  document.getElementById('followListModalOverlay').classList.add('open');
+}
+function closeFollowListModal() {
+  document.getElementById('followListModalOverlay').classList.remove('open');
 }
 
 // ═══════════════════════════════════════
@@ -2798,6 +3184,7 @@ function renderSidebar() {
             <div class="fc-name">${f.name}</div>
             <div class="fc-desc">${f.desc}</div>
             <div class="fc-count">${cnt}スポット</div>
+            ${availabilityBadgeHTML(f)}
           </div>
           <div class="fc-actions">
             <button class="follow-btn ${f.following?'following':'not-following'}" onclick="toggleFollow('${f.id}')">${f.following?'フォロー中':'フォロー'}</button>
@@ -2818,8 +3205,16 @@ function renderSidebar() {
     if (mySpots.length === 0) {
       html = `<div class="empty-state"><div class="big">🍽</div><p>まだスポットがありません<br>「＋ 追加」から登録してみましょう！</p></div>`;
     } else {
-      html = `<div class="section-head"><div class="section-label">📍 りょうのスポット (${mySpots.length})</div></div>`;
-      mySpots.slice().reverse().forEach(s => { html += spotCardHTML(s, MY_USER, true); });
+      const visited = mySpots.filter(s=>s.visitStatus!=='want').slice().reverse();
+      const want    = mySpots.filter(s=>s.visitStatus==='want').slice().reverse();
+      if (visited.length) {
+        html += `<div class="section-head"><div class="section-label">✅ 行った店 (${visited.length})</div></div>`;
+        visited.forEach(s => { html += spotCardHTML(s, MY_USER, true); });
+      }
+      if (want.length) {
+        html += `<div class="section-head"><div class="section-label">📌 気になる店 (${want.length})</div></div>`;
+        want.forEach(s => { html += spotCardHTML(s, MY_USER, true); });
+      }
     }
   }
   body.innerHTML = html;
@@ -2828,16 +3223,19 @@ function renderSidebar() {
 function spotCardHTML(spot, user, canDel) {
   const hi  = spot.id === highlightedSpotId;
   const lbl = user.label;
+  const isWant = spot.visitStatus === 'want';
   return `
     <div class="spot-card ${hi?'hl':''}" id="spot-${spot.id}" onclick="focusSpot('${spot.id}')">
       <div class="spot-icon-box">${iconOf(spot.genre)}</div>
       <div class="spot-info">
         <div class="spot-name">${spot.name}</div>
         <div class="spot-meta">${spot.genre}${spot.area?' · '+spot.area:''}</div>
-        ${spot.rating?`<div class="spot-stars">${starsHTML(spot.rating)}</div>`:''}
-        ${spot.comment?`<div class="spot-comment">「${spot.comment.substring(0,40)}…」</div>`:''}
+        ${isWant?'':spot.rating?`<div class="spot-stars">${starsHTML(spot.rating)}</div>`:''}
+        ${isWant?'':spot.comment?`<div class="spot-comment">「${spot.comment.substring(0,40)}…」</div>`:''}
         ${(()=>{ const open=isOpenNow(spot); return open===true?`<span class="open-now-tag">営業中</span>`:open===false?`<span class="closed-now-tag">営業時間外</span>`:''; })()}
-        <div class="spot-tag" style="background:${user.color};">${lbl} ${user.name}</div>
+        ${isWant?`<div class="want-badge">📌 行きたい</div>`:''}
+        <div class="spot-tag" style="background:${user.color};cursor:pointer;" onclick="event.stopPropagation();openProfile('${user.id}');goPage('map');">${lbl} ${user.name}</div>
+        ${(isWant&&canDel)?`<div><button class="visit-mark-btn" onclick="event.stopPropagation();markAsVisited('${spot.id}')">✅ 行った店にする</button></div>`:''}
       </div>
       ${canDel?`<div class="spot-card-actions">
         <button class="spot-edit" onclick="event.stopPropagation();editSpot('${spot.id}')">✏️</button>
@@ -2946,10 +3344,11 @@ function openModalWithPlace(place) {
     if (w) pendingArea = w.long_name;
   }
   currentRating = 0;
+  currentVisitStatus = 'visited';
   document.getElementById('inputComment').value = '';
   document.getElementById('inputGenre').selectedIndex = 0;
   autoSelectGenre(place.types||[], 'inputGenre', place.name||'');
-  onGenreChange(); updateStarUI(0);
+  onGenreChange(); updateStarUI(0); updateVisitStatusUI();
   document.getElementById('selectedPlaceCard').innerHTML = `
     <div class="pc">✅ Googleマップから取得</div>
     <div class="pn">${pendingName}</div>`;
@@ -2979,6 +3378,19 @@ function setRating(v) { currentRating=v; updateStarUI(v); }
 function updateStarUI(v) {
   document.querySelectorAll('#starInput .si').forEach(s=>s.classList.toggle('filled', parseInt(s.dataset.v)<=v));
   document.getElementById('ratingLabel').textContent = v>0 ? RATING_WORDS[v] : 'タップして評価';
+}
+// ── 行った店／気になる店のステータス切り替え ──
+function setVisitStatus(v) { currentVisitStatus = v; updateVisitStatusUI(); }
+function updateVisitStatusUI() {
+  document.querySelectorAll('#visitStatusToggle .vs-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.status === currentVisitStatus);
+  });
+  const isWant = currentVisitStatus === 'want';
+  document.getElementById('ratingFormRow').style.display = isWant ? 'none' : 'block';
+  document.getElementById('commentFormRow').style.display = isWant ? 'none' : 'block';
+  document.getElementById('addSpotModalSubtitle').textContent = editingSpotId
+    ? 'お店の情報を編集します'
+    : (isWant ? '気になる店として保存します（タイムラインには投稿されません）' : '登録すると自動でタイムラインにも投稿されます');
 }
 let editingSpotId = null;
 // ── 詳細フィールド（営業時間・タグなど。すべて任意項目） ──
@@ -3039,17 +3451,17 @@ function collectExtraFieldsIntoSpot(spot) {
 function startAddSpot() {
   editingSpotId = null;
   pendingLat=null; pendingLng=null; pendingName=null; pendingAddr=null; pendingArea=null; currentRating=0;
+  currentVisitStatus='visited';
   document.getElementById('inputSearch').value='';
   document.getElementById('inputComment').value='';
   document.getElementById('inputGenre').selectedIndex=0;
   document.getElementById('btnSubmit').disabled=true;
   document.getElementById('btnSubmit').textContent='保存する';
-  document.getElementById('addSpotModalSubtitle').textContent='登録すると自動でタイムラインにも投稿されます';
   document.getElementById('step1').style.display='block';
   document.getElementById('step2').style.display='none';
   document.getElementById('modalOverlay').classList.add('open');
   resetExtraFields();
-  onGenreChange(); updateStarUI(0);
+  onGenreChange(); updateStarUI(0); updateVisitStatusUI();
   setTimeout(()=>document.getElementById('inputSearch').focus(), 100);
 }
 // 自分のスポットを編集する（add-spotモーダルを編集モードで再利用）
@@ -3060,12 +3472,14 @@ function editSpot(id) {
   pendingLat = spot.lat; pendingLng = spot.lng; pendingName = spot.name;
   pendingAddr = spot.addr || ''; pendingArea = spot.area || '';
   currentRating = spot.rating || 0;
+  currentVisitStatus = spot.visitStatus || 'visited';
   document.getElementById('inputComment').value = spot.comment || '';
   const sel = document.getElementById('inputGenre');
   const idx = Array.from(sel.options).findIndex(o=>o.value===spot.genre);
   sel.selectedIndex = idx >= 0 ? idx : 0;
   onGenreChange();
   updateStarUI(currentRating);
+  updateVisitStatusUI();
   document.getElementById('selectedPlaceCard').innerHTML = `
     <div class="pc">✏️ スポットを編集中</div>
     <div class="pn">${spot.name}</div>`;
@@ -3073,9 +3487,13 @@ function editSpot(id) {
   document.getElementById('step2').style.display = 'block';
   document.getElementById('btnSubmit').disabled = false;
   document.getElementById('btnSubmit').textContent = '更新する';
-  document.getElementById('addSpotModalSubtitle').textContent = 'お店の情報を編集します';
   document.getElementById('modalOverlay').classList.add('open');
   fillExtraFields(spot);
+}
+// 「気になる店」を「行った店」に切り替える（編集モーダルをステータス変更済みで開く）
+function markAsVisited(id) {
+  editSpot(id);
+  setVisitStatus('visited');
 }
 function resetSearch() {
   document.getElementById('step1').style.display='block';
@@ -3093,9 +3511,10 @@ async function submitSpot() {
     const spot = mySpots.find(s=>s.id===editingSpotId);
     if (!spot) { editingSpotId=null; closeModal(); return; }
     spot.name = pendingName; spot.genre = genre;
-    spot.comment = document.getElementById('inputComment').value.trim();
+    spot.comment = currentVisitStatus==='want' ? '' : document.getElementById('inputComment').value.trim();
     spot.area = pendingArea||''; spot.addr = pendingAddr||'';
-    spot.lat = pendingLat; spot.lng = pendingLng; spot.rating = currentRating||null;
+    spot.lat = pendingLat; spot.lng = pendingLng; spot.rating = currentVisitStatus==='want' ? null : (currentRating||null);
+    spot.visitStatus = currentVisitStatus;
     collectExtraFieldsIntoSpot(spot);
     await updateSpotInFirestore(spot);
     editingSpotId = null;
@@ -3107,23 +3526,27 @@ async function submitSpot() {
     toast('スポットを更新しました');
     return;
   }
+  const isWant = currentVisitStatus === 'want';
   const spot  = {
     id: genId('s'), userId: '0', name:pendingName, genre,
-    comment: document.getElementById('inputComment').value.trim(),
+    comment: isWant ? '' : document.getElementById('inputComment').value.trim(),
     area: pendingArea||'', addr: pendingAddr||'',
-    lat: pendingLat, lng: pendingLng, rating: currentRating||null,
+    lat: pendingLat, lng: pendingLng, rating: isWant ? null : (currentRating||null),
+    visitStatus: currentVisitStatus,
   };
   collectExtraFieldsIntoSpot(spot);
   mySpots.push(spot);
   await createSpotInFirestore(spot);
-  // タイムラインにも投稿として追加
-  const post = {
-    id: genId('p'), userId: '0', spotId: spot.id, restaurantName: spot.name,
-    genre: spot.genre, area: spot.area||'', caption: spot.comment||'',
-    createdAt: new Date().toISOString(), likes: [], comments: [],
-  };
-  myPosts.push(post);
-  await createPostInFirestore(post);
+  // 「行ってよかった」店のみタイムラインにも投稿として追加（気になる店はまだ行っていないため投稿しない）
+  if (!isWant) {
+    const post = {
+      id: genId('p'), userId: '0', spotId: spot.id, restaurantName: spot.name,
+      genre: spot.genre, area: spot.area||'', caption: spot.comment||'',
+      createdAt: new Date().toISOString(), likes: [], comments: [],
+    };
+    myPosts.push(post);
+    await createPostInFirestore(post);
+  }
   closeModal();
   const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map, icon:makeIcon(MY_USER), title:spot.name, animation:google.maps.Animation.DROP });
   marker.addListener('click',()=>{ infoWindow.setContent(infoHTML(spot,MY_USER)); infoWindow.open(map,marker); highlightedSpotId=spot.id; renderSidebar(); });
