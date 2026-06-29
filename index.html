@@ -160,7 +160,7 @@ header {
 .profile-big-ring.gray { background: #dbdbdb; }
 .profile-big-inner { width: 72px; height: 72px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid #fff; }
 .profile-big-inner.me { font-size: 24px; font-weight: 800; color: #dc2743; }
-.profile-stats { display: flex; gap: 20px; }
+.profile-stats { display: flex; gap: 14px; flex-wrap: wrap; }
 .profile-stat { text-align: center; }
 .profile-stat-val { font-size: 17px; font-weight: 800; display: block; }
 .profile-stat-label { font-size: 11px; color: #8e8e8e; }
@@ -367,11 +367,24 @@ body.dark .crop-viewport { background: #111; }
 .account-search-box .search-run-btn { width: auto; padding: 10px 18px; flex-shrink: 0; }
 .result-add-btn { width: auto; padding: 6px 12px; border: none; border-radius: 8px; background: #0095f6; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
 .result-add-btn:active { background: #0077c8; }
-.search-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.search-toolbar { display: flex; flex-direction: column; gap: 6px; padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #efefef; flex-shrink: 0; }
+.search-toolbar-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .sr-count { font-size: 12px; color: #8e8e8e; font-weight: 600; flex: 1; }
 .tb-btn { padding: 5px 12px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; color: #262626; white-space: nowrap; }
 .tb-btn.active { background: #262626; border-color: #262626; color: #fff; }
+.dist-circle-hint { font-size: 11px; color: #8e8e8e; }
 .search-views { flex: 1; overflow: hidden; position: relative; }
+/* ── 表示用の切り替えスイッチ（対象／リスト・マップなど、今どちらの状態かが一目でわかる形） ── */
+.seg-switch { display: inline-flex; background: #efefef; border-radius: 10px; padding: 3px; gap: 2px; }
+.seg-switch .seg-opt { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #8e8e8e; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.seg-switch .seg-opt.on { background: #fff; color: #262626; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+body.dark .seg-switch { background: #1e1e1e; }
+body.dark .seg-switch .seg-opt { color: #999; }
+body.dark .seg-switch .seg-opt.on { background: #2a2a2a; color: #e8e8e8; }
+.form-select { padding: 7px 10px; border-radius: 8px; border: 1.5px solid #dbdbdb; background: #fff; font-size: 13px; font-weight: 600; color: #262626; font-family: inherit; cursor: pointer; }
+.filter-reset-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.filter-reset-row .chip { border-color: #dc2743; color: #dc2743; }
+.scope-hint { font-size: 11px; color: #8e8e8e; flex-basis: 100%; margin-top: -2px; }
 .sv-map { width: 100%; height: 100%; display: none; }
 .sv-map.active { display: block; }
 .sv-list { height: 100%; overflow-y: auto; display: none; }
@@ -544,6 +557,10 @@ body.dark .reaction-badge.mine { background: #1a3a52; color: #4db5ff; }
 .feature-chip { padding: 6px 10px; border-radius: 14px; background: #f2f2f2; font-size: 12px; color: #666; cursor: pointer; user-select: none; }
 .feature-chip.active { background: #ffeef0; color: #dc2743; font-weight: 600; border: 1px solid #dc2743; }
 .feature-chip-sm { display: inline-block; padding: 2px 7px; border-radius: 10px; background: #f2f2f2; font-size: 10.5px; color: #777; margin: 2px 3px 0 0; }
+.avail-day-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #efefef; }
+.avail-day-row:last-child { border-bottom: none; }
+.avail-day-row .feature-chip-picker { margin-top: 0; flex: 1; }
+.avail-day-label { width: 22px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: #444; }
 .gm-popup-hours { font-size: 11.5px; color: #666; margin-top: 4px; }
 .open-now-tag { color: #2e9e3f; font-weight: 700; }
 .closed-now-tag { color: #999; font-weight: 700; }
@@ -590,7 +607,8 @@ body.dark .gm-popup-hours, body.dark .gm-popup-extra, body.dark .admin-row-email
 body.dark .feature-chip-sm, body.dark .post-companions, body.dark .profile-allergy-line { color: #d9a23b; }
 body.dark .stories-row, body.dark .sidebar-tabs, body.dark .friend-card,
 body.dark .result-card, body.dark .acc-card, body.dark .account-search-box,
-body.dark .post-card { border-color: #2e2e2e; }
+body.dark .post-card, body.dark .avail-day-row { border-color: #2e2e2e; }
+body.dark .avail-day-label { color: #e8e8e8; }
 body.dark input, body.dark select, body.dark textarea {
   background: #2a2a2a; color: #e8e8e8; border-color: #3a3a3a !important;
 }
@@ -604,6 +622,17 @@ body.dark .feature-chip-sm { background: #2a2a2a; }
 body.dark .extra-fields-toggle { color: #6db8ff; }
 body.dark .sidebar-body::-webkit-scrollbar-thumb { background: #3a3a3a; }
 body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background: rgba(0,0,0,0.7); }
+/* ── ダークモード未対応だった背景色の修正 ── */
+body.dark .search-toolbar, body.dark .genre-preview, body.dark .post-restaurant,
+body.dark .profile-post-card, body.dark .vs-btn {
+  background: #262626; border-color: #3a3a3a;
+}
+body.dark .profile-post-card:hover { background: #2e2e2e; }
+body.dark .profile-map-btn, body.dark .profile-edit-btn {
+  background: #2a2a2a; border-color: #3a3a3a; color: #e8e8e8;
+}
+body.dark .profile-edit-btn:hover { background: #333; }
+body.dark .profile-map-btn.on { background: #3a1a22; border-color: #dc2743; color: #ff7a92; }
 </style>
 </head>
 <body>
@@ -650,7 +679,7 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
   </div>
 </header>
 
-<div class="app-page active row" id="page-map">
+<div class="app-page row" id="page-map">
   <div class="main">
   <div class="sidebar">
     <!-- Stories -->
@@ -682,36 +711,50 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
 </div>
 
 <!-- ══════════════ SEARCH PAGE ══════════════ -->
-<div class="app-page" id="page-search">
-  <div class="search-tabs">
-    <div class="se-tab active" id="se-tab-shop" onclick="switchSearchTab('shop')">🍽 お店検索</div>
-    <div class="se-tab" id="se-tab-account" onclick="switchSearchTab('account')">👤 アカウント検索</div>
-  </div>
-
+<!-- 「アカウント検索」タブはタイムラインページに移動したため、検索ページはお店検索専用に変更 -->
+<div class="app-page active" id="page-search">
   <!-- Shop search -->
   <div class="search-body active" id="search-shop">
     <div class="filter-panel">
+      <div class="filter-reset-row">
+        <div class="chip" onclick="resetAllFilters()">🔄 絞り込みを解除</div>
+      </div>
+      <div class="filter-row">
+        <span class="f-label">場所</span>
+        <div class="dist-row">
+          <div class="dist-input-wrap">
+            <input id="distOriginInput" placeholder="駅名・場所を入力（任意。空欄なら日本全国が対象）" autocomplete="off"/>
+          </div>
+          <button class="loc-btn" onclick="useCurrentLocation()">📍 現在地</button>
+          <button class="search-run-btn" style="width:auto;padding:7px 16px;font-size:13px;" onclick="runManualSearch('shop')">🔍 検索する</button>
+        </div>
+      </div>
       <div class="filter-row">
         <span class="f-label">対象</span>
-        <div class="chip on" data-scope="all" onclick="setSearchScope('all')">🗺 マップ上の全てのお店</div>
-        <div class="chip" data-scope="following" onclick="setSearchScope('following')">👥 フォロー中の人のみ</div>
+        <div class="seg-switch" id="scopeSwitch">
+          <span class="seg-opt on" data-scope="all" onclick="setSearchScope('all')">🗺 全部</span>
+          <span class="seg-opt" data-scope="following" onclick="setSearchScope('following')">👥 フォロー中のみ</span>
+        </div>
+        <span class="scope-hint">「全部」＝登録されている全てのお店／「フォロー中のみ」＝フォロー中の人が登録した店</span>
       </div>
       <div class="filter-row">
         <span class="f-label">ジャンル</span>
-        <div class="chip on" data-genre="all" onclick="toggleGenreChip('all')">すべて</div>
-        <div class="chip" data-genre="居酒屋" onclick="toggleGenreChip('居酒屋')">🍶 居酒屋</div>
-        <div class="chip" data-genre="ダイニングバー・バル" onclick="toggleGenreChip('ダイニングバー・バル')">🍷 バル</div>
-        <div class="chip" data-genre="創作料理" onclick="toggleGenreChip('創作料理')">🍳 創作料理</div>
-        <div class="chip" data-genre="和食" onclick="toggleGenreChip('和食')">🍣 和食</div>
-        <div class="chip" data-genre="洋食" onclick="toggleGenreChip('洋食')">🍴 洋食</div>
-        <div class="chip" data-genre="イタリアン・フレンチ" onclick="toggleGenreChip('イタリアン・フレンチ')">🍝 イタリアン</div>
-        <div class="chip" data-genre="中華" onclick="toggleGenreChip('中華')">🥟 中華</div>
-        <div class="chip" data-genre="焼肉・ホルモン" onclick="toggleGenreChip('焼肉・ホルモン')">🔥 焼肉</div>
-        <div class="chip" data-genre="韓国料理" onclick="toggleGenreChip('韓国料理')">🌶️ 韓国</div>
-        <div class="chip" data-genre="アジア・エスニック料理" onclick="toggleGenreChip('アジア・エスニック料理')">🍛 エスニック</div>
-        <div class="chip" data-genre="バー・カクテル" onclick="toggleGenreChip('バー・カクテル')">🍸 バー</div>
-        <div class="chip" data-genre="ラーメン" onclick="toggleGenreChip('ラーメン')">🍜 ラーメン</div>
-        <div class="chip" data-genre="カフェ・スイーツ" onclick="toggleGenreChip('カフェ・スイーツ')">☕ カフェ</div>
+        <select class="form-select" id="genreSelect" onchange="onGenreSelectChange()">
+          <option value="all">指定しない</option>
+          <option value="居酒屋">🍶 居酒屋</option>
+          <option value="ダイニングバー・バル">🍷 バル</option>
+          <option value="創作料理">🍳 創作料理</option>
+          <option value="和食">🍣 和食</option>
+          <option value="洋食">🍴 洋食</option>
+          <option value="イタリアン・フレンチ">🍝 イタリアン</option>
+          <option value="中華">🥟 中華</option>
+          <option value="焼肉・ホルモン">🔥 焼肉</option>
+          <option value="韓国料理">🌶️ 韓国</option>
+          <option value="アジア・エスニック料理">🍛 エスニック</option>
+          <option value="バー・カクテル">🍸 バー</option>
+          <option value="ラーメン">🍜 ラーメン</option>
+          <option value="カフェ・スイーツ">☕ カフェ</option>
+        </select>
       </div>
       <div class="filter-row">
         <span class="f-label">価格帯</span>
@@ -725,50 +768,37 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         <div class="chip" data-rating="3" onclick="toggleRatingChip(3)">★3以上</div>
         <div class="chip" data-rating="4" onclick="toggleRatingChip(4)">★4以上</div>
         <div class="chip" data-rating="5" onclick="toggleRatingChip(5)">★5のみ</div>
-        <div class="chip" id="openNowChip" onclick="toggleOpenNowFilter()">🕐 営業中のみ</div>
-        <div class="chip" style="border-color:#dc2743;color:#dc2743;" onclick="resetAllFilters()">🔄 絞り込みを解除</div>
-      </div>
-      <div class="filter-row">
-        <span class="f-label">駅・距離</span>
-        <div class="dist-row">
-          <div class="dist-input-wrap">
-            <input id="distOriginInput" placeholder="駅名・場所を入力（例：渋谷駅）" autocomplete="off"/>
-          </div>
-          <button class="loc-btn" onclick="useCurrentLocation()">📍 現在地</button>
-          <div class="mode-btn on" data-mode="walk" onclick="setTravelMode('walk')">🚶 徒歩</div>
-          <div class="mode-btn" data-mode="bike" onclick="setTravelMode('bike')">🚲 自転車</div>
-          <div class="mode-btn" data-mode="train" onclick="setTravelMode('train')">🚃 電車</div>
-          <div class="mode-btn" data-mode="car" onclick="setTravelMode('car')">🚗 車</div>
-          <div class="min-wrap">
-            <input type="range" id="distMinutesRange" min="5" max="60" step="5" value="15" oninput="onMinutesChange()"/>
-            <span class="min-label" id="distMinutesLabel">15分</span>
-          </div>
-          <button class="dist-clear-btn" id="distClearBtn" onclick="clearDistanceFilter()">✕ 解除</button>
-        </div>
-      </div>
-      <div class="search-run-row">
-        <button class="search-run-btn" onclick="runManualSearch('shop')">🔍 検索する</button>
       </div>
     </div>
     <div class="search-toolbar">
-      <span class="sr-count" id="searchResultCount">0件のお店</span>
-      <div class="tb-btn" id="googleFetchBtn" onclick="fetchGooglePlacesInView()" style="display:none;">🔍 この範囲でGoogle検索</div>
-      <div class="tb-btn" id="viewListBtn" onclick="setSearchView('list')">📋 リスト</div>
-      <div class="tb-btn active" id="viewMapBtn" onclick="setSearchView('map')">🗺 マップ</div>
+      <div class="search-toolbar-row">
+        <span class="sr-count" id="searchResultCount">0件のお店</span>
+        <div class="tb-btn" id="googleFetchBtn" onclick="fetchGooglePlacesInView()" style="display:none;">🔄 この範囲で更新</div>
+        <div class="seg-switch" id="viewSwitch">
+          <span class="seg-opt" id="viewListBtn" onclick="setSearchView('list')">📋 リスト</span>
+          <span class="seg-opt on" id="viewMapBtn" onclick="setSearchView('map')">🗺 マップ</span>
+        </div>
+      </div>
+      <div class="search-toolbar-row">
+        <span class="f-label" style="min-width:auto;">表示の距離</span>
+        <select class="form-select" id="travelModeSelect" onchange="onTravelModeSelectChange()">
+          <option value="walk">🚶 徒歩</option>
+          <option value="bike">🚲 自転車</option>
+          <option value="train">🚃 電車</option>
+          <option value="car">🚗 車</option>
+        </select>
+        <div class="min-wrap">
+          <input type="range" id="distMinutesRange" min="5" max="60" step="5" value="15" oninput="onMinutesChange()"/>
+          <span class="min-label" id="distMinutesLabel">15分</span>
+        </div>
+        <button class="dist-clear-btn" id="distClearBtn" onclick="clearDistanceFilter()">✕ 解除</button>
+        <span class="dist-circle-hint" id="distCircleHint" style="display:none;">※地図の円は大体の目安です</span>
+      </div>
     </div>
     <div class="search-views">
       <div class="sv-map active" id="sv-map"><div id="search-map" style="width:100%;height:100%;"></div></div>
       <div class="sv-list" id="sv-list"></div>
     </div>
-  </div>
-
-  <!-- Account search -->
-  <div class="search-body" id="search-account">
-    <div class="account-search-box">
-      <input id="accountSearchInput" placeholder="名前・タグで検索（例：ラーメン、カフェ）" oninput="renderAccountResults()" onkeydown="if(event.key==='Enter')runManualSearch('account')"/>
-      <button class="search-run-btn" onclick="runManualSearch('account')">🔍 検索する</button>
-    </div>
-    <div class="account-results" id="accountResults"></div>
   </div>
 </div>
 
@@ -777,24 +807,42 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
   <div class="tl-header">
     <div class="tl-title">タイムライン</div>
     <div class="tl-fbtn" id="tlHashtagChip" style="display:none;color:#dc2743;border-color:#dc2743;" onclick="clearHashtagFilter()"></div>
+    <!-- アカウント検索：旧・検索ページのタブから移動 -->
+    <button class="tl-fbtn" id="tlAccountSearchToggle" onclick="openAccountSearchModal()" title="ユーザーを名前・タグで検索します">👤 検索</button>
     <button class="tl-fbtn" id="tlComposerToggle" onclick="openTimelineComposer()" title="登録済みのお店、またはGoogleマップのお店について感想を投稿します">📝 投稿する</button>
   </div>
   <div class="tl-feed" id="tlFeed"></div>
 </div>
 
+<!-- ══════════════ アカウント検索モーダル（タイムラインから移動） ══════════════ -->
+<div class="modal-overlay" id="accountSearchOverlay">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <div class="modal-title">👤 アカウント検索</div>
+      <button class="modal-close" onclick="closeAccountSearchModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="account-search-box">
+        <input id="accountSearchInput" placeholder="名前・タグで検索（例：ラーメン、カフェ）" oninput="renderAccountResults()" onkeydown="if(event.key==='Enter')runManualSearch('account')"/>
+        <button class="search-run-btn" onclick="runManualSearch('account')">🔍 検索する</button>
+      </div>
+      <div class="account-results" id="accountResults"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ BOTTOM NAV ══════════════ -->
 <nav class="bottom-nav">
-  <button class="nav-item active" id="nav-map" onclick="goPage('map')">
-    <span class="ni-icon">🗺</span><span class="ni-label">マップ</span>
-  </button>
-  <button class="nav-item" id="nav-search" onclick="goPage('search')">
+  <!-- 旧「マップ」タブは検索ページの地図に統合したため廃止。
+       id="nav-map"はgoPage('map')がアクティブ判定に使うため内部名として維持しつつ、表示は「データ」タブに転用 -->
+  <button class="nav-item active" id="nav-search" onclick="goPage('search')">
     <span class="ni-icon">🔍</span><span class="ni-label">検索</span>
   </button>
   <button class="nav-item" id="nav-timeline" onclick="goPage('timeline')">
     <span class="ni-icon">📰</span><span class="ni-label">タイムライン</span>
   </button>
-  <button class="nav-item" id="nav-profile" onclick="openProfile(0); goPage('map')">
-    <span class="ni-icon">👤</span><span class="ni-label">プロフィール</span>
+  <button class="nav-item" id="nav-map" onclick="openProfile(0); goPage('map')">
+    <span class="ni-icon">📊</span><span class="ni-label">データ</span>
   </button>
 </nav>
 
@@ -1007,17 +1055,9 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         <input class="form-input" id="editProfileTags" placeholder="例：和食, カフェ, ラーメン"/>
       </div>
       <div class="form-row">
-        <label class="form-label">アレルギー（任意・複数選択可）</label>
-        <div class="feature-chip-picker" id="editAllergyPicker">
-          <span class="feature-chip" data-tag="卵" onclick="toggleChipEl(this)">卵</span>
-          <span class="feature-chip" data-tag="乳" onclick="toggleChipEl(this)">乳</span>
-          <span class="feature-chip" data-tag="小麦" onclick="toggleChipEl(this)">小麦</span>
-          <span class="feature-chip" data-tag="えび" onclick="toggleChipEl(this)">えび</span>
-          <span class="feature-chip" data-tag="かに" onclick="toggleChipEl(this)">かに</span>
-          <span class="feature-chip" data-tag="そば" onclick="toggleChipEl(this)">そば</span>
-          <span class="feature-chip" data-tag="落花生" onclick="toggleChipEl(this)">落花生</span>
-          <span class="feature-chip" data-tag="くるみ" onclick="toggleChipEl(this)">くるみ</span>
-        </div>
+        <label class="form-label">アレルギー（任意）</label>
+        <div class="modal-subtitle" id="allergySummaryPreview" style="margin-bottom:8px;">設定なし</div>
+        <button class="btn-cancel" style="width:100%;" onclick="openAllergyModal()">⚠️ アレルギーを設定する</button>
       </div>
       <div class="form-row">
         <label class="form-label">嫌いな食べ物（任意）</label>
@@ -1027,25 +1067,8 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         <label class="form-label">今の空き状況（任意）</label>
         <div class="modal-subtitle" id="availabilityStatusPreview" style="margin-bottom:8px;">設定なし</div>
         <button class="btn-cancel" style="width:100%;margin-bottom:8px;" onclick="setQuickAvailability('tonight')">🌙 今夜空いてる</button>
-        <div class="search-hint" style="margin-bottom:4px;">または曜日・時間帯を選んで設定（どちらも複数選択可）：</div>
-        <div class="weekday-picker" id="availWeekdayPicker">
-          <span class="weekday-chip" data-day="月" onclick="selectAvailDay(this)">月</span>
-          <span class="weekday-chip" data-day="火" onclick="selectAvailDay(this)">火</span>
-          <span class="weekday-chip" data-day="水" onclick="selectAvailDay(this)">水</span>
-          <span class="weekday-chip" data-day="木" onclick="selectAvailDay(this)">木</span>
-          <span class="weekday-chip" data-day="金" onclick="selectAvailDay(this)">金</span>
-          <span class="weekday-chip" data-day="土" onclick="selectAvailDay(this)">土</span>
-          <span class="weekday-chip" data-day="日" onclick="selectAvailDay(this)">日</span>
-        </div>
-        <div class="feature-chip-picker" id="availSlotPicker" style="margin-top:8px;">
-          <span class="feature-chip" data-slot="朝" onclick="selectAvailSlot(this)">朝</span>
-          <span class="feature-chip" data-slot="昼" onclick="selectAvailSlot(this)">昼</span>
-          <span class="feature-chip" data-slot="夜" onclick="selectAvailSlot(this)">夜</span>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn-submit" style="width:auto;flex:1;" onclick="applyWeekdayAvailability()">この空き状況を設定</button>
-          <button class="btn-cancel" style="width:auto;flex:1;" onclick="clearAvailability()">クリア</button>
-        </div>
+        <button class="btn-cancel" style="width:100%;margin-bottom:8px;" onclick="openAvailabilityModal()">📅 曜日ごとに設定する</button>
+        <button class="btn-cancel" style="width:100%;color:#dc2743;" onclick="clearAvailability()">空き状況をクリア</button>
       </div>
       <div class="form-row dark-toggle-row">
         <div class="dark-toggle-label">🌙 ダークモード</div>
@@ -1064,6 +1087,136 @@ body.dark .pending-approval-overlay, body.dark .login-gate-overlay { background:
         <button class="btn-cancel" onclick="closeEditProfileModal()">キャンセル</button>
         <button class="btn-submit" onclick="saveProfile()">保存する</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ アレルギー設定モーダル（プロフィール編集から分離） ══════════════ -->
+<div class="modal-overlay" id="allergyModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚠️ アレルギーを設定</div>
+      <button class="modal-close" onclick="closeAllergyModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-subtitle" style="margin-top:-6px;">当てはまるものをすべて選んでください（複数選択可）</div>
+      <div id="editAllergyPicker">
+        <div class="form-row">
+          <label class="form-label">特定原材料（表示義務8品目）</label>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-tag="卵" onclick="toggleChipEl(this)">卵</span>
+            <span class="feature-chip" data-tag="乳" onclick="toggleChipEl(this)">乳</span>
+            <span class="feature-chip" data-tag="小麦" onclick="toggleChipEl(this)">小麦</span>
+            <span class="feature-chip" data-tag="えび" onclick="toggleChipEl(this)">えび</span>
+            <span class="feature-chip" data-tag="かに" onclick="toggleChipEl(this)">かに</span>
+            <span class="feature-chip" data-tag="そば" onclick="toggleChipEl(this)">そば</span>
+            <span class="feature-chip" data-tag="落花生" onclick="toggleChipEl(this)">落花生</span>
+            <span class="feature-chip" data-tag="くるみ" onclick="toggleChipEl(this)">くるみ</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">準ずる原材料（推奨20品目・任意）</label>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-tag="アーモンド" onclick="toggleChipEl(this)">アーモンド</span>
+            <span class="feature-chip" data-tag="あわび" onclick="toggleChipEl(this)">あわび</span>
+            <span class="feature-chip" data-tag="いか" onclick="toggleChipEl(this)">いか</span>
+            <span class="feature-chip" data-tag="いくら" onclick="toggleChipEl(this)">いくら</span>
+            <span class="feature-chip" data-tag="オレンジ" onclick="toggleChipEl(this)">オレンジ</span>
+            <span class="feature-chip" data-tag="カシューナッツ" onclick="toggleChipEl(this)">カシューナッツ</span>
+            <span class="feature-chip" data-tag="キウイフルーツ" onclick="toggleChipEl(this)">キウイフルーツ</span>
+            <span class="feature-chip" data-tag="牛肉" onclick="toggleChipEl(this)">牛肉</span>
+            <span class="feature-chip" data-tag="ごま" onclick="toggleChipEl(this)">ごま</span>
+            <span class="feature-chip" data-tag="さけ" onclick="toggleChipEl(this)">さけ</span>
+            <span class="feature-chip" data-tag="さば" onclick="toggleChipEl(this)">さば</span>
+            <span class="feature-chip" data-tag="大豆" onclick="toggleChipEl(this)">大豆</span>
+            <span class="feature-chip" data-tag="鶏肉" onclick="toggleChipEl(this)">鶏肉</span>
+            <span class="feature-chip" data-tag="バナナ" onclick="toggleChipEl(this)">バナナ</span>
+            <span class="feature-chip" data-tag="豚肉" onclick="toggleChipEl(this)">豚肉</span>
+            <span class="feature-chip" data-tag="まつたけ" onclick="toggleChipEl(this)">まつたけ</span>
+            <span class="feature-chip" data-tag="もも" onclick="toggleChipEl(this)">もも</span>
+            <span class="feature-chip" data-tag="やまいも" onclick="toggleChipEl(this)">やまいも</span>
+            <span class="feature-chip" data-tag="りんご" onclick="toggleChipEl(this)">りんご</span>
+            <span class="feature-chip" data-tag="ゼラチン" onclick="toggleChipEl(this)">ゼラチン</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">その他（自由記載）</label>
+        <input class="form-input" id="editAllergyOtherInput" placeholder="例：特定の香辛料など、上にないもの"/>
+      </div>
+      <button class="btn-submit" style="width:100%;" onclick="closeAllergyModal()">設定する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ 空き状況設定モーダル（曜日ごとに時間帯を設定） ══════════════ -->
+<div class="modal-overlay" id="availabilityModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📅 空き状況を曜日ごとに設定</div>
+      <button class="modal-close" onclick="closeAvailabilityModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-subtitle" style="margin-top:-6px;">曜日ごとに空いている時間帯を選べます（例：月曜は昼だけ、水曜は夜だけ、のような組み合わせも可能です）</div>
+      <div id="availDayPicker">
+        <div class="avail-day-row" data-day="月">
+          <div class="avail-day-label">月</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="火">
+          <div class="avail-day-label">火</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="水">
+          <div class="avail-day-label">水</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="木">
+          <div class="avail-day-label">木</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="金">
+          <div class="avail-day-label">金</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="土">
+          <div class="avail-day-label">土</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+        <div class="avail-day-row" data-day="日">
+          <div class="avail-day-label">日</div>
+          <div class="feature-chip-picker">
+            <span class="feature-chip" data-slot="朝" onclick="toggleChipEl(this)">朝</span>
+            <span class="feature-chip" data-slot="昼" onclick="toggleChipEl(this)">昼</span>
+            <span class="feature-chip" data-slot="夜" onclick="toggleChipEl(this)">夜</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" style="width:100%;margin-top:6px;" onclick="applyDayAvailability()">この空き状況を設定</button>
     </div>
   </div>
 </div>
@@ -1381,8 +1534,8 @@ const MY_USER = {
   bio: '東京グルメを開拓中。おいしいお店を地図に残しています。',
   tags: ['和食','カフェ','ラーメン'],
   uid: null, email: null, photoURL: null,
-  allergies: [], dislikedFoods: '',
-  followingUids: [], mapVisibleUids: [], availability: null,
+  allergies: [], allergyOther: '', dislikedFoods: '',
+  followingUids: [], mapVisibleUids: [], availability: null, availabilityByDay: null,
 };
 // 友達は実際にGoogleログインしたユーザー。Firestoreから読み込む（loadUsersFromFirestore）
 let FRIENDS = [];
@@ -1398,11 +1551,9 @@ let INITIAL_POSTS = [];  // 自分以外のユーザーの投稿
 // ═══════════════════════════════════════
 let myPosts = [];
 let timelineHashtagFilter = null; // ③-2：ハッシュタグ絞り込みを実際に機能させる
-let searchTab = 'shop';
 let searchView = 'map';
 let selectedGenres = new Set();      // 空 = すべて
 let maxPriceFilter = 4;              // 4(10000円以上) = 絞り込みなし
-let openNowFilterOn = false;         // 営業時間での絞り込み（②-2/①-15）
 let minRatingFilter = 0;
 let searchScope = 'all';             // 'all' = マップ上の全登録店, 'following' = フォロー中の人のみ
 let distOrigin = null;               // {lat,lng,label}
@@ -1548,10 +1699,12 @@ async function upsertMyUserDoc() {
   MY_USER.tags  = data.tags  || MY_USER.tags;
   MY_USER.photoURL = data.photoURL || MY_USER.photoURL;
   MY_USER.allergies = data.allergies || [];
+  MY_USER.allergyOther = data.allergyOther || '';
   MY_USER.dislikedFoods = data.dislikedFoods || '';
   MY_USER.followingUids  = data.followingUids  || [];
   MY_USER.mapVisibleUids = data.mapVisibleUids || [];
   MY_USER.availability   = data.availability   || null;
+  MY_USER.availabilityByDay = data.availabilityByDay || null;
   refreshHeaderIdentity();
   return true;
 }
@@ -1573,7 +1726,7 @@ async function persistMyProfile() {
   const { db, doc, updateDoc } = window.FWY_FB;
   await updateDoc(doc(db, 'users', MY_USER.uid), {
     name: MY_USER.name, label: MY_USER.label, bio: MY_USER.bio, tags: MY_USER.tags, photoURL: MY_USER.photoURL,
-    allergies: MY_USER.allergies || [], dislikedFoods: MY_USER.dislikedFoods || '',
+    allergies: MY_USER.allergies || [], allergyOther: MY_USER.allergyOther || '', dislikedFoods: MY_USER.dislikedFoods || '',
   });
 }
 
@@ -1603,20 +1756,38 @@ function nextDateForWeekday(dayChar) {
   d.setDate(now.getDate() + diff);
   return d;
 }
-// 曜日・時間帯はどちらも複数選択できる（タップでON/OFFを切り替え）
-function selectAvailDay(el) { el.classList.toggle('active'); }
-function selectAvailSlot(el) { el.classList.toggle('active'); }
-function getActiveAvailDays()  { return Array.from(document.querySelectorAll('#availWeekdayPicker .weekday-chip.active')).map(el=>el.dataset.day); }
-function getActiveAvailSlots() { return Array.from(document.querySelectorAll('#availSlotPicker .feature-chip.active')).map(el=>el.dataset.slot); }
+// 空き状況：曜日ごとに別々の時間帯を設定できる（例：月曜は昼だけ、水曜は夜だけ）
+// 別画面（モーダル）で曜日×時間帯の組み合わせを選んでもらう方式に変更
 function updateAvailabilityPreviewUI() {
   const el = document.getElementById('availabilityStatusPreview');
   el.textContent = isAvailabilityActive(MY_USER) ? `現在の設定：${MY_USER.availability.text}` : '設定なし';
-  document.querySelectorAll('#availWeekdayPicker .weekday-chip').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('#availSlotPicker .feature-chip').forEach(c=>c.classList.remove('active'));
+}
+function getAvailabilityByDayUI() {
+  const result = {};
+  document.querySelectorAll('#availDayPicker .avail-day-row').forEach(row => {
+    const day = row.dataset.day;
+    const slots = Array.from(row.querySelectorAll('.feature-chip.active')).map(el=>el.dataset.slot);
+    if (slots.length) result[day] = slots;
+  });
+  return result;
+}
+function setAvailabilityByDayUI(byDay) {
+  document.querySelectorAll('#availDayPicker .avail-day-row').forEach(row => {
+    const day = row.dataset.day;
+    const active = (byDay && byDay[day]) || [];
+    row.querySelectorAll('.feature-chip').forEach(el => el.classList.toggle('active', active.includes(el.dataset.slot)));
+  });
+}
+function openAvailabilityModal() {
+  setAvailabilityByDayUI(MY_USER.availabilityByDay);
+  document.getElementById('availabilityModalOverlay').classList.add('open');
+}
+function closeAvailabilityModal() {
+  document.getElementById('availabilityModalOverlay').classList.remove('open');
 }
 async function persistAvailability() {
   const { db, doc, updateDoc } = window.FWY_FB;
-  await updateDoc(doc(db, 'users', MY_USER.uid), { availability: MY_USER.availability });
+  await updateDoc(doc(db, 'users', MY_USER.uid), { availability: MY_USER.availability, availabilityByDay: MY_USER.availabilityByDay || null });
 }
 async function setQuickAvailability(kind) {
   if (kind === 'tonight') {
@@ -1627,23 +1798,29 @@ async function setQuickAvailability(kind) {
   renderProfilePanel('0'); renderSidebar();
   toast('空き状況を設定しました');
 }
-async function applyWeekdayAvailability() {
+async function applyDayAvailability() {
   const SLOT_ORDER = ['朝','昼','夜'];
-  const days  = getActiveAvailDays().sort((a,b)=>WEEKDAYS.indexOf(a)-WEEKDAYS.indexOf(b));
-  const slots = getActiveAvailSlots().sort((a,b)=>SLOT_ORDER.indexOf(a)-SLOT_ORDER.indexOf(b));
-  if (!days.length || !slots.length) { toast('曜日と時間帯を選んでください（複数選択できます）'); return; }
+  const byDay = getAvailabilityByDayUI();
+  const days = Object.keys(byDay).sort((a,b)=>WEEKDAYS.indexOf(a)-WEEKDAYS.indexOf(b));
+  if (!days.length) { toast('曜日ごとに時間帯を選んでください'); return; }
+  const text = days.map(d => `${d}(${byDay[d].slice().sort((a,b)=>SLOT_ORDER.indexOf(a)-SLOT_ORDER.indexOf(b)).join('・')})`).join('・') + ' 空いてます';
   // 選んだ曜日のうち一番先の日付を期限にする（その日が終わるまでバッジを表示し続ける）
   const farthest = days.map(nextDateForWeekday).sort((a,b)=>b-a)[0];
-  MY_USER.availability = { text: `今週${days.join('・')} ${slots.join('/')}空いてます`, expiresAt: endOfDate(farthest).toISOString() };
+  MY_USER.availability = { text, expiresAt: endOfDate(farthest).toISOString() };
+  MY_USER.availabilityByDay = byDay;
   await persistAvailability();
   updateAvailabilityPreviewUI();
+  closeAvailabilityModal();
   renderProfilePanel('0'); renderSidebar();
   toast('空き状況を設定しました');
 }
 async function clearAvailability() {
   MY_USER.availability = null;
+  MY_USER.availabilityByDay = null;
   await persistAvailability();
   updateAvailabilityPreviewUI();
+  setAvailabilityByDayUI(null);
+  closeAvailabilityModal();
   renderProfilePanel('0'); renderSidebar();
   toast('空き状況をクリアしました');
 }
@@ -1656,6 +1833,24 @@ async function clearAvailability() {
 // ═══════════════════════════════════════
 let unsubUsers = null, unsubSpots = null, unsubPosts = null;
 let remoteSyncReady = false;
+let unsubJoinRequests = null;
+let pendingJoinRequests = []; // 管理者向け：承認待ちの参加リクエスト（通知に表示するためリアルタイム監視）
+
+// 承認申請の通知機能：管理者なら参加リクエストをリアルタイムで監視し、通知に反映する
+function loadJoinRequestsRealtime() {
+  if (!isAdminUser()) return;
+  const { db, collection, onSnapshot } = window.FWY_FB;
+  if (unsubJoinRequests) unsubJoinRequests();
+  unsubJoinRequests = onSnapshot(collection(db, 'joinRequests'), (snap) => {
+    pendingJoinRequests = [];
+    snap.forEach(docSnap => pendingJoinRequests.push({ uid: docSnap.id, ...docSnap.data() }));
+    refreshNotificationBadge();
+    const dd = document.getElementById('notifDropdown');
+    if (dd && dd.classList.contains('open')) renderNotifDropdown();
+    const ap = document.getElementById('adminPanelOverlay');
+    if (ap && ap.classList.contains('open')) refreshAdminPanel();
+  }, (err) => console.error('joinRequests onSnapshot error:', err));
+}
 
 function loadUsersFromFirestore() {
   return new Promise((resolve) => {
@@ -1671,7 +1866,7 @@ function loadUsersFromFirestore() {
           id: docSnap.id, name: data.name || '名無し', label: data.label || (data.name||'？').charAt(0),
           color: pickColorForUid(docSnap.id), photoURL: data.photoURL || null,
           desc: data.bio || '', bio: data.bio || '', tags: data.tags || [],
-          allergies: data.allergies || [], dislikedFoods: data.dislikedFoods || '',
+          allergies: data.allergies || [], allergyOther: data.allergyOther || '', dislikedFoods: data.dislikedFoods || '',
           following: MY_USER.followingUids.includes(docSnap.id),
           showOnMap: MY_USER.mapVisibleUids.includes(docSnap.id),
           followingUids: data.followingUids || [],
@@ -1950,6 +2145,16 @@ function setNotifLastSeenNow() {
 function collectNotifications() {
   const lastSeen = getNotifLastSeen();
   const items = [];
+  // 承認待ちの参加リクエスト（管理者のみ）：既読扱いにせず、承認/拒否されるまで常に表示し続ける
+  if (isAdminUser()) {
+    (pendingJoinRequests || []).forEach(r => {
+      items.push({
+        time: r.requestedAt || r.createdAt || new Date().toISOString(),
+        text: `${r.name || r.email || '新しいユーザー'}さんから参加申請が届いています`,
+        action: 'admin',
+      });
+    });
+  }
   (INITIAL_POSTS || []).forEach(p => {
     if (p.createdAt && p.createdAt > lastSeen) {
       const user = getUserById(p.userId);
@@ -1972,7 +2177,12 @@ function collectNotifications() {
       }
     });
   });
-  items.sort((a, b) => b.time.localeCompare(a.time));
+  // 参加申請（admin）は対応が終わるまでの「やること」なので、常に一番上に表示する
+  items.sort((a, b) => {
+    if (a.action === 'admin' && b.action !== 'admin') return -1;
+    if (a.action !== 'admin' && b.action === 'admin') return 1;
+    return b.time.localeCompare(a.time);
+  });
   return items;
 }
 function refreshNotificationBadge() {
@@ -1997,8 +2207,8 @@ function renderNotifDropdown() {
   const items = collectNotifications();
   const list = document.getElementById('notifList');
   list.innerHTML = items.length ? items.map(it => `
-    <div class="notif-item" onclick="goPage('timeline');closeNotifDropdown();">
-      <div class="notif-item-text">${it.text}</div>
+    <div class="notif-item" onclick="${it.action === 'admin' ? "closeNotifDropdown();openAdminPanelFromProfile();" : "goPage('timeline');closeNotifDropdown();"}">
+      <div class="notif-item-text">${it.action === 'admin' ? '🔔 ' : ''}${it.text}</div>
       <div class="notif-item-time">${timeAgo(it.time)}</div>
     </div>`).join('') : '<div class="notif-empty">新しいお知らせはありません</div>';
   // ドロップダウンを開いたら既読にする（次に新しい投稿・コメントが来たら、また件数バッジが出る）
@@ -2103,6 +2313,8 @@ function startApp() {
       renderStories();
       renderSidebar();
       refreshNotificationBadge();
+      loadJoinRequestsRealtime(); // 承認申請の通知機能：管理者なら参加リクエストをリアルタイム監視
+      initSearchPage(); // マップタブ廃止により、検索ページが初期表示になったためここで初期化
     } else {
       openOnboardingModal();
     }
@@ -2123,6 +2335,8 @@ function openEditProfileModal() {
   document.getElementById('editProfileBio').value = MY_USER.bio || '';
   document.getElementById('editProfileTags').value = (MY_USER.tags||[]).join(', ');
   setActiveChips('editAllergyPicker', MY_USER.allergies);
+  document.getElementById('editAllergyOtherInput').value = MY_USER.allergyOther || '';
+  updateAllergySummaryUI();
   document.getElementById('editDislikedFoods').value = MY_USER.dislikedFoods || '';
   editPhotoDataUrl = null;
   document.getElementById('editProfilePhotoPreview').innerHTML = avatarInner(MY_USER);
@@ -2134,6 +2348,22 @@ function openEditProfileModal() {
 }
 function closeEditProfileModal() {
   document.getElementById('editProfileModalOverlay').classList.remove('open');
+}
+
+// ── アレルギー設定（別画面モーダル） ──
+function updateAllergySummaryUI() {
+  const chips = getActiveChips('editAllergyPicker');
+  const other = (document.getElementById('editAllergyOtherInput').value || '').trim();
+  const parts = chips.slice();
+  if (other) parts.push(other);
+  document.getElementById('allergySummaryPreview').textContent = parts.length ? `設定済み：${parts.join('・')}` : '設定なし';
+}
+function openAllergyModal() {
+  document.getElementById('allergyModalOverlay').classList.add('open');
+}
+function closeAllergyModal() {
+  updateAllergySummaryUI();
+  document.getElementById('allergyModalOverlay').classList.remove('open');
 }
 
 // ── ダークモード ──
@@ -2176,6 +2406,7 @@ async function saveProfile() {
   MY_USER.bio   = document.getElementById('editProfileBio').value.trim();
   MY_USER.tags  = document.getElementById('editProfileTags').value.split(',').map(t=>t.trim()).filter(Boolean);
   MY_USER.allergies = getActiveChips('editAllergyPicker');
+  MY_USER.allergyOther = document.getElementById('editAllergyOtherInput').value.trim();
   MY_USER.dislikedFoods = document.getElementById('editDislikedFoods').value.trim();
   if (editPhotoDataUrl) MY_USER.photoURL = editPhotoDataUrl;
   await persistMyProfile();
@@ -2212,12 +2443,13 @@ async function finishOnboarding() {
   renderStories();
   renderSidebar();
   refreshNotificationBadge();
+  loadJoinRequestsRealtime(); // 承認申請の通知機能：管理者なら参加リクエストをリアルタイム監視
 }
 
 // ═══════════════════════════════════════
 // PAGE NAVIGATION
 // ═══════════════════════════════════════
-let currentPage = 'map';
+let currentPage = 'search'; // マップタブ廃止に伴い、初期表示は検索ページに変更
 let isPoppingState = false; // popstate処理中フラグ（処理中は新たにhistoryへpushしない）
 function goPage(page) {
   currentPage = page;
@@ -2234,7 +2466,7 @@ function goPage(page) {
 // ブラウザの「戻る」ボタンでアプリ内のページ・プロフィール表示を正しく戻す
 window.addEventListener('popstate', (e) => {
   isPoppingState = true;
-  const state = e.state || { fwyPage: 'map', fwyProfile: null };
+  const state = e.state || { fwyPage: 'search', fwyProfile: null };
   if (!state.fwyProfile && openProfileId !== null) {
     closeProfile();
   } else if (state.fwyProfile && state.fwyProfile !== openProfileId) {
@@ -2420,14 +2652,13 @@ async function submitPost() {
 // ═══════════════════════════════════════
 // SEARCH PAGE
 // ═══════════════════════════════════════
-function switchSearchTab(tab) {
-  searchTab = tab;
-  document.getElementById('se-tab-shop').classList.toggle('active', tab==='shop');
-  document.getElementById('se-tab-account').classList.toggle('active', tab==='account');
-  document.getElementById('search-shop').classList.toggle('active', tab==='shop');
-  document.getElementById('search-account').classList.toggle('active', tab==='account');
-  if (tab === 'account') renderAccountResults();
-  if (tab === 'shop' && searchMap) setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
+// アカウント検索：検索ページのタブからタイムラインのモーダルに移動
+function openAccountSearchModal() {
+  document.getElementById('accountSearchOverlay').classList.add('open');
+  renderAccountResults();
+}
+function closeAccountSearchModal() {
+  document.getElementById('accountSearchOverlay').classList.remove('open');
 }
 
 function initSearchPage() {
@@ -2459,6 +2690,9 @@ function initSearchPage() {
   } else {
     setTimeout(()=>{ google.maps.event.trigger(searchMap,'resize'); applySharedViewTo(searchMap); }, 80);
   }
+  // 「対象：全部」が初期値なので、検索ページを開いた時点でGoogleのお店も合流させておく
+  // （以前はチップを押した時しか取得されず、何も選ばなくても出てくるはずなのに出てこないバグだった）
+  if (searchScope === 'all') setTimeout(fetchGooglePlacesInView, 300);
   renderSearchResults();
 }
 
@@ -2477,6 +2711,9 @@ function scheduleGooglePlacesFetch(immediate) {
   clearTimeout(googlePlacesFetchTimer);
   googlePlacesFetchTimer = setTimeout(fetchGooglePlacesInView, immediate ? 0 : 500);
 }
+// 「G」が付くお店（レストランtype）しか登録できなかった不具合の修正：
+// レストランだけでなくカフェ・バーも合わせて検索し、食べ物系のお店なら登録できるようにする（百貨店等のランドマークは対象外のまま）
+const GOOGLE_SEARCH_TYPES = ['restaurant', 'cafe', 'bar'];
 function fetchGooglePlacesInView() {
   if (!googlePlacesService || searchScope !== 'all') return;
   const bounds = searchMap.getBounds();
@@ -2485,12 +2722,20 @@ function fetchGooglePlacesInView() {
   const ne = bounds.getNorthEast();
   const radius = Math.min(3000, Math.max(300, google.maps.geometry.spherical.computeDistanceBetween(center, ne)));
   googlePlacesLoading = true;
-  googlePlacesService.nearbySearch({ location: center, radius, type: 'restaurant' }, (results, status) => {
-    googlePlacesLoading = false;
-    googlePlaceResults = (status === google.maps.places.PlacesServiceStatus.OK && results)
-      ? results.filter(p => p.geometry && p.geometry.location).map(toGooglePseudoSpot)
-      : [];
-    renderSearchResults();
+  const merged = new Map();
+  let pending = GOOGLE_SEARCH_TYPES.length;
+  GOOGLE_SEARCH_TYPES.forEach(type => {
+    googlePlacesService.nearbySearch({ location: center, radius, type }, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        results.filter(p => p.geometry && p.geometry.location).forEach(p => merged.set(p.place_id, p));
+      }
+      pending--;
+      if (pending === 0) {
+        googlePlacesLoading = false;
+        googlePlaceResults = Array.from(merged.values()).map(toGooglePseudoSpot);
+        renderSearchResults();
+      }
+    });
   });
 }
 function toGooglePseudoSpot(place) {
@@ -2534,15 +2779,10 @@ function googlePriceLevelToOurs(level) {
   const table = { 0:'2000円以下', 1:'2000円以下', 2:'5000円以下', 3:'10000円以下', 4:'10000円以上' };
   return (level != null && table[level]) ? table[level] : null;
 }
-function toggleGenreChip(g) {
-  if (g === 'all') { selectedGenres.clear(); }
-  else {
-    selectedGenres.has(g) ? selectedGenres.delete(g) : selectedGenres.add(g);
-  }
-  document.querySelectorAll('[data-genre]').forEach(c => {
-    const cg = c.dataset.genre;
-    c.classList.toggle('on', cg==='all' ? selectedGenres.size===0 : selectedGenres.has(cg));
-  });
+function onGenreSelectChange() {
+  const g = document.getElementById('genreSelect').value;
+  selectedGenres.clear();
+  if (g !== 'all') selectedGenres.add(g);
   renderSearchResults();
 }
 function onPriceRangeChange() {
@@ -2550,22 +2790,17 @@ function onPriceRangeChange() {
   document.getElementById('priceMaxLabel').textContent = maxPriceFilter >= 4 ? '指定なし' : PRICE_LEVELS[maxPriceFilter-1];
   renderSearchResults();
 }
-function toggleOpenNowFilter() {
-  openNowFilterOn = !openNowFilterOn;
-  document.getElementById('openNowChip').classList.toggle('on', openNowFilterOn);
-  renderSearchResults();
-}
 function resetAllFilters() {
   selectedGenres.clear();
   maxPriceFilter = 4;
   minRatingFilter = 0;
-  openNowFilterOn = false;
   clearDistanceFilter();
-  document.querySelectorAll('[data-genre]').forEach(c => c.classList.toggle('on', c.dataset.genre==='all'));
+  document.getElementById('genreSelect').value = 'all';
+  document.getElementById('travelModeSelect').value = 'walk';
+  distMode = 'walk';
   document.querySelectorAll('[data-rating]').forEach(c => c.classList.remove('on'));
   document.getElementById('priceMaxRange').value = 4;
   document.getElementById('priceMaxLabel').textContent = '指定なし';
-  document.getElementById('openNowChip').classList.remove('on');
   renderSearchResults();
 }
 function toggleRatingChip(r) {
@@ -2575,8 +2810,12 @@ function toggleRatingChip(r) {
 }
 function setTravelMode(m) {
   distMode = m;
-  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode===m));
+  const sel = document.getElementById('travelModeSelect');
+  if (sel) sel.value = m;
   if (distanceFilterOn) renderSearchResults();
+}
+function onTravelModeSelectChange() {
+  setTravelMode(document.getElementById('travelModeSelect').value);
 }
 function onMinutesChange() {
   distMaxMinutes = parseInt(document.getElementById('distMinutesRange').value);
@@ -2607,8 +2846,8 @@ function setSearchView(v) {
   searchView = v;
   document.getElementById('sv-map').classList.toggle('active', v==='map');
   document.getElementById('sv-list').classList.toggle('active', v==='list');
-  document.getElementById('viewMapBtn').classList.toggle('active', v==='map');
-  document.getElementById('viewListBtn').classList.toggle('active', v==='list');
+  document.getElementById('viewMapBtn').classList.toggle('on', v==='map');
+  document.getElementById('viewListBtn').classList.toggle('on', v==='list');
   if (v==='map') setTimeout(()=>google.maps.event.trigger(searchMap,'resize'), 80);
 }
 function estimateMinutes(spot) {
@@ -2633,7 +2872,6 @@ function getFilteredSpots() {
   if (distanceFilterOn && distOrigin) {
     spots = spots.filter(s => estimateMinutes(s) <= distMaxMinutes);
   }
-  if (openNowFilterOn) spots = spots.filter(s => isOpenNow(s) !== false); // 不明な場合は除外しない
   return spots;
 }
 // 営業時間（hours）データから「今営業中か」を判定する（①-15／営業時間フィルタ用）。データがない場合はnull（不明）
@@ -2659,6 +2897,8 @@ function hoursLabel(spot) {
 // 距離フィルタが有効なとき、地図上に「ここまでが範囲内」の円を表示する
 function updateDistRadiusCircle() {
   if (distRadiusCircle) { distRadiusCircle.setMap(null); distRadiusCircle = null; }
+  const hintEl = document.getElementById('distCircleHint');
+  if (hintEl) hintEl.style.display = (distanceFilterOn && distOrigin) ? 'inline' : 'none';
   if (!distanceFilterOn || !distOrigin || !searchMap) return;
   const radius = distMaxMinutes * TRAVEL_SPEED_M_PER_MIN[distMode];
   distRadiusCircle = new google.maps.Circle({
@@ -2710,7 +2950,7 @@ function renderSearchResults() {
   spots.forEach(spot => {
     const isGoogle = spot.source === 'google';
     const user = isGoogle ? null : getUserById(spot.userId);
-    const icon = isGoogle ? makeIcon({ color:'#4285F4', label:'G', photoURL:null }) : makeIcon(user);
+    const icon = isGoogle ? makeGoogleIcon() : makeIcon(user);
     const marker = new google.maps.Marker({ position:{lat:spot.lat,lng:spot.lng}, map:searchMap, icon, title:spot.name });
     marker.addListener('click', () => {
       const mins = estimateMinutes(spot);
@@ -3130,6 +3370,15 @@ function makeIcon(user) {
   return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(40,48), anchor: new google.maps.Point(20,48) };
 }
 
+// 未登録のGoogleマップ上のお店用ピン：丸＋点線で「友達のピンとは違う・まだ登録されていない」がひと目で分かるデザインに
+// （以前の「G」と書かれた吹き出し型ピンは、ユーザーのアバターピンと同じ見た目で「ダサい」と指摘されたため変更）
+function makeGoogleIcon() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+    <circle cx="17" cy="17" r="14" fill="#ffffff" stroke="#4285F4" stroke-width="2.5" stroke-dasharray="3,2.5"/>
+    <text x="17" y="22" text-anchor="middle" font-size="14">🍴</text>
+  </svg>`;
+  return { url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg), scaledSize: new google.maps.Size(34,34), anchor: new google.maps.Point(17,17) };
+}
 function googleMapsLinkFor(spot) {
   const q = encodeURIComponent(spot.name + (spot.addr ? ' ' + spot.addr : ''));
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
@@ -3271,8 +3520,10 @@ function renderProfilePanel(userId) {
     </button>` : '';
 
   const tagsHTML = (user.tags||[]).map(t=>`<span class="profile-tag">${t}</span>`).join('');
-  const allergyHTML = (user.allergies||[]).length
-    ? `<div class="profile-allergy-line">⚠️ アレルギー: ${user.allergies.join('・')}</div>` : '';
+  const allergyParts = (user.allergies||[]).slice();
+  if (user.allergyOther) allergyParts.push(user.allergyOther);
+  const allergyHTML = allergyParts.length
+    ? `<div class="profile-allergy-line">⚠️ アレルギー: ${allergyParts.join('・')}</div>` : '';
   const dislikedHTML = user.dislikedFoods
     ? `<div class="profile-allergy-line">🙅 苦手な食べ物: ${user.dislikedFoods}</div>` : '';
 
@@ -3296,6 +3547,10 @@ function renderProfilePanel(userId) {
         <div class="profile-stat" style="cursor:pointer;" onclick="openFollowListModal('${userId}','followers')">
           <span class="profile-stat-val">${getFollowerIdsOf(userId).length}</span>
           <span class="profile-stat-label">フォロワー</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-val">${getAllPosts().filter(p=>p.userId===userId).reduce((sum,p)=>sum+(p.likes||[]).length,0)}</span>
+          <span class="profile-stat-label">❤️ いいね</span>
         </div>
       </div>
     </div>
@@ -3880,6 +4135,18 @@ document.getElementById('timelineComposerOverlay').addEventListener('click',func
   if (e.target !== this) return;
   if (postComposerHasInput() && !confirm('入力中の内容が消えます。閉じてもよいですか？')) return;
   closeTimelineComposer();
+});
+document.getElementById('accountSearchOverlay').addEventListener('click',function(e){
+  if (e.target !== this) return;
+  closeAccountSearchModal();
+});
+document.getElementById('allergyModalOverlay').addEventListener('click',function(e){
+  if (e.target !== this) return;
+  closeAllergyModal();
+});
+document.getElementById('availabilityModalOverlay').addEventListener('click',function(e){
+  if (e.target !== this) return;
+  closeAvailabilityModal();
 });
 </script>
 
